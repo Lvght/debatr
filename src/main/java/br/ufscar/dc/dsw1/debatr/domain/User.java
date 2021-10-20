@@ -11,7 +11,7 @@ import java.util.Date;
 @Table(name = "debatr_user")
 public class User extends AbstractEntity {
     @Id
-    private int id;
+    private long id;
 
     @NotEmpty
     @NotNull
@@ -60,7 +60,7 @@ public class User extends AbstractEntity {
         return displayName;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
