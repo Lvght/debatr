@@ -1,24 +1,22 @@
-CREATE TABLE IF NOT EXISTS Usuario
-(
-    id_usuario     SERIAL UNIQUE,
-    username       varchar(15)  not null unique,
-    nome           VARCHAR(50)  NOT NULL,
-    email          VARCHAR(255) NOT NULL UNIQUE,
-    senha          VARCHAR(128) NOT NULL,
-    salt           VARCHAR(128) NOT NULL,
-    imagem_perfil  VARCHAR(255),
-    descricao      VARCHAR(255),
-    reputacao      float     DEFAULT 0.0,
-    ra             INTEGER UNIQUE,
-    data_criacao   TIMESTAMP DEFAULT current_timestamp,
-    data_alteracao TIMESTAMP DEFAULT current_timestamp,
-    CONSTRAINT PK_Usuario PRIMARY KEY (id_usuario)
+CREATE TABLE IF NOT EXISTS debatr_user (
+    id SERIAL UNIQUE PRIMARY KEY,
+    username VARCHAR(15)  not null unique,
+    display_name VARCHAR(50)  NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(128) NOT NULL,
+    salt VARCHAR(128) NOT NULL,
+    profile_image VARCHAR(255),
+    description VARCHAR(255),
+    reputation FLOAT DEFAULT 0.0,
+    ar INTEGER UNIQUE,
+    created_at TIMESTAMP DEFAULT current_timestamp,
+    updated_at TIMESTAMP DEFAULT current_timestamp
 );
 
 CREATE TABLE IF NOT EXISTS Forum
 (
     id_forum        SERIAL UNIQUE,
-    id_dono         INTEGER      NOT NULL,
+    owner_id INTEGER NOT NULL REFERENCES debatr_user (id),
     escopo_postagem INTEGER      NOT NULL,
     escopo_acesso   INTEGER      NOT NULL,
     titulo          VARCHAR(50)  NOT NULL,
@@ -26,9 +24,7 @@ CREATE TABLE IF NOT EXISTS Forum
     icone           VARCHAR(255) NOT NULL,
     data_criacao    TIMESTAMP DEFAULT current_timestamp,
     data_alteracao  TIMESTAMP DEFAULT current_timestamp,
-    CONSTRAINT PK_Forum PRIMARY KEY (id_forum),
-    CONSTRAINT FK_User FOREIGN KEY (id_dono)
-        REFERENCES Usuario (id_usuario)
+    CONSTRAINT PK_Forum PRIMARY KEY (id_forum)
 );
 
 CREATE TABLE IF NOT EXISTS Topico
@@ -43,50 +39,37 @@ CREATE TABLE IF NOT EXISTS Topico
         REFERENCES Forum (id_forum) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS Postagem
+CREATE TABLE IF NOT EXISTS post
 (
-    id_postagem    SERIAL UNIQUE,
-    id_forum       INTEGER      NOT NULL,
-    id_autor       INTEGER      NOT NULL,
-    id_topico      INTEGER,
-    titulo         VARCHAR(255) NOT NULL,
-    conteudo       TEXT         NOT NULL,
-    data_criacao   TIMESTAMP DEFAULT current_timestamp,
-    data_alteracao TIMESTAMP DEFAULT current_timestamp,
-    CONSTRAINT PK_Postagem PRIMARY KEY (id_postagem),
-    CONSTRAINT FK_Forum FOREIGN KEY (id_forum)
-        REFERENCES Forum (id_forum) ON DELETE CASCADE,
-    CONSTRAINT FK_Usuario FOREIGN KEY (id_autor)
-        REFERENCES Usuario (id_usuario) ON DELETE CASCADE,
-    CONSTRAINT FK_Topico FOREIGN KEY (id_topico)
-        REFERENCES Topico (id_topico) ON DELETE SET NULL
+    id SERIAL UNIQUE PRIMARY KEY,
+    forum  INTEGER NOT NULL REFERENCES Forum(id_forum) ON DELETE CASCADE,
+    author INTEGER NOT NULL REFERENCES debatr_user (id) ON DELETE CASCADE,
+    topic INTEGER REFERENCES Topico(id_topico) ON DELETE SET NULL,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT current_timestamp,
+    updated_at TIMESTAMP DEFAULT current_timestamp
 );
 
 CREATE TABLE IF NOT EXISTS Comentario
 (
     id_comentario  SERIAL UNIQUE,
-    id_postagem    INTEGER NOT NULL,
-    id_autor       INTEGER NOT NULL,
+    post_id INTEGER NOT NULL REFERENCES post(id) ON DELETE CASCADE,
+    author_id INTEGER NOT NULL REFERENCES debatr_user(id) ON DELETE CASCADE,
     conteudo       TEXT    NOT NULL,
     data_criacao   TIMESTAMP DEFAULT current_timestamp,
     data_alteracao TIMESTAMP DEFAULT current_timestamp,
-    CONSTRAINT PK_Comentario PRIMARY KEY (id_comentario),
-    CONSTRAINT FK_Postagem FOREIGN KEY (id_postagem)
-        REFERENCES Postagem (id_postagem) ON DELETE CASCADE,
-    CONSTRAINT FK_Usuario FOREIGN KEY (id_autor)
-        REFERENCES Usuario (id_usuario) ON DELETE CASCADE
+    CONSTRAINT PK_Comentario PRIMARY KEY (id_comentario)
 );
 
 CREATE TABLE IF NOT EXISTS usuario_ingressa_forum
 (
     id_usuario_ingressa_forum SERIAL UNIQUE,
-    id_usuario                INTEGER NOT NULL,
+    user_id INTEGER NOT NULL REFERENCES debatr_user (id) ON DELETE CASCADE,
     id_forum                  INTEGER NOT NULL,
     data_criacao              TIMESTAMP DEFAULT current_timestamp,
     data_alteracao            TIMESTAMP DEFAULT current_timestamp,
     CONSTRAINT PK_usuario_ingressa_forum PRIMARY KEY (id_usuario_ingressa_forum),
-    CONSTRAINT FK_Usuario FOREIGN KEY (id_usuario)
-        REFERENCES Usuario (id_usuario) ON DELETE CASCADE,
     CONSTRAINT FK_Forum FOREIGN KEY (id_forum)
         REFERENCES Forum (id_forum) ON DELETE CASCADE
 );
@@ -100,7 +83,7 @@ CREATE TABLE IF NOT EXISTS usuario_administra_forum
     data_alteracao              TIMESTAMP DEFAULT current_timestamp,
     CONSTRAINT PK_usuario_administra_forum PRIMARY KEY (id_usuario_administra_forum),
     CONSTRAINT FK_Usuario FOREIGN KEY (id_usuario)
-        REFERENCES Usuario (id_usuario) ON DELETE CASCADE,
+        REFERENCES debatr_user (id) ON DELETE CASCADE,
     CONSTRAINT FK_Forum FOREIGN KEY (id_forum)
         REFERENCES Forum (id_forum) ON DELETE CASCADE
 );
@@ -108,29 +91,23 @@ CREATE TABLE IF NOT EXISTS usuario_administra_forum
 CREATE TABLE IF NOT EXISTS usuario_reage_postagem
 (
     id_usuario_reage_postagem SERIAL UNIQUE,
-    id_usuario                INTEGER NOT NULL,
-    id_postagem               INTEGER NOT NULL,
+    user_id INTEGER NOT NULL REFERENCES debatr_user(id) ON DELETE CASCADE,
+    post_id INTEGER NOT NULL REFERENCES post(id) ON DELETE CASCADE,
     tipo_reacao               INTEGER NOT NULL,
     data_criacao              TIMESTAMP DEFAULT current_timestamp,
     data_alteracao            TIMESTAMP DEFAULT current_timestamp,
-    CONSTRAINT PK_usuario_reage_postagem PRIMARY KEY (id_usuario_reage_postagem),
-    CONSTRAINT FK_Usuario FOREIGN KEY (id_usuario)
-        REFERENCES Usuario (id_usuario) ON DELETE CASCADE,
-    CONSTRAINT FK_Postagem FOREIGN KEY (id_postagem)
-        REFERENCES Postagem (id_postagem) ON DELETE CASCADE
+    CONSTRAINT PK_usuario_reage_postagem PRIMARY KEY (id_usuario_reage_postagem)
 );
 
 CREATE TABLE IF NOT EXISTS usuario_reage_comentario
 (
     id_usuario_reage_comentario SERIAL UNIQUE,
-    id_usuario                  INTEGER NOT NULL,
+    user_id INTEGER NOT NULL REFERENCES debatr_user (id) ON DELETE CASCADE,
     id_comentario               INTEGER NOT NULL,
     tipo_reacao                 INTEGER NOT NULL,
     data_criacao                TIMESTAMP DEFAULT current_timestamp,
     data_alteracao              TIMESTAMP DEFAULT current_timestamp,
     CONSTRAINT PK_usuario_reage_comentario PRIMARY KEY (id_usuario_reage_comentario),
-    CONSTRAINT FK_Usuario FOREIGN KEY (id_usuario)
-        REFERENCES Usuario (id_usuario) ON DELETE CASCADE,
     CONSTRAINT FK_Comentario FOREIGN KEY (id_comentario)
         REFERENCES Comentario (id_comentario) ON DELETE CASCADE
 );
