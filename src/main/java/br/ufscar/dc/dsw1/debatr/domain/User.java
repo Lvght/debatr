@@ -10,7 +10,9 @@ import java.util.Date;
 @Entity
 @Table(name = "debatr_user")
 public class User extends AbstractEntity {
+    @Column(nullable = false, updatable = false)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotEmpty

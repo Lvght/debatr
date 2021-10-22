@@ -6,33 +6,28 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
-import java.util.List;
 
 @Entity
-@Table(name = "post")
-public class Post extends AbstractEntity {
+public class Comment extends AbstractEntity {
+    @Column(nullable = false, updatable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @ManyToOne
+    Post post;
+
+    @ManyToOne
+    User author;
+
     @NotNull
     @NotBlank
-    private String title;
-
+    @Size(min = 1, max = 255)
     private String content;
 
-    @ManyToOne()
-    @JoinColumn(name = "author_id", referencedColumnName = "id", updatable = false)
-    private User author;
-
     @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
-    Date createdAt;
-    
-    @OneToMany
-    List<Reaction> reactions;
-
-    @OneToMany
-    List<Comment> comments;
+    @Column(name = "created_at")
+    private Date createdAt;
 }
