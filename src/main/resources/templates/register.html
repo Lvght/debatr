@@ -2,7 +2,7 @@
 <html lang="pt">
 
 <head>
-    <title>Login</title>
+    <title>Debatr - Criar conta</title>
     <meta charset="utf8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -54,7 +54,7 @@
         }
 
         .buttom {
-            background-color: #404040 !important;
+            background-color: #404040;
             border-radius: 30px;
             height: 50px;
             justify-content: center;
@@ -69,20 +69,19 @@
             color: white;
         }
 
-        a {
-            color: #00171F;
-            transition: 1s ease-in;
-        }
-
+        a,
         a:hover {
             text-decoration: none;
-            color: black;
+            color: white;
         }
 
         .errorMessage {
             font-size: 12px;
             color: red;
-            padding-left: 15px;
+            margin-left: 15px;
+            min-height: 20px;
+            min-width: 100%;
+            display: grid;
         }
     </style>
 </head>
@@ -91,33 +90,32 @@
     <div class="jumbotron vertical-center">
         <div class="container">
             <div class="col p-4">
-                <img th:src="@{/image/logo.png}" alt="Logotipo do Debatr" height="40px">
+                <img th:src="@{image/logo.png}" alt="Logotipo do Debatr" height="40px">
 
                 <br />
-                <div class="py-4">
-                    <h2 class="fw-bold">Bem vindo(a)</h2>
-                </div>
+                <br />
 
-                <span>Entre em sua conta para acessar o sistema</span>
+                <h3>Criar conta no Debatr</h3>
+                <form th:object="${user}" th:action="@{/user}" method="POST">
+                    <input placeholder="Nome" name="displayName" required pattern="[^ ]+([^]*[^ ])*"
+                        title="Deve conter ao menos uma letra, não começar e nem terminar com espaço" />
+                    <input placeholder="Nome de usuário" name="username" required pattern="[^ ]*"
+                        title="Deve conter ao menos uma letra e não conter espaços" />
+                    <input placeholder="Email" name="email" type="email" required />
+                    <input name="profileImageUrl" type="file" />
+                    <input placeholder="Senha" name="password" type="password" required />
 
-                <form th:action="@{/login}" method="post">
-                    <input type="text" placeholder="Nome de usuário" name="username" required>
-                    <input type="password" placeholder="Senha" name="password" required>
-
-                    <input class="buttom" type="submit" value="Entrar">
+                    <input class="buttom" type="submit" value="Criar">
                 </form>
+
                 <hr />
-                <a href="register">
+                <a href="login">
                     <div class="buttom">
                         <span>
-                            Criar conta
+                            Entre na sua conta
                         </span>
                     </div>
                 </a>
-                <!-- 
-                <div class="container text-center pt-4">
-                    <a>Esqueci minha senha</a>
-                </div> -->
             </div>
         </div>
     </div>
