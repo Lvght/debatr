@@ -14,6 +14,7 @@ body {
  * main layout
  */
 .layout-main {
+    width: 80%;
     display: flex;
     min-height: calc(80vh - 52px);
     overflow: hidden;

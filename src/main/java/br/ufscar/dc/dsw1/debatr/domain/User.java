@@ -10,6 +10,7 @@ import java.util.Date;
 @Entity
 @Table(name = "debatr_user")
 public class User extends AbstractEntity {
+
     @Column(nullable = false, updatable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +36,11 @@ public class User extends AbstractEntity {
     @Column(unique = true)
     private String email;
 
+    @NotEmpty
+    @NotNull
+    @Column(unique = false, nullable = false, length = 60)
+    private String password;
+
     @Column(name = "profile_image")
     private String profileImageUrl;
 
@@ -50,6 +56,9 @@ public class User extends AbstractEntity {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    public User() {
+    }
+
     public String getEmail() {
         return email;
     }
@@ -60,6 +69,46 @@ public class User extends AbstractEntity {
 
     public String getDisplay_name() {
         return displayName;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setReputation(double reputation) {
+        this.reputation = reputation;
+    }
+
+    public void setAr(int ar) {
+        this.ar = ar;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public long getId() {
@@ -92,5 +141,13 @@ public class User extends AbstractEntity {
 
     public Date getUpdatedAt() {
         return updatedAt;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
