@@ -35,6 +35,11 @@ public class User extends AbstractEntity {
     @Column(unique = true)
     private String email;
 
+    @NotEmpty
+    @NotNull
+    @Column(unique = false, nullable = false, length = 60)
+    private String password;
+
     @Column(name = "profile_image")
     private String profileImageUrl;
 
@@ -92,5 +97,13 @@ public class User extends AbstractEntity {
 
     public Date getUpdatedAt() {
         return updatedAt;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
