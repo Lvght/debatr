@@ -31,6 +31,9 @@ public class UserService implements IUserService {
     }
 
     @Transactional(readOnly = true)
+    public User buscarPorUsername(String username) { return dao.findByUsername(username); }
+
+    @Transactional(readOnly = true)
     public List<User> buscarTodos() {
         return dao.findAll();
     }

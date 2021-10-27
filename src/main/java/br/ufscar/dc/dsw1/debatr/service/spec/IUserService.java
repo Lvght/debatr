@@ -6,6 +6,8 @@ import br.ufscar.dc.dsw1.debatr.domain.User;
 public interface IUserService {
     User buscarPorId(Long id);
 
+    User buscarPorUsername(String username);
+
     List<User> buscarTodos();
 
     void salvar(User editora);

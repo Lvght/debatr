@@ -25,6 +25,4 @@ public class PostService implements IPostService {
     public void getUserTimeline(User user) {
         dao.findPostsByForum_Members(user);
     }
-
-
 }
