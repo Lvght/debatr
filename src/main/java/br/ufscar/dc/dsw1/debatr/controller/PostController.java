@@ -27,6 +27,7 @@ public class PostController {
 
             if (user != null) {
                 model.addAttribute("forum_count", user.getForuns().size());
+                model.addAttribute("foruns", user.getForuns());
             }
         }
 

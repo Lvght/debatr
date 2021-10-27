@@ -113,7 +113,6 @@
                     </p>
                 </div>
                 <div th:case="false">
-                    <span th:text="${forum_count}"></span>
                     <h1>Criar um novo post</h1>
                     <hr/>
 
@@ -121,18 +120,30 @@
                         <input name="id_autor" value="${sessionScope.user.id}" hidden required/>
 
                         <select class="forumSelect" name="id_forum" required
-                                onchange="genericXmlHttpRequest('${pageContext.request.contextPath}/forum/getTopicosForum', 'GET', 'id_forum=' + this.value, 'selectTopic');">
+                                onchange="genericXmlHttpRequest('${pageContext.request.contextPath}/forum/getTopicosForum',
+                                'GET', 'id_forum=' + this.value, 'selectTopic');">
+
                             <option value="" selected disabled hidden>
                                 Escolha um forum
                             </option>
 
-                            <c:forEach var="forum" items="${requestScope.listaForuns}">
-                                <option value="${forum.id}">
-                                    ${forum.titulo}
-                                </option>
-                            </c:forEach>
+                            <option th:each="forum: ${foruns}" value="${forum.id}" th:text="${forum.title}"></option>
 
                         </select>
+
+<!--                        <select class="forumSelect" name="id_forum" required-->
+<!--                                onchange="genericXmlHttpRequest('${pageContext.request.contextPath}/forum/getTopicosForum', 'GET', 'id_forum=' + this.value, 'selectTopic');">-->
+<!--                            <option value="" selected disabled hidden>-->
+<!--                                Escolha um forum-->
+<!--                            </option>-->
+
+<!--                            <c:forEach var="forum" items="${requestScope.listaForuns}">-->
+<!--                                <option value="${forum.id}">-->
+<!--                                    ${forum.titulo}-->
+<!--                                </option>-->
+<!--                            </c:forEach>-->
+
+<!--                        </select>-->
 
                         <br/>
                         <br/>
