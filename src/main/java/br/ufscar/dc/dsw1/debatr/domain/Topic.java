@@ -5,6 +5,7 @@ import org.dom4j.tree.AbstractEntity;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "topic")
@@ -15,6 +16,9 @@ public class Topic extends AbstractEntity {
     @ManyToOne()
     @JoinColumn(name = "forum_id", referencedColumnName = "id")
     private Forum forum;
+
+    @OneToMany
+    private List<Post> posts;
 
     @NotEmpty
     @NotNull
