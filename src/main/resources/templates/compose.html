@@ -104,11 +104,8 @@
     </head>
     <body>
         <section class="layout-content" layout:fragment="corpo">
-            <div th:switch="${forum_count == 0}">
+            <div class="mt-4" th:switch="${forum_count == 0}">
                 <div th:case="true">
-                    <div sec:authorize="isAuthenticated()">
-                        Authenticated as <span sec:authentication="name"></span>
-                    </div>
                      <h1>Você não está em nenhum fórum</h1>
                     <p>
                         Para fazer postagens, você deve se inscrever em ao menos um fórum. Você pode verificar a <a href="#">lista de

@@ -45,7 +45,7 @@ public class User extends AbstractEntity {
     @Column(name = "profile_image")
     private String profileImageUrl;
 
-    @ManyToMany
+    @ManyToMany()
     List<Forum> foruns;
 
     private String description;

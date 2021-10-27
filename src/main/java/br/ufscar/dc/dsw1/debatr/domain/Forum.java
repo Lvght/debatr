@@ -18,7 +18,7 @@ public class Forum extends AbstractEntity {
     @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
     private User owner;
 
-    @OneToMany
+    @ManyToMany(mappedBy = "foruns")
     List<User> members;
 
     @NotNull
