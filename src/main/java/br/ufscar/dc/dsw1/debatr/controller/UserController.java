@@ -1,5 +1,8 @@
 package br.ufscar.dc.dsw1.debatr.controller;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import br.ufscar.dc.dsw1.debatr.helper.AuthenticatedUserHelper;
@@ -36,6 +39,7 @@ public class UserController {
 
     @PostMapping("/register")
     public String salvar(
+            HttpServletRequest request,
             @RequestParam("email") String email,
             @RequestParam("display_name") String displayName,
             @RequestParam("username") String username,
@@ -43,6 +47,13 @@ public class UserController {
     ) {
         User newUser = new User(displayName, username, email, encoder.encode(plaintextPassword));
         service.salvar(newUser);
+
+        try {
+            request.login(username, plaintextPassword);
+        } catch (ServletException e) {
+            return "redirect:login";
+        }
+
         return "redirect:home";
     }
 
