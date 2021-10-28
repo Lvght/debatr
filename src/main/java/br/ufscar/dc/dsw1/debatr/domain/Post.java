@@ -2,6 +2,7 @@ package br.ufscar.dc.dsw1.debatr.domain;
 
 import org.dom4j.tree.AbstractEntity;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "post")
+@EntityListeners(AuditingEntityListener.class)
 public class Post extends AbstractEntity {
     public Post() {}
 
