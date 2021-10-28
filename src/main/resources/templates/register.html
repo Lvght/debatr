@@ -96,8 +96,8 @@
                 <br />
 
                 <h3>Criar conta no Debatr</h3>
-                <form th:object="${user}" th:action="@{/user}" method="POST">
-                    <input placeholder="Nome" name="displayName" required pattern="[^ ]+([^]*[^ ])*"
+                <form th:action="@{/register}" method="POST">
+                    <input placeholder="Nome" name="display_name" required pattern="[^ ]+([^]*[^ ])*"
                         title="Deve conter ao menos uma letra, não começar e nem terminar com espaço" />
                     <input placeholder="Nome de usuário" name="username" required pattern="[^ ]*"
                         title="Deve conter ao menos uma letra e não conter espaços" />

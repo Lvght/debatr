@@ -4,6 +4,9 @@ import javax.validation.Valid;
 
 import br.ufscar.dc.dsw1.debatr.helper.AuthenticatedUserHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -31,24 +34,15 @@ public class UserController {
         return "register";
     }
 
-    // @GetMapping("/listar")
-    // public String listar(ModelMap model) {
-    // model.addAttribute("usuarios", service.buscarTodos());
-    // return "usuario/lista";
-    // }
-
-    @PostMapping("/user")
-    public String salvar(@Valid User user, BindingResult result, RedirectAttributes attr) {
-
-        if (result.hasErrors()) {
-            return "redirect:register";
-        }
-
-        System.out.println("password = " + user.getPassword());
-
-        user.setPassword(encoder.encode(user.getPassword()));
-        service.salvar(user);
-        attr.addFlashAttribute("sucess", "Usuário inserido com sucesso.");
+    @PostMapping("/register")
+    public String salvar(
+            @RequestParam("email") String email,
+            @RequestParam("display_name") String displayName,
+            @RequestParam("username") String username,
+            @RequestParam("password") String plaintextPassword
+    ) {
+        User newUser = new User(displayName, username, email, encoder.encode(plaintextPassword));
+        service.salvar(newUser);
         return "redirect:home";
     }
 

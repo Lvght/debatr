@@ -33,6 +33,9 @@ public class User extends AbstractEntity {
     @Column(unique = true, length = 15)
     private String username;
 
+    @Column(name = "email_verified_at")
+    private Date emailVerifiedAt;
+
     @NotEmpty
     @Email
     @NotNull
@@ -62,7 +65,13 @@ public class User extends AbstractEntity {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    public User() {
+    public User() {}
+
+    public User(String displayName, String username, String email, String password) {
+        this.displayName = displayName;
+        this.username = username;
+        this.email = email;
+        this.password = password;
     }
 
     public String getEmail() {
