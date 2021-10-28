@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "debatr_user")
@@ -44,6 +45,9 @@ public class User extends AbstractEntity {
     @Column(name = "profile_image")
     private String profileImageUrl;
 
+    @ManyToMany()
+    List<Forum> foruns;
+
     private String description;
 
     private double reputation;
@@ -65,6 +69,14 @@ public class User extends AbstractEntity {
 
     public String getUsername() {
         return username;
+    }
+
+    public List<Forum> getForuns() {
+        return foruns;
+    }
+
+    public void setForuns(List<Forum> foruns) {
+        this.foruns = foruns;
     }
 
     public String getDisplay_name() {

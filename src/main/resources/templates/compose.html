@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+<html layout:decorate="~{layout}" xmlns="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="${pageContext.request.contextPath}/js/ajax.js" type="text/javascript"></script>
+        <style>
+            body {
+                display: flex;
+            }
+
+            .criarPost {
+                padding: 30px;
+            }
+
+            .criarPost h1 {
+                color: #00171F;
+                font-size: 21px;
+                margin-bottom: 0;
+            }
+
+            .criarPost hr {
+                border-top: 1px solid black;
+                margin: 0 0 1rem 0;
+            }
+
+            form {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .criarPost .forumSelect {
+                width: 50%;
+            }
+
+            .criarPost .selectTopic {
+                width: 25%;
+            }
+
+            input, select, textarea {
+                margin-bottom: 10px !important;
+                padding: 10px;
+                background-color: #142931;
+                color: white;
+                border-radius: 15px;
+            }
+
+            .criarPost .postTitle {
+                margin-bottom: 0px !important;
+            }
+
+            textarea {
+                min-height: 200px
+            }
+
+            input, select {
+                height: 50px;
+            }
+
+            input[type="submit"], .discard {
+                width: fit-content;
+                height: 40px;
+                padding: 0 15px;
+                border-radius: 10px;
+                border: 0;
+            }
+
+            .criarPost {
+                width: 100%;
+            }
+
+            .criar .post {
+                display: flex;
+            }
+
+            .actionButtons {
+                display: flex;
+                line-height: 35px;
+            }
+
+            .discard {
+                background-color: white;
+                border: 2px solid #142931 !important;
+                color: #142931;
+                margin-right: 10px;
+                cursor: pointer;
+            }
+
+            .counter {
+                text-align: end;
+                margin-bottom: 10px;
+                font-size: 12px;
+                padding-right: 10px;
+            }
+
+            @media only screen and (max-width: 700px) {
+                .criarPost {
+                    width: 100%;
+                }
+            }
+
+        </style>
+    </head>
+    <body>
+        <section class="layout-content" layout:fragment="corpo">
+            <div class="mt-4" th:switch="${forum_count == 0}">
+                <div th:case="true">
+                     <h1>Você não está em nenhum fórum</h1>
+                    <p>
+                        Para fazer postagens, você deve se inscrever em ao menos um fórum. Você pode verificar a <a href="#">lista de
+                        fóruns do <strong>Debatr</strong></a>, ou <a href="/forum">criar um novo fórum</a>.
+                    </p>
+                </div>
+                <div th:case="false">
+                    <h1>Criar um novo post</h1>
+                    <hr/>
+
+                    <form th:action="@{/compose}" method="post">
+                        <input name="id_autor" value="${sessionScope.user.id}" hidden required/>
+
+                        <select class="forumSelect" name="forum_id" required
+                                onchange="genericXmlHttpRequest('${pageContext.request.contextPath}/forum/getTopicosForum',
+                                'GET', 'id_forum=' + this.value, 'selectTopic');">
+
+                            <option value="" selected disabled hidden>
+                                Escolha um forum
+                            </option>
+
+                            <option th:each="forum: ${foruns}" th:value="${forum.id}" th:text="${forum.title}"></option>
+
+                        </select>
+
+                        <br/>
+                        <br/>
+
+                        <input class="postTitle" id="post-title" name="title" placeholder="Titulo" maxlength="255"
+                               required
+                               pattern="[^ ]+([^]*[^ ])*"
+                               title="Deve conter ao menos uma letra, não começar e nem terminar com espaço"/>
+
+                        <span id="counter" class="counter">255</span>
+
+                        <textarea name="content" placeholder="Conteudo (suporta markdown)" required></textarea>
+
+<!--                        <select id="selectTopic" class="selectTopic" name="topic_id">-->
+<!--                            <option value="" selected>-->
+<!--                                Geral-->
+<!--                            </option>-->
+<!--                        </select>-->
+                        <br/>
+                        <hr/>
+                        <div class="actionButtons">
+                            <div class="discard" onclick="window.history.back();">
+                                <span>Descartar</span>
+                            </div>
+                            <input type="submit" value="Postar">
+                        </div>
+                    </form>
+
+                    <script>
+                        function changeCounter() {
+                            $("#counter").html(255 - $("#post-title").val().length);
+                        }
+
+                        const debounce = (func, wait) => {
+                            let timeout;
+
+                            return function executedFunction(...args) {
+                                const later = () => {
+                                    clearTimeout(timeout);
+                                    func(...args);
+                                };
+
+                                clearTimeout(timeout);
+                                timeout = setTimeout(later, wait);
+                            };
+                        };
+
+                        $("#post-title").keyup(debounce(changeCounter, 500));
+                    </script>
+                </div>
+            </div>
+
+        </section>
+    </body>
+
+</html>

@@ -1,5 +1,6 @@
 package br.ufscar.dc.dsw1.debatr;
 
+import br.ufscar.dc.dsw1.debatr.domain.Forum;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
