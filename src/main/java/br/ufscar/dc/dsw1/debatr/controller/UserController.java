@@ -2,9 +2,12 @@ package br.ufscar.dc.dsw1.debatr.controller;
 
 import javax.validation.Valid;
 
+import br.ufscar.dc.dsw1.debatr.helper.AuthenticatedUserHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,6 +52,44 @@ public class UserController {
         service.salvar(user);
         attr.addFlashAttribute("sucess", "Usuário inserido com sucesso.");
         return "redirect:home";
+    }
+
+    @GetMapping("/profile/{username}")
+    public String profile(@PathVariable("username") String username, Model model) {
+
+        User profileOwner = service.buscarPorUsername(username);
+
+        if (profileOwner != null) {
+            model.addAttribute("profileOwner", profileOwner);
+
+            UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+
+            if (details != null) {
+                User currentUser = service.buscarPorUsername(details.getUsername());
+
+                if (currentUser != null) {
+                    model.addAttribute("isProfileOwner",
+                            currentUser.getId() == profileOwner.getId());
+                }
+            }
+        } else {
+            model.addAttribute("404", true);
+        }
+
+        return "profile";
+    }
+
+    @GetMapping("/config/profile")
+    public String editProfile(Model model) {
+
+        UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+
+        if (details != null) {
+            User user = service.buscarPorUsername(details.getUsername());
+            model.addAttribute("user", user);
+        }
+
+        return "editProfile";
     }
 
     // @GetMapping("/editar/{id}")

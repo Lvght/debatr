@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html layout:decorate="~{layout}">
+    <head>
+        <title>Editar profile</title>
+    </head>
+
+    <body>
+        <div class="layout-content mt-4" layout:fragment="corpo">
+            <h1>Editar perfil</h1>
+            <form th:action="@{/config/profile}" method="post">
+                <div class="form-group mt-3">
+                    <label for="display-name">Nome de exibição</label>
+                    <input type="text"
+                           class="form-control"
+                           id="display-name"
+                           th:placeholder="${user.display_name}">
+<!--                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+                </div>
+                <div class="form-group mt-3">
+                    <label for="description-textarea">Biografia</label>
+                    <textarea th:placeholder="${user.description}"
+                              class="form-control"
+                              id="description-textarea"
+                              name="description"
+                              maxlength="255"></textarea>
+                </div>
+
+                <div class="form-check mt-3">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                </div>
+                <button type="submit" class="btn btn-primary mt-5">Salvar</button>
+            </form>
+        </div>
+    </body>
+
+</html>
