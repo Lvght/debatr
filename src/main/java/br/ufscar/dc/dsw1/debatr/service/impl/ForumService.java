@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.ufscar.dc.dsw1.debatr.dao.IForumDAO;
 import br.ufscar.dc.dsw1.debatr.domain.Forum;
+import br.ufscar.dc.dsw1.debatr.domain.User;
 import br.ufscar.dc.dsw1.debatr.service.spec.IForumService;
 
 @Service
@@ -17,8 +18,8 @@ public class ForumService implements IForumService {
     @Autowired
     IForumDAO dao;
 
-    public void salvar(Forum usuario) {
-        dao.save(usuario);
+    public void salvar(Forum forum) {
+        dao.save(forum);
     }
 
     public void excluir(Long id) {
@@ -26,12 +27,18 @@ public class ForumService implements IForumService {
     }
 
     @Transactional(readOnly = true)
-    public Forum buscarPorId(Long id) {
-        return dao.findById(id.longValue());
+    public Forum buscarPorId(Long id, User user) {
+        Forum forum = dao.findById(id.longValue());
+        forum.setUserIngress(forum.getMembers().contains(user));
+        return forum;
     }
 
     @Transactional(readOnly = true)
-    public List<Forum> buscarTodos() {
-        return dao.findAll();
+    public List<Forum> buscarTodos(User user) {
+        List<Forum> foruns = dao.findAll();
+        for (Forum forum : foruns) {
+            forum.setUserIngress(forum.getMembers().contains(user));
+        }
+        return foruns;
     }
 }

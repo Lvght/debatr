@@ -57,6 +57,8 @@ public class Forum extends AbstractEntity {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    boolean userIngress;
+
     public Forum() {
     }
 
@@ -131,4 +133,21 @@ public class Forum extends AbstractEntity {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public List<User> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<User> members) {
+        this.members = members;
+    }
+
+    public boolean isUserIngress() {
+        return userIngress;
+    }
+
+    public void setUserIngress(boolean userIngress) {
+        this.userIngress = userIngress;
+    }
+
 }

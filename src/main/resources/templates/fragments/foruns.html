@@ -15,12 +15,14 @@
                     <img src="https://seeklogo.com/images/U/ufscar-logotipo-logo-E01F858A9C-seeklogo.com.png" />
                 </div>
                 <div class="forumInformation">
-                    <a href="#">
+                    <a th:href="@{/forum/{id} (id=${forum.id})}">
                         <h1 th:text="${forum.title}"></h1>
                     </a>
                     <h2 th:text="${forum.accessScope == 1 ? 'livre' : 'restrito'}"></h2>
                 </div>
+                <div th:replace="fragments/signButton :: button"></div>
             </div>
+
             <div class="description">
                 <h2 th:text="${forum.description}"></h2>
             </div>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="br">
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <div th:switch="${forum.isUserIngress()}" th:fragment="button" class="action">
+        <div th:case="false" th:id="${'ingressar' + forum.id}">
+            <input class="ingressar" type="submit" value="Ingressar"
+                th:attr="onclick=|genericXmlHttpRequest('/forum/signIn/${forum.id}', 'GET', '', 'ingressar${forum.id}')|">
+        </div>
+        <div th:case="true" th:id="${'sair' + forum.id}">
+            <input class=" sair" type="submit" value="Sair"
+                th:attr="onclick=|genericXmlHttpRequest('/forum/signOut/${forum.id}', 'GET', '', 'sair${forum.id}')|">
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>
