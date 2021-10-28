@@ -79,6 +79,19 @@ public class UserController {
         return "profile";
     }
 
+    @GetMapping("/config/profile")
+    public String editProfile(Model model) {
+
+        UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+
+        if (details != null) {
+            User user = service.buscarPorUsername(details.getUsername());
+            model.addAttribute("user", user);
+        }
+
+        return "editProfile";
+    }
+
     // @GetMapping("/editar/{id}")
     // public String preEditar(@PathVariable("id") Long id, ModelMap model) {
     // model.addAttribute("usuario", service.buscarPorId(id));
