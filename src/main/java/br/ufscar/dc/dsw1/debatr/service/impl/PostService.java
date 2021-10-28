@@ -6,6 +6,9 @@ import br.ufscar.dc.dsw1.debatr.domain.Forum;
 import br.ufscar.dc.dsw1.debatr.domain.Post;
 import br.ufscar.dc.dsw1.debatr.domain.User;
 import br.ufscar.dc.dsw1.debatr.service.spec.IPostService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +37,7 @@ public class PostService implements IPostService {
         postDAO.delete(post);
     }
 
-    public void getUserTimeline(User user) {
-        postDAO.findPostsByForum_Members(user);
+    public List<Post> getUserTimeline(User user) {
+        return postDAO.findPostsByForum_Members(user);
     }
 }

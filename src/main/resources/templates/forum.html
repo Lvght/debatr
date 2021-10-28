@@ -3,7 +3,7 @@
 
 <head>
     <script th:src="@{/js/ajax.js}"></script>
-
+    <link th:href="@{/css/post.css}" rel="stylesheet" />
     <style>
         .forum {
             margin-top: 30px;
@@ -169,6 +169,7 @@
             </div>
             <hr />
         </div>
+        <div th:replace="fragments/posts :: posts"></div>
     </section>
 </body>
 

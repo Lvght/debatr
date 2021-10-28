@@ -20,6 +20,7 @@ import br.ufscar.dc.dsw1.debatr.domain.User;
 import org.springframework.ui.Model;
 
 import br.ufscar.dc.dsw1.debatr.domain.Forum;
+import br.ufscar.dc.dsw1.debatr.domain.Post;
 import br.ufscar.dc.dsw1.debatr.service.impl.ForumService;
 import br.ufscar.dc.dsw1.debatr.service.spec.IForumService;
 import br.ufscar.dc.dsw1.debatr.service.spec.IUserService;
@@ -81,6 +82,8 @@ public class ForumController {
     public String preEditar(@PathVariable("id") Long id, ModelMap model) {
         UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
         User user = userService.buscarPorUsername(userDetails.getUsername());
+        Forum forum = forumService.buscarPorId(id, user);
+        model.addAttribute("posts", forum.getPosts());
         model.addAttribute("forum", forumService.buscarPorId(id, user));
         model.addAttribute("status", "ingressar");
         return "/forum";

@@ -6,6 +6,9 @@ import br.ufscar.dc.dsw1.debatr.domain.User;
 import br.ufscar.dc.dsw1.debatr.helper.AuthenticatedUserHelper;
 import br.ufscar.dc.dsw1.debatr.service.spec.IPostService;
 import br.ufscar.dc.dsw1.debatr.service.spec.IUserService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -22,6 +25,15 @@ public class PostController {
 
     @Autowired
     private IUserService userService;
+
+    @GetMapping("/")
+    public String home(Model model) {
+        UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+        User user = userService.buscarPorUsername(userDetails.getUsername());
+        List<Post> posts = postService.getUserTimeline(user);
+        model.addAttribute("posts", posts);
+        return "home";
+    }
 
     @GetMapping("/compose")
     public String getPosts(Model model) {
@@ -40,12 +52,8 @@ public class PostController {
     }
 
     @PostMapping("/compose")
-    public String createPost(
-            @RequestParam("title") String title,
-            @RequestParam("content") String content,
-            @RequestParam("forum_id") Long forumId,
-            Model model
-    ) {
+    public String createPost(@RequestParam("title") String title, @RequestParam("content") String content,
+            @RequestParam("forum_id") Long forumId, Model model) {
 
         UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
         model.addAttribute("errored", true);

@@ -2,6 +2,7 @@ package br.ufscar.dc.dsw1.debatr.domain;
 
 import org.dom4j.tree.AbstractEntity;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -21,6 +22,9 @@ public class Forum extends AbstractEntity {
 
     @ManyToMany(mappedBy = "foruns")
     List<User> members;
+
+    @OneToMany(mappedBy = "forum")
+    List<Post> posts;
 
     @NotNull
     @Column(name = "post_scope", nullable = false)
@@ -148,6 +152,14 @@ public class Forum extends AbstractEntity {
 
     public void setUserIngress(boolean userIngress) {
         this.userIngress = userIngress;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
 }

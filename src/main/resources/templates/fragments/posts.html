@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="br">
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <div class="posts" th:fragment="posts" th:each="post: ${posts}">
+        <div class="post">
+            <div class="postHeader">
+                <div class="informations">
+                    <a th:href="@{/forum/{forum_id} (forum_id=${post.forum.id})}">
+                        <div class="postForumInformation">
+                            <div class="forumIcon">
+                                <img
+                                    src="https://seeklogo.com/images/U/ufscar-logotipo-logo-E01F858A9C-seeklogo.com.png" />
+                            </div>
+                            <div class="forumName">
+                                <h2 th:text="${'f:' + post.forum.title}"></h2>
+                            </div>
+                        </div>
+                    </a>
+                    <a th:href="@{/profile/{username} (username=${post.author.username})}">
+                        <div class="userInformation">
+                            <div class="userPicture">
+                                <img th:src="@{/image/default-profile.jpeg}" alt="">
+
+                            </div>
+                            <div class="username">
+                                <h2 th:text="${post.author.username}"></h2>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="body">
+                <div class="titulo">
+                    <h2 th:text="${post.title}"></h2>
+                </div>
+                <div id="content${post.id}" class="conteudo">
+                    <h2 th:text="${post.content}"></h2>
+                </div>
+            </div>
+        </div>
+        <hr />
+    </div>
+</body>
+
+</html>
