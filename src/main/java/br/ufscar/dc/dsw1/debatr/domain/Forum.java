@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "forum")
@@ -16,6 +17,9 @@ public class Forum extends AbstractEntity {
     @ManyToOne()
     @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
     private User owner;
+
+    @ManyToMany(mappedBy = "foruns")
+    List<User> members;
 
     @NotNull
     @Column(name = "post_scope", nullable = false)
