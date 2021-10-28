@@ -36,6 +36,9 @@ public class User extends AbstractEntity {
     @Column(name = "email_verified_at")
     private Date emailVerifiedAt;
 
+    @OneToMany(mappedBy = "author")
+    private List<Post> posts;
+
     @NotEmpty
     @Email
     @NotNull
@@ -72,6 +75,22 @@ public class User extends AbstractEntity {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public Date getEmailVerifiedAt() {
+        return emailVerifiedAt;
+    }
+
+    public void setEmailVerifiedAt(Date emailVerifiedAt) {
+        this.emailVerifiedAt = emailVerifiedAt;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
     public String getEmail() {

@@ -40,7 +40,9 @@
                 <h1 class="mt-4">Estatísticas</h1>
                 <div class="row align-items-center">
                     <div class="col-auto align-items-center justify-content-center">
-                    <span class="d-block" style="font-size: 2.5rem">-1</span>
+                    <span th:text="${profileOwner.posts.size()}"
+                          class="d-block text-center"
+                          style="font-size: 2.5rem"></span>
                         <span class="d-block text-center">posts</span>
                     </div>
 
