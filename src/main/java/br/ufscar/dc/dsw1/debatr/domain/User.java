@@ -2,6 +2,7 @@ package br.ufscar.dc.dsw1.debatr.domain;
 
 import org.dom4j.tree.AbstractEntity;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "debatr_user")
+@EntityListeners(AuditingEntityListener.class)
 public class User extends AbstractEntity {
 
     @Column(nullable = false, updatable = false)
@@ -30,6 +32,12 @@ public class User extends AbstractEntity {
     @NotNull
     @Column(unique = true, length = 15)
     private String username;
+
+    @Column(name = "email_verified_at")
+    private Date emailVerifiedAt;
+
+    @OneToMany(mappedBy = "author")
+    private List<Post> posts;
 
     @NotEmpty
     @Email
@@ -60,7 +68,29 @@ public class User extends AbstractEntity {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    public User() {
+    public User() {}
+
+    public User(String displayName, String username, String email, String password) {
+        this.displayName = displayName;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+    public Date getEmailVerifiedAt() {
+        return emailVerifiedAt;
+    }
+
+    public void setEmailVerifiedAt(Date emailVerifiedAt) {
+        this.emailVerifiedAt = emailVerifiedAt;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
     public String getEmail() {

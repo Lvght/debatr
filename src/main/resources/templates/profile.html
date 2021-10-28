@@ -28,7 +28,8 @@
                         <span class="d-block" th:text="'@' + ${profileOwner.username}"></span>
                     </div>
                     <div class="col text-end p-0" th:if="${isProfileOwner}">
-                        <input type='button' value='Editar perfil'>
+                        <a th:href="@{/config/profile}"
+                           class="btn btn-primary">Editar perfil</a>
                     </div>
                 </div>
 
@@ -39,7 +40,9 @@
                 <h1 class="mt-4">Estatísticas</h1>
                 <div class="row align-items-center">
                     <div class="col-auto align-items-center justify-content-center">
-                    <span class="d-block" style="font-size: 2.5rem">-1</span>
+                    <span th:text="${profileOwner.posts.size()}"
+                          class="d-block text-center"
+                          style="font-size: 2.5rem"></span>
                         <span class="d-block text-center">posts</span>
                     </div>
 

@@ -24,17 +24,22 @@
                         <i class='bx bx-grid-alt nav_icon'></i>
                         <span class="nav_name">Início</span>
                     </a>
-                    <a href="/compose" class="nav_link">
+                    <a th:href="@{/compose}" class="nav_link">
                         <i class='bx bx-grid-alt nav_icon'></i>
                         <span class="nav_name">Criar Post</span>
                     </a>
-                    <a href="/forum/register" class="nav_link">
+                    <a th:href="@{/forum/register}" class="nav_link">
                         <i class='bx bx-grid-alt nav_icon'></i>
                         <span class="nav_name">Criar Forum</span>
                     </a>
-                    <a href="/forum/list" class="nav_link">
+                    <a th:href="@{/forum/list}" class="nav_link">
                         <i class='bx bx-grid-alt nav_icon'></i>
                         <span class="nav_name">Listar Foruns</span>
+                    </a>
+
+                    <a th:href="@{'/profile/' + ${#request.userPrincipal.getName()}}" class="nav_link">
+                        <i class='bx bx-grid-alt nav_icon'></i>
+                        <span class="nav_name">Perfil</span>
                     </a>
                 </div>
             </div>
