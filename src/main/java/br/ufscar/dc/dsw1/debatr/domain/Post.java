@@ -12,6 +12,16 @@ import java.util.List;
 @Entity
 @Table(name = "post")
 public class Post extends AbstractEntity {
+    public Post() {}
+
+    public Post(String title, String content, User author, Forum forum, Topic topic) {
+        this.title = title;
+        this.content = content;
+        this.author = author;
+        this.forum = forum;
+        this.topic = topic;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -39,7 +49,7 @@ public class Post extends AbstractEntity {
     @ManyToOne
     private Forum forum;
 
-    @ManyToOne
+    @ManyToOne()
     private Topic topic;
 
     public long getId() {

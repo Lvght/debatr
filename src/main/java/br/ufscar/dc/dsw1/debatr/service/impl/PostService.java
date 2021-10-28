@@ -1,6 +1,8 @@
 package br.ufscar.dc.dsw1.debatr.service.impl;
 
+import br.ufscar.dc.dsw1.debatr.dao.IForumDAO;
 import br.ufscar.dc.dsw1.debatr.dao.IPostDAO;
+import br.ufscar.dc.dsw1.debatr.domain.Forum;
 import br.ufscar.dc.dsw1.debatr.domain.Post;
 import br.ufscar.dc.dsw1.debatr.domain.User;
 import br.ufscar.dc.dsw1.debatr.service.spec.IPostService;
@@ -12,17 +14,27 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = false)
 public class PostService implements IPostService {
     @Autowired
-    private IPostDAO dao;
+    private IPostDAO postDAO;
+
+    @Autowired
+    private IForumDAO forumDAO;
 
     public void save(Post post) {
-        dao.save(post);
+        postDAO.save(post);
+    }
+
+    public void save(Post post, long forumId) {
+        Forum forum = forumDAO.findById(forumId);
+        post.setForum(forum);
+
+        postDAO.save(post);
     }
 
     public void delete(Post post) {
-        dao.delete(post);
+        postDAO.delete(post);
     }
 
     public void getUserTimeline(User user) {
-        dao.findPostsByForum_Members(user);
+        postDAO.findPostsByForum_Members(user);
     }
 }

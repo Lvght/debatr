@@ -116,10 +116,10 @@
                     <h1>Criar um novo post</h1>
                     <hr/>
 
-                    <form action="/posts" method="post">
+                    <form th:action="@{/compose}" method="post">
                         <input name="id_autor" value="${sessionScope.user.id}" hidden required/>
 
-                        <select class="forumSelect" name="id_forum" required
+                        <select class="forumSelect" name="forum_id" required
                                 onchange="genericXmlHttpRequest('${pageContext.request.contextPath}/forum/getTopicosForum',
                                 'GET', 'id_forum=' + this.value, 'selectTopic');">
 
@@ -127,41 +127,27 @@
                                 Escolha um forum
                             </option>
 
-                            <option th:each="forum: ${foruns}" value="${forum.id}" th:text="${forum.title}"></option>
+                            <option th:each="forum: ${foruns}" th:value="${forum.id}" th:text="${forum.title}"></option>
 
                         </select>
 
-<!--                        <select class="forumSelect" name="id_forum" required-->
-<!--                                onchange="genericXmlHttpRequest('${pageContext.request.contextPath}/forum/getTopicosForum', 'GET', 'id_forum=' + this.value, 'selectTopic');">-->
-<!--                            <option value="" selected disabled hidden>-->
-<!--                                Escolha um forum-->
-<!--                            </option>-->
-
-<!--                            <c:forEach var="forum" items="${requestScope.listaForuns}">-->
-<!--                                <option value="${forum.id}">-->
-<!--                                    ${forum.titulo}-->
-<!--                                </option>-->
-<!--                            </c:forEach>-->
-
-<!--                        </select>-->
-
                         <br/>
                         <br/>
 
-                        <input class="postTitle" id="post-title" name="titulo" placeholder="Titulo" maxlength="255"
+                        <input class="postTitle" id="post-title" name="title" placeholder="Titulo" maxlength="255"
                                required
                                pattern="[^ ]+([^]*[^ ])*"
                                title="Deve conter ao menos uma letra, não começar e nem terminar com espaço"/>
 
                         <span id="counter" class="counter">255</span>
 
-                        <textarea name="conteudo" placeholder="Conteudo (suporta markdown)" required></textarea>
+                        <textarea name="content" placeholder="Conteudo (suporta markdown)" required></textarea>
 
-                        <select id="selectTopic" class="selectTopic" name="id_topico">
-                            <option value="" selected>
-                                Geral
-                            </option>
-                        </select>
+<!--                        <select id="selectTopic" class="selectTopic" name="topic_id">-->
+<!--                            <option value="" selected>-->
+<!--                                Geral-->
+<!--                            </option>-->
+<!--                        </select>-->
                         <br/>
                         <hr/>
                         <div class="actionButtons">
