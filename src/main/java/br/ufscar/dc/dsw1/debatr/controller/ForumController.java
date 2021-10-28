@@ -1,5 +1,6 @@
 package br.ufscar.dc.dsw1.debatr.controller;
 
+import java.util.Comparator;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -19,6 +20,7 @@ import br.ufscar.dc.dsw1.debatr.domain.User;
 import org.springframework.ui.Model;
 
 import br.ufscar.dc.dsw1.debatr.domain.Forum;
+import br.ufscar.dc.dsw1.debatr.domain.Post;
 import br.ufscar.dc.dsw1.debatr.service.impl.ForumService;
 import br.ufscar.dc.dsw1.debatr.service.spec.IForumService;
 import br.ufscar.dc.dsw1.debatr.service.spec.IUserService;
@@ -59,8 +61,55 @@ public class ForumController {
 
     @GetMapping("/list")
     public String list(Model model) {
-        List<Forum> foruns = forumService.buscarTodos();
+        UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+        User user = userService.buscarPorUsername(userDetails.getUsername());
+        List<Forum> foruns = forumService.buscarTodos(user);
+        foruns.sort(new Comparator<Forum>() {
+            public int compare(Forum f1, Forum f2) {
+                if (f1.getId() > f2.getId())
+                    return 1;
+                if (f1.getId() < f2.getId())
+                    return -2;
+                return 0;
+            }
+        });
         model.addAttribute("foruns", foruns);
+        model.addAttribute("status", "ingressar");
         return "/listForuns";
+    }
+
+    @GetMapping("/{id}")
+    public String preEditar(@PathVariable("id") Long id, ModelMap model) {
+        UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+        User user = userService.buscarPorUsername(userDetails.getUsername());
+        Forum forum = forumService.buscarPorId(id, user);
+        model.addAttribute("posts", forum.getPosts());
+        model.addAttribute("forum", forumService.buscarPorId(id, user));
+        model.addAttribute("status", "ingressar");
+        return "/forum";
+    }
+
+    @GetMapping("/signIn/{id_forum}")
+    public String signIn(@PathVariable("id_forum") Long id, ModelMap model) {
+        UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+        User user = userService.buscarPorUsername(userDetails.getUsername());
+        Forum forum = forumService.buscarPorId(id, user);
+        user.getForuns().add(forum);
+        userService.salvar(user);
+        forum.setUserIngress(true);
+        model.addAttribute("forum", forum);
+        return "fragments/signButton";
+    }
+
+    @GetMapping("/signOut/{id_forum}")
+    public String signOut(@PathVariable("id_forum") Long id, ModelMap model) {
+        UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+        User user = userService.buscarPorUsername(userDetails.getUsername());
+        Forum forum = forumService.buscarPorId(id, user);
+        user.getForuns().remove(forum);
+        userService.salvar(user);
+        forum.setUserIngress(false);
+        model.addAttribute("forum", forum);
+        return "fragments/signButton";
     }
 }

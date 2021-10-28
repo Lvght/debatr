@@ -2,33 +2,11 @@
 <html layout:decorate="~{layout}">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Foruns</title>
     <script th:src="@{/js/ajax.js}"></script>
+    <link th:href="@{/css/post.css}" rel="stylesheet" />
     <style>
-        body {
-            display: flex;
-            color: black;
-        }
-
-        body>* {
-            color: black;
-        }
-
-        .listaForum {
-            width: 100%;
-        }
-
         .forum {
-            width: 100%;
-            padding-top: 30px;
-        }
-
-        .description h2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            margin-top: 30px;
         }
 
         .forum .forumInformation a:hover {
@@ -108,7 +86,6 @@
             font-size: 30px;
         }
 
-
         .forum .action {
             margin-left: auto;
         }
@@ -174,7 +151,25 @@
 
 <body>
     <section class="layout-content" layout:fragment="corpo">
-        <div th:replace="fragments/foruns :: foruns"></div>
+        <div class="forum">
+            <div class="details">
+                <div class="forumIcon">
+                    <img src="https://seeklogo.com/images/U/ufscar-logotipo-logo-E01F858A9C-seeklogo.com.png" />
+                </div>
+                <div class="forumInformation">
+                    <a th:href="@{/forum/{id} (id=${forum.id})}">
+                        <h1 th:text="${forum.title}"></h1>
+                    </a>
+                    <h2 th:text="${forum.accessScope == 1 ? 'livre' : 'restrito'}"></h2>
+                </div>
+                <div th:replace="fragments/signButton :: button"></div>
+            </div>
+            <div class="description">
+                <h2 th:text="${forum.description}"></h2>
+            </div>
+            <hr />
+        </div>
+        <div th:replace="fragments/posts :: posts"></div>
     </section>
 </body>
 

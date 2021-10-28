@@ -2,11 +2,12 @@
 <html layout:decorate="~{layout}">
 
 <head>
+    <link th:href="@{/css/post.css}" rel="stylesheet" />
 </head>
 
 <body>
     <section class="layout-content" layout:fragment="corpo">
-        <p th:text="'Hello, ' + ${name} + '!'"></p>
+        <div th:replace="fragments/posts :: posts"></div>
     </section>
 </body>
 
