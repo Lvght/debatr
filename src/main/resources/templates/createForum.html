@@ -104,8 +104,6 @@
         <h1>Criar um forum</h1>
         <hr />
         <form th:object="${forum}" th:action="@{/forum/cadastrar}" method="POST" enctype="multipart/form-data">
-            <input th:field="*{owner}" value=1 hidden required />
-
             <label for="escopoAcesso">Quem pode visualizar</label>
             <select id="escopoAcesso" name="accessScope" required>
 
@@ -139,7 +137,7 @@
             <textarea id="descricao" name="description" required></textarea>
 
             <label for="icone">icone</label>
-            <input id="icone" name="icon" type="file" required />
+            <input id="icone" name="icon" type="text" required />
             <br />
             <hr />
             <div class="actionButtons">
