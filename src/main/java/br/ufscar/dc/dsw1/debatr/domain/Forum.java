@@ -52,6 +52,9 @@ public class Forum extends AbstractEntity {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    public Forum() {
+    }
+
     public long getId() {
         return id;
     }

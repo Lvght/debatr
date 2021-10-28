@@ -103,11 +103,11 @@
     <div class="forumForm layout-content" layout:fragment="corpo">
         <h1>Criar um forum</h1>
         <hr />
-        <form th:action="@{/forum}" method="POST" enctype="multipart/form-data">
-            <input name="id_dono" hidden required />
+        <form th:object="${forum}" th:action="@{/forum/cadastrar}" method="POST" enctype="multipart/form-data">
+            <input th:field="*{owner}" value=1 hidden required />
 
             <label for="escopoAcesso">Quem pode visualizar</label>
-            <select id="escopoAcesso" name="escopo_acesso" required>
+            <select id="escopoAcesso" name="accessScope" required>
 
                 <option value=1>
                     Qualquer um
@@ -120,7 +120,7 @@
             </select>
 
             <label for="escopoPostagem">Quem pode postar</label>
-            <select id="escopoPostagem" name="escopo_postagem" required>
+            <select id="escopoPostagem" name="postScope" required>
                 <option value=1>
                     Qualquer um
                 </option>
@@ -132,14 +132,14 @@
             </select>
 
             <label for="titulo">Titulo</label>
-            <input id="titulo" name="titulo" required pattern="[^ ]+([^]*[^ ])*"
+            <input id="titulo" name="title" required pattern="[^ ]+([^]*[^ ])*"
                 title="Deve conter ao menos uma letra, não começar e nem terminar com espaço" />
 
             <label for="descricao">Descricao</label>
-            <textarea id="descricao" name="descricao" required></textarea>
+            <textarea id="descricao" name="description" required></textarea>
 
             <label for="icone">icone</label>
-            <input id="icone" name="icone" type="file" required />
+            <input id="icone" name="icon" type="file" required />
             <br />
             <hr />
             <div class="actionButtons">
