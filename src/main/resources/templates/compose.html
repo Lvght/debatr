@@ -108,8 +108,8 @@
                 <div th:case="true">
                      <h1>Você não está em nenhum fórum</h1>
                     <p>
-                        Para fazer postagens, você deve se inscrever em ao menos um fórum. Você pode verificar a <a href="#">lista de
-                        fóruns do <strong>Debatr</strong></a>, ou <a href="/forum">criar um novo fórum</a>.
+                        Para fazer postagens, você deve se inscrever em ao menos um fórum. Você pode verificar a <a th:href="@{/forum/list}">lista de
+                        fóruns do <strong>Debatr</strong></a>, ou <a th:href="@{/forum/register}">criar um novo fórum</a>.
                     </p>
                 </div>
                 <div th:case="false">
