@@ -10,10 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufscar.dc.dsw1.debatr.domain.User;
@@ -80,7 +78,7 @@ public class UserController {
     }
 
     @GetMapping("/config/profile")
-    public String editProfile(Model model) {
+    public String getEditProfileForm(Model model) {
 
         UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
 
@@ -90,6 +88,29 @@ public class UserController {
         }
 
         return "editProfile";
+    }
+
+    @PostMapping("/config/profile")
+    public ModelAndView editProfile(
+            @RequestParam("display-name") String displayName,
+            @RequestParam("biography") String biography,
+            ModelMap model
+    ) {
+        UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+        if (userDetails != null) {
+            User currentUser = service.buscarPorUsername(userDetails.getUsername());
+
+            if (currentUser != null) {
+                currentUser.setDisplayName(displayName);
+                currentUser.setDescription(biography);
+
+                service.salvar(currentUser);
+            }
+        }
+
+        // Indicates that the current profile has been successfully updated.
+        model.addAttribute("updated", true);
+        return new ModelAndView("redirect:profile", model);
     }
 
     // @GetMapping("/editar/{id}")

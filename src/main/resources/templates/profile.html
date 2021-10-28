@@ -28,7 +28,8 @@
                         <span class="d-block" th:text="'@' + ${profileOwner.username}"></span>
                     </div>
                     <div class="col text-end p-0" th:if="${isProfileOwner}">
-                        <input type='button' value='Editar perfil'>
+                        <a th:href="@{/config/profile}"
+                           class="btn btn-primary">Editar perfil</a>
                     </div>
                 </div>
 

@@ -32,6 +32,11 @@
                         <i class='bx bx-grid-alt nav_icon'></i>
                         <span class="nav_name">Criar Forum</span>
                     </a>
+
+                    <a th:href="@{'/profile/' + ${#request.userPrincipal.getName()}}" class="nav_link">
+                        <i class='bx bx-grid-alt nav_icon'></i>
+                        <span class="nav_name">Perfil</span>
+                    </a>
                 </div>
             </div>
         </nav>

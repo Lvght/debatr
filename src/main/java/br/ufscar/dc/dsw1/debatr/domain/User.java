@@ -2,6 +2,7 @@ package br.ufscar.dc.dsw1.debatr.domain;
 
 import org.dom4j.tree.AbstractEntity;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "debatr_user")
+@EntityListeners(AuditingEntityListener.class)
 public class User extends AbstractEntity {
 
     @Column(nullable = false, updatable = false)

@@ -2,32 +2,107 @@
 <html layout:decorate="~{layout}">
     <head>
         <title>Editar profile</title>
+
+        <script>
+            function imagePreview(input) {
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#frame').attr('src', e.target.result)
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+        </script>
     </head>
 
     <body>
-        <div class="layout-content mt-4" layout:fragment="corpo">
+        <div class="layout-content mt-4 mb-5" layout:fragment="corpo">
+
+            <div th:if="${param.updated != null}"
+                 class="alert alert-success mt-3 mb-3"
+                 role="alert">
+                Perfil atualizado com sucesso!
+            </div>
+
             <h1>Editar perfil</h1>
             <form th:action="@{/config/profile}" method="post">
+
+
+                <div class="form-group mt-4 mb-4">
+                    <label class="btn btn-default btn-file">
+                        <div th:switch="${user.profileImageUrl == null}">
+                            <img th:case="true"
+                                 id="frame"
+                                 th:src="@{/image/default-profile.jpeg}"
+                                 class="rounded-circle p-0"
+                                 style="width: 72px; height: 72px; object-fit: cover">
+
+                            <img th:case="false"
+                                 id="frame"
+                                 th:src="@{${user.profileImageUrl}}"
+                                 class="rounded-circle p-0"
+                                 style="width: 72px; height: 72px; object-fit: cover">
+                        </div>
+
+                        <input type="file"
+                               onchange="imagePreview(this)"
+                               style="display: none;">
+                    </label>
+                </div>
+
                 <div class="form-group mt-3">
                     <label for="display-name">Nome de exibição</label>
                     <input type="text"
                            class="form-control"
                            id="display-name"
-                           th:placeholder="${user.display_name}">
-<!--                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+                           name="display-name"
+                           minlength="1"
+                           placeholder="O nome que aparecerá no seu perfil"
+                           required
+                           th:value="${user.display_name}">
+                    <!--                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+
                 </div>
+
+                <div class="form-group mt-3">
+                    <label for="username" class="sr-only">Nome de usuário</label>
+
+                    <input type="text"
+                           name="username"
+                           class="form-control"
+                           id="username"
+                           minlength="1"
+                           placeholder="Seu identificador"
+                           required
+                           th:value="${user.username}">
+                    <!--                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+
+                </div>
+
                 <div class="form-group mt-3">
                     <label for="description-textarea">Biografia</label>
-                    <textarea th:placeholder="${user.description}"
+                    <textarea th:text="${user.description}"
+                              placeholder="Fale sobre você"
                               class="form-control"
                               id="description-textarea"
-                              name="description"
+                              name="biography"
                               maxlength="255"></textarea>
                 </div>
 
-                <div class="form-check mt-3">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
+
+                <div th:switch="${user.ar == 0}" class="form-group mt-3">
+                    <button th:case="true"
+                            type="button"
+                            class="btn btn-link">
+                        Verificar minha conta
+                    </button>
+                    <button th:case="false"
+                            type="button"
+                            class="btn btn-link">
+                        Remover status de verificado
+                    </button>
                 </div>
                 <button type="submit" class="btn btn-primary mt-5">Salvar</button>
             </form>
