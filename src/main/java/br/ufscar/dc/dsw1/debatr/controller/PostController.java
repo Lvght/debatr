@@ -53,7 +53,7 @@ public class PostController {
 
     @PostMapping("/compose")
     public String createPost(@RequestParam("title") String title, @RequestParam("content") String content,
-            @RequestParam("forum_id") Long forumId, Model model) {
+                             @RequestParam("forum_id") Long forumId, Model model) {
 
         UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
         model.addAttribute("errored", true);

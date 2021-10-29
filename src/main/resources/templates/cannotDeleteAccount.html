@@ -6,7 +6,7 @@
     </head>
     <body>
         <section class="layout-content" layout:fragment="corpo">
-            <div class="container">
+            <div class="container mt-5 mb-5">
                 <h1>Não podemos apagar a sua conta ainda</h1>
                 <p>Você é administrador dos seguintes fóruns:</p>
                 <ul th:each="forum: ${foruns}">
@@ -23,9 +23,23 @@
                     MOTIVO, ESTA OPÇÃO É FORTEMENTE CONTRARRECOMENDADA</strong>.
                 </p>
 
-                <form class="mt-5" th:action="@{/config/delete-account}" method="post">
-                    <button class="btn btn-danger" type="submit">FORÇAR A EXCLUSÃO DA MINHA CONTA</button>
-                </form>
+                <p>
+                    Se deseja prosseguir, confirme sua senha abaixo.
+                </p>
+
+                <form th:action="@{/config/delete-account}" method="post">
+                    <div class="form-group mt-4">
+                        <label>Confirme sua senha
+                            <input type="password"
+                                   class="form-control"
+                                   name="password"
+                                   placeholder="Digite sua senha aqui">
+                        </label>
+                    </div>
+
+                    <div class="form-group mt-5">
+                        <button type="submit" class="btn btn-danger">FORÇAR A EXCLUSÃO DA MINHA CONTA</button>
+                    </div>
 
             </div>
         </section>
