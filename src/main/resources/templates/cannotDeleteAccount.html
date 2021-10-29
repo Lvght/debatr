@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layout}">
+    <head>
+        <meta charset="UTF-8">
+        <title>Não é possível deletar a sua conta</title>
+    </head>
+    <body>
+        <section class="layout-content" layout:fragment="corpo">
+            <div class="container">
+                <h1>Não podemos apagar a sua conta ainda</h1>
+                <p>Você é administrador dos seguintes fóruns:</p>
+                <ul>
+                    <li>AA</li>
+                    <li>BB</li>
+                </ul>
+                <p>Para excluir a sua conta, delegue os fóruns acima para outro usuário antes.</p>
+                <a class="btn btn-link" href="/">Voltar para o início</a>
+
+                <hr>
+
+                <p>
+                    Se quiser, podemos forçar a exclusão da sua conta imediatamente. <strong>ESTEJA CIENTE DE
+                    QUE ISSO APAGARÁ IRREVERSÍVELMENTE TODOS OS DADOS DOS FÓRUNS QUE VOCÊ ADMINISTRA. POR ESTE
+                    MOTIVO, ESTA OPÇÃO É FORTEMENTE CONTRARRECOMENDADA</strong>.
+                </p>
+
+                <form class="mt-5">
+                    <button class="btn btn-danger" type="submit">FORÇAR A EXCLUSÃO DA MINHA CONTA</button>
+                </form>
+
+            </div>
+        </section>
+    </body>
+</html>

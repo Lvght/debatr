@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layout}">
+    <head>
+        <meta charset="UTF-8">
+        <title>Apagar conta</title>
+    </head>
+    <body>
+        <section class="layout-content" layout:fragment="corpo">
+            <div class="container mt-5">
+                <h1>Você tem certeza?</h1>
+                <p>
+                    Se confirmar esta operação, todos os dados da sua conta serão excluídos, incluindo todas as suas
+                    postagens e reações. <strong>Esta operação é irreversível</strong>.
+                </p>
+
+                <p>
+                    Se ainda assim deseja continuar, confirme sua senha abaixo.
+                </p>
+
+                <form>
+                    <div class="form-group mt-4">
+                        <label>Confirme sua senha
+                            <input type="password"
+                                   class="form-control"
+                                   name="password"
+                                   placeholder="Digite sua senha aqui">
+                        </label>
+                    </div>
+
+                    <div class="form-group mt-5">
+                        <button type="submit" class="btn btn-danger">Apagar minha conta</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </body>
+</html>

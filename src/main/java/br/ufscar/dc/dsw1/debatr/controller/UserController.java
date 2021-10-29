@@ -118,6 +118,24 @@ public class UserController {
         return new ModelAndView("redirect:profile", model);
     }
 
+    @GetMapping("/config/delete-account")
+    public String apagarConta(Model model) {
+
+        UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+
+        if (details != null) {
+            User currentUser = service.buscarPorUsername(details.getUsername());
+
+            if (currentUser != null) {
+                if (currentUser.getForuns().size() != 0) {
+                    return "cannotDeleteAccount";
+                }
+            }
+        }
+
+        return "confirmAccountDeletion";
+    }
+
     // @GetMapping("/editar/{id}")
     // public String preEditar(@PathVariable("id") Long id, ModelMap model) {
     // model.addAttribute("usuario", service.buscarPorId(id));

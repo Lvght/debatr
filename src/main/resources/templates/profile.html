@@ -37,7 +37,7 @@
                    th:text="${profileOwner.description}"
                    class="mt-4 mb-3 p-0"></p>
 
-                <h1 class="mt-4">Estatísticas</h1>
+                <h1 class="mt-5">Estatísticas</h1>
                 <div class="row align-items-center">
                     <div class="col-auto align-items-center justify-content-center">
                     <span th:text="${profileOwner.posts.size()}"
@@ -58,11 +58,18 @@
 
                         <img th:case="true"
                              th:src="verifiedpath">
+
                         <input th:case="false"
                                type="button"
                                value="Verificar perfil">
 
                     </div>
+                </div>
+
+                <div th:if="${profileOwner.username == #request.getUserPrincipal().getName()}" class="mt-5">
+                    <form th:action="@{/config/delete-account}">
+                        <button type="submit" class="btn btn-outline-danger">Apagar minha conta</button>
+                    </form>
                 </div>
             </div>
         </section>
