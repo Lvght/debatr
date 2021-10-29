@@ -96,7 +96,7 @@ public class ForumController {
         Forum forum = forumService.buscarPorId(id, user);
         user.getForuns().add(forum);
         userService.salvar(user);
-        forum.setUserIngress(true);
+        // forum.setUserIngress(true);
         model.addAttribute("forum", forum);
         return "fragments/signButton";
     }
@@ -108,7 +108,7 @@ public class ForumController {
         Forum forum = forumService.buscarPorId(id, user);
         user.getForuns().remove(forum);
         userService.salvar(user);
-        forum.setUserIngress(false);
+        // forum.setUserIngress(false);
         model.addAttribute("forum", forum);
         return "fragments/signButton";
     }

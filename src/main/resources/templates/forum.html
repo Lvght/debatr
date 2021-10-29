@@ -153,8 +153,9 @@
     <section class="layout-content" layout:fragment="corpo">
         <div class="forum">
             <div class="details">
-                <div class="forumIcon">
-                    <img src="https://seeklogo.com/images/U/ufscar-logotipo-logo-E01F858A9C-seeklogo.com.png" />
+                <div th:switch="${forum.iconImageUrl == null}" class="forumIcon">
+                    <img th:case="true" th:src="@{/image/default-forum.png}" />
+                    <img th:case="false" th:src="@{${forum.iconImageUrl}}">
                 </div>
                 <div class="forumInformation">
                     <a th:href="@{/forum/{id} (id=${forum.id})}">

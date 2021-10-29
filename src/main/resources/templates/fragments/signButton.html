@@ -6,7 +6,7 @@
 </head>
 
 <body>
-    <div th:switch="${forum.isUserIngress()}" th:fragment="button" class="action">
+    <div th:switch="${false}" th:fragment="button" class="action">
         <div th:case="false" th:id="${'ingressar' + forum.id}">
             <input class="ingressar" type="submit" value="Ingressar"
                 th:attr="onclick=|genericXmlHttpRequest('/forum/signIn/${forum.id}', 'GET', '', 'ingressar${forum.id}')|">

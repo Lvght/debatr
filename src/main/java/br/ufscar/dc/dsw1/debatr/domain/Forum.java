@@ -2,7 +2,6 @@ package br.ufscar.dc.dsw1.debatr.domain;
 
 import org.dom4j.tree.AbstractEntity;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -49,19 +48,15 @@ public class Forum extends AbstractEntity {
     private String description;
 
     @NotBlank
-    @NotEmpty
-    @NotNull
     @Length(max = 255)
-    @Column(length = 255, nullable = false)
-    private String icon;
+    @Column(length = 255, nullable = true)
+    private String iconImageUrl;
 
     @Column(name = "created_at")
     private Date createdAt;
 
     @Column(name = "updated_at")
     private Date updatedAt;
-
-    boolean userIngress;
 
     public Forum() {
     }
@@ -114,12 +109,12 @@ public class Forum extends AbstractEntity {
         this.description = description;
     }
 
-    public String getIcon() {
-        return icon;
+    public String getIconImageUrl() {
+        return iconImageUrl;
     }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
+    public void setIconImageUrl(String icon) {
+        this.iconImageUrl = icon;
     }
 
     public Date getCreatedAt() {
@@ -144,14 +139,6 @@ public class Forum extends AbstractEntity {
 
     public void setMembers(List<User> members) {
         this.members = members;
-    }
-
-    public boolean isUserIngress() {
-        return userIngress;
-    }
-
-    public void setUserIngress(boolean userIngress) {
-        this.userIngress = userIngress;
     }
 
     public List<Post> getPosts() {

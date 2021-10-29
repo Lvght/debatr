@@ -29,7 +29,7 @@ public class ForumService implements IForumService {
     @Transactional(readOnly = true)
     public Forum buscarPorId(Long id, User user) {
         Forum forum = dao.findById(id.longValue());
-        forum.setUserIngress(forum.getMembers().contains(user));
+        // forum.setUserIngress(forum.getMembers().contains(user));
         return forum;
     }
 
@@ -37,7 +37,7 @@ public class ForumService implements IForumService {
     public List<Forum> buscarTodos(User user) {
         List<Forum> foruns = dao.findAll();
         for (Forum forum : foruns) {
-            forum.setUserIngress(forum.getMembers().contains(user));
+            // forum.setUserIngress(forum.getMembers().contains(user));
         }
         return foruns;
     }
