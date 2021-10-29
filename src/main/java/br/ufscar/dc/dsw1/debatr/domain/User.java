@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class User extends AbstractEntity {
     private String profileImageUrl;
 
     @ManyToMany()
-    List<Forum> foruns;
+    List<Forum> foruns = new ArrayList<>();
 
     private String description;
 
@@ -68,7 +69,8 @@ public class User extends AbstractEntity {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String displayName, String username, String email, String password) {
         this.displayName = displayName;

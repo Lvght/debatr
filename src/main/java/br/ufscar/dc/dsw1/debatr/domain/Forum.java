@@ -1,11 +1,13 @@
 package br.ufscar.dc.dsw1.debatr.domain;
 
+import net.bytebuddy.implementation.bind.annotation.Default;
 import org.dom4j.tree.AbstractEntity;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +23,7 @@ public class Forum extends AbstractEntity {
     private User owner;
 
     @ManyToMany(mappedBy = "foruns")
-    private List<User> members;
+    private List<User> members = new ArrayList<>();
 
     @OneToMany(mappedBy = "forum")
     private List<Post> posts;

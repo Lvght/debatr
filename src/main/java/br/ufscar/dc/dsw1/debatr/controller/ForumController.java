@@ -44,7 +44,7 @@ public class ForumController {
 
             if (user != null) {
                 Forum newForum = new Forum(user, postScope, accessScope, title, description);
-                forumService.salvar(newForum);
+                forumService.salvarEAdicionarMembro(newForum, user);
 
                 return "redirect:/home";
             }

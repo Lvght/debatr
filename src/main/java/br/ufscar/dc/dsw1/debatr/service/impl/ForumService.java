@@ -3,6 +3,7 @@ package br.ufscar.dc.dsw1.debatr.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.ufscar.dc.dsw1.debatr.dao.IUserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,9 @@ public class ForumService implements IForumService {
 
     @Autowired
     IForumDAO dao;
+
+    @Autowired
+    IUserDAO userDAO;
 
     public Forum salvar(Forum forum) {
         return dao.save(forum);
@@ -47,15 +51,7 @@ public class ForumService implements IForumService {
     @Override
     public void salvarEAdicionarMembro(Forum forum, User member) {
         Forum f = dao.save(forum);
-
-        if (f.getMembers() == null) {
-            ArrayList<User> list = new ArrayList<>();
-            list.add(member);
-            f.setMembers(list);
-        } else {
-            f.addMember(member);
-        }
-
-        dao.save(f);
+        member.getForuns().add(f);
+        userDAO.save(member);
     }
 }
