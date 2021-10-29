@@ -2,6 +2,7 @@ package br.ufscar.dc.dsw1.debatr.domain;
 
 import org.dom4j.tree.AbstractEntity;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -20,10 +21,10 @@ public class Forum extends AbstractEntity {
     private User owner;
 
     @ManyToMany(mappedBy = "foruns")
-    List<User> members;
+    private List<User> members;
 
     @OneToMany(mappedBy = "forum")
-    List<Post> posts;
+    private List<Post> posts;
 
     @NotNull
     @Column(name = "post_scope", nullable = false)
@@ -47,9 +48,8 @@ public class Forum extends AbstractEntity {
     @Column(length = 255, nullable = false)
     private String description;
 
-    @NotBlank
-    @Length(max = 255)
-    @Column(length = 255, nullable = true)
+    @URL
+    @Column(nullable = true)
     private String iconImageUrl;
 
     @Column(name = "created_at")
@@ -61,10 +61,22 @@ public class Forum extends AbstractEntity {
     public Forum() {
     }
 
+    public Forum(User owner, int postScope, int accessScope, String title, String description) {
+        this.owner = owner;
+        this.postScope = postScope;
+        this.accessScope = accessScope;
+        this.title = title;
+        this.description = description;
+    }
+
     public boolean isMember(String username) {
         return this.members.stream()
                 .filter(member -> username.equals(member.getUsername()))
                 .findFirst().orElse(null) != null;
+    }
+
+    public void addMember(User newMember) {
+        members.add(newMember);
     }
 
     public long getId() {

@@ -9,7 +9,9 @@ public interface IForumService {
 
     List<Forum> buscarTodos(User user);
 
-    void salvar(Forum forum);
+    Forum salvar(Forum forum);
+
+    void salvarEAdicionarMembro(Forum forum, User member);
 
     void excluir(Long id);
 }

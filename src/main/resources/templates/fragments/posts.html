@@ -12,9 +12,11 @@
                 <div class="informations">
                     <a th:href="@{/forum/{forum_id} (forum_id=${post.forum.id})}">
                         <div class="postForumInformation">
-                            <div class="forumIcon">
-                                <img
-                                    src="https://seeklogo.com/images/U/ufscar-logotipo-logo-E01F858A9C-seeklogo.com.png" />
+                            <div th:switch="${post.forum.iconImageUrl == null}" class="forumIcon">
+                                <img th:case="true"
+                                    th:src="@{/image/default-forum.png}" />
+                                <img th:case="true"
+                                     th:src="@{post.forum.iconImageUrl}" />
                             </div>
                             <div class="forumName">
                                 <h2 th:text="${'f:' + post.forum.title}"></h2>
