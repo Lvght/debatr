@@ -61,6 +61,12 @@ public class Forum extends AbstractEntity {
     public Forum() {
     }
 
+    public boolean isMember(String username) {
+        return this.members.stream()
+                .filter(member -> username.equals(member.getUsername()))
+                .findFirst().orElse(null) != null;
+    }
+
     public long getId() {
         return id;
     }
