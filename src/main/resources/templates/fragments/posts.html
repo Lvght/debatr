@@ -1,53 +1,60 @@
 <!DOCTYPE html>
 <html lang="br">
 
-<head>
-    <meta charset="utf-8">
-</head>
+    <head>
+        <meta charset="utf-8">
+    </head>
 
-<body>
-    <div class="posts" th:fragment="posts" th:each="post: ${posts}">
-        <div class="post">
-            <div class="postHeader">
-                <div class="informations">
-                    <a th:href="@{/forum/{forum_id} (forum_id=${post.forum.id})}">
-                        <div class="postForumInformation">
-                            <div th:switch="${post.forum.iconImageUrl == null}" class="forumIcon">
-                                <img th:case="true"
-                                    th:src="@{/image/default-forum.png}" />
-                                <img th:case="true"
-                                     th:src="@{post.forum.iconImageUrl}" />
-                            </div>
-                            <div class="forumName">
-                                <h2 th:text="${'f:' + post.forum.title}"></h2>
-                            </div>
-                        </div>
-                    </a>
-                    <a th:href="@{/profile/{username} (username=${post.author.username})}">
-                        <div class="userInformation">
-                            <div class="userPicture">
-                                <img th:src="@{/image/default-profile.jpeg}" alt="">
-
-                            </div>
-                            <div class="username">
-                                <h2 th:text="${post.author.username}"></h2>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="body">
-                <div class="titulo">
-                    <h2 th:text="${post.title}"></h2>
-                </div>
-                <div id="content${post.id}" class="conteudo">
-                    <h2 th:text="${post.content}"></h2>
-                </div>
-            </div>
+    <body>
+        <div th:fragment="posts"
+             th:if="${posts != null && posts.size() == 0}"
+             class="container mt-5 mb-5">
+            <h1>Não há nada aqui... ainda</h1>
+            <p><a th:href="@{/forum/list}">Se cadastre em um dos fóruns do Debatr</a>, ou <a th:href="@{/forum/register}">comece o seu pŕoprio.</a></p>
         </div>
-        <hr />
-    </div>
-</body>
+
+        <div class="posts" th:if="${posts != null && posts.size() != 0}" th:fragment="posts" th:each="post: ${posts}">
+            <div class="post">
+                <div class="postHeader">
+                    <div class="informations">
+                        <a th:href="@{/forum/{forum_id} (forum_id=${post.forum.id})}">
+                            <div class="postForumInformation">
+                                <div th:switch="${post.forum.iconImageUrl == null}" class="forumIcon">
+                                    <img th:case="true"
+                                         th:src="@{/image/default-forum.png}"/>
+                                    <img th:case="true"
+                                         th:src="@{post.forum.iconImageUrl}"/>
+                                </div>
+                                <div class="forumName">
+                                    <h2 th:text="${'f:' + post.forum.title}"></h2>
+                                </div>
+                            </div>
+                        </a>
+                        <a th:href="@{/profile/{username} (username=${post.author.username})}">
+                            <div class="userInformation">
+                                <div class="userPicture">
+                                    <img th:src="@{/image/default-profile.jpeg}" alt="">
+
+                                </div>
+                                <div class="username">
+                                    <h2 th:text="${post.author.username}"></h2>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="body">
+                    <div class="titulo">
+                        <h2 th:text="${post.title}"></h2>
+                    </div>
+                    <div id="content${post.id}" class="conteudo">
+                        <h2 th:text="${post.content}"></h2>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+        </div>
+    </body>
 
 </html>
