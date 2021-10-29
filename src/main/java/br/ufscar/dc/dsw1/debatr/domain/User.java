@@ -1,6 +1,7 @@
 package br.ufscar.dc.dsw1.debatr.domain;
 
 import org.dom4j.tree.AbstractEntity;
+import org.hibernate.annotations.OnDelete;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -37,7 +38,7 @@ public class User extends AbstractEntity {
     @Column(name = "email_verified_at")
     private Date emailVerifiedAt;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", cascade = {CascadeType.REMOVE})
     private List<Post> posts;
 
     @NotEmpty
@@ -54,8 +55,11 @@ public class User extends AbstractEntity {
     @Column(name = "profile_image")
     private String profileImageUrl;
 
-    @ManyToMany()
+    @ManyToMany(cascade = {CascadeType.DETACH})
     List<Forum> foruns = new ArrayList<>();
+
+    @OneToMany(mappedBy = "owner", cascade = {CascadeType.REMOVE})
+    private List<Forum> administeredForuns = new ArrayList<>();
 
     private String description;
 
@@ -193,5 +197,13 @@ public class User extends AbstractEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Forum> getAdministeredForuns() {
+        return administeredForuns;
+    }
+
+    public void setAdministeredForuns(List<Forum> administeredForuns) {
+        this.administeredForuns = administeredForuns;
     }
 }

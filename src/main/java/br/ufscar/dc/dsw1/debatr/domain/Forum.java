@@ -18,14 +18,14 @@ public class Forum extends AbstractEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne()
+    @ManyToOne(cascade = {CascadeType.DETACH})
     @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
     private User owner;
 
-    @ManyToMany(mappedBy = "foruns")
+    @ManyToMany(mappedBy = "foruns", cascade = {CascadeType.DETACH})
     private List<User> members = new ArrayList<>();
 
-    @OneToMany(mappedBy = "forum")
+    @OneToMany(mappedBy = "forum", cascade = {CascadeType.REMOVE})
     private List<Post> posts;
 
     @NotNull
@@ -71,8 +71,11 @@ public class Forum extends AbstractEntity {
         this.description = description;
     }
 
+    /**
+     * @return [true], if the user is a member or is the owner of this forum. [false], otherwise.
+     */
     public boolean isMember(String username) {
-        return this.members.stream()
+        return this.owner.getUsername().equals(username) || this.members.stream()
                 .filter(member -> username.equals(member.getUsername()))
                 .findFirst().orElse(null) != null;
     }

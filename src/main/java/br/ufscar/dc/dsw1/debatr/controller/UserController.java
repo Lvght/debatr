@@ -32,6 +32,16 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder encoder;
 
+    private User getCurrentUser() {
+        UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+
+        if (details != null) {
+            return service.buscarPorUsername(details.getUsername());
+        }
+
+        return null;
+    }
+
     @GetMapping("/register")
     public String cadastrar(User usuario) {
         return "register";
@@ -119,7 +129,7 @@ public class UserController {
     }
 
     @GetMapping("/config/delete-account")
-    public String apagarConta(Model model) {
+    public String deleteAccountConfirmation(Model model) {
 
         UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
 
@@ -127,7 +137,8 @@ public class UserController {
             User currentUser = service.buscarPorUsername(details.getUsername());
 
             if (currentUser != null) {
-                if (currentUser.getForuns().size() != 0) {
+                if (currentUser.getAdministeredForuns().size() != 0) {
+                    model.addAttribute("foruns", currentUser.getAdministeredForuns());
                     return "cannotDeleteAccount";
                 }
             }
@@ -136,31 +147,18 @@ public class UserController {
         return "confirmAccountDeletion";
     }
 
-    // @GetMapping("/editar/{id}")
-    // public String preEditar(@PathVariable("id") Long id, ModelMap model) {
-    // model.addAttribute("usuario", service.buscarPorId(id));
-    // return "usuario/cadastro";
-    // }
+    @PostMapping("/config/delete-account")
+    public String deleteAccount(HttpServletRequest request) {
+        User currentUser = getCurrentUser();
 
-    // @PostMapping("/editar")
-    // public String editar(@Valid User usuario, BindingResult result,
-    // RedirectAttributes attr) {
+        if (currentUser != null) {
+            service.excluir(currentUser.getId());
 
-    // if (result.hasErrors()) {
-    // return "usuario/cadastro";
-    // }
+            try {
+                request.logout();
+            } catch (ServletException ignored) {}
+        }
 
-    // System.out.println(usuario.getPassword());
-
-    // service.salvar(usuario);
-    // attr.addFlashAttribute("sucess", "Usuário editado com sucesso.");
-    // return "redirect:/usuarios/listar";
-    // }
-
-    // @GetMapping("/excluir/{id}")
-    // public String excluir(@PathVariable("id") Long id, ModelMap model) {
-    // service.excluir(id);
-    // model.addAttribute("sucess", "Usuário excluído com sucesso.");
-    // return listar(model);
-    // }
+        return "redirect:home";
+    }
 }

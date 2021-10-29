@@ -17,7 +17,7 @@
                     Se ainda assim deseja continuar, confirme sua senha abaixo.
                 </p>
 
-                <form>
+                <form th:action="@{/config/delete-account}" method="post">
                     <div class="form-group mt-4">
                         <label>Confirme sua senha
                             <input type="password"

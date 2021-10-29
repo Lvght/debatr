@@ -9,9 +9,8 @@
             <div class="container">
                 <h1>Não podemos apagar a sua conta ainda</h1>
                 <p>Você é administrador dos seguintes fóruns:</p>
-                <ul>
-                    <li>AA</li>
-                    <li>BB</li>
+                <ul th:each="forum: ${foruns}">
+                    <li><a target="_blank" th:href="@{'/forum/' + ${forum.id}}" th:text="${forum.title}"></a></li>
                 </ul>
                 <p>Para excluir a sua conta, delegue os fóruns acima para outro usuário antes.</p>
                 <a class="btn btn-link" href="/">Voltar para o início</a>
@@ -24,7 +23,7 @@
                     MOTIVO, ESTA OPÇÃO É FORTEMENTE CONTRARRECOMENDADA</strong>.
                 </p>
 
-                <form class="mt-5">
+                <form class="mt-5" th:action="@{/config/delete-account}" method="post">
                     <button class="btn btn-danger" type="submit">FORÇAR A EXCLUSÃO DA MINHA CONTA</button>
                 </form>
 
