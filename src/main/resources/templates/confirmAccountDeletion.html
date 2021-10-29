@@ -17,6 +17,12 @@
                     Se ainda assim deseja continuar, confirme sua senha abaixo.
                 </p>
 
+                <div th:if="${param.wrong_password != null}"
+                     class="alert alert-warning mt-3 mb-3"
+                     role="alert">
+                    Senha incorreta.
+                </div>
+
                 <form th:action="@{/config/delete-account}" method="post">
                     <div class="form-group mt-4">
                         <label>Confirme sua senha

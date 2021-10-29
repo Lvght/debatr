@@ -42,6 +42,10 @@ public class UserController {
         return null;
     }
 
+    private boolean doPasswordsMatch(String plaintextPassoword, String userPassword) {
+        return encoder.matches(plaintextPassoword, userPassword);
+    }
+
     @GetMapping("/register")
     public String cadastrar(User usuario) {
         return "register";
@@ -148,17 +152,33 @@ public class UserController {
     }
 
     @PostMapping("/config/delete-account")
-    public String deleteAccount(HttpServletRequest request) {
+    public ModelAndView deleteAccount(
+            @RequestParam("password") String password,
+            ModelMap model,
+            HttpServletRequest request
+            ) {
         User currentUser = getCurrentUser();
 
         if (currentUser != null) {
-            service.excluir(currentUser.getId());
+            if (doPasswordsMatch(password, currentUser.getPassword())) {
+                service.excluir(currentUser.getId());
 
-            try {
-                request.logout();
-            } catch (ServletException ignored) {}
+                try {
+                    request.logout();
+                } catch (ServletException ignored) {}
+            } else {
+                model.addAttribute("wrong_password", true);
+                model.addAttribute("pw", request.getAttribute("password"));
+
+                if (currentUser.getAdministeredForuns().size() == 0) {
+                    return new ModelAndView("redirect:/config/delete-account", model);
+                } else {
+                    return new ModelAndView("redirect:/config/delete-account", model);
+
+                }
+            }
         }
 
-        return "redirect:home";
+        return new ModelAndView("redirect:goodbye", model);
     }
 }

@@ -23,8 +23,29 @@
                     MOTIVO, ESTA OPÇÃO É FORTEMENTE CONTRARRECOMENDADA</strong>.
                 </p>
 
-                <form class="mt-5" th:action="@{/config/delete-account}" method="post">
-                    <button class="btn btn-danger" type="submit">FORÇAR A EXCLUSÃO DA MINHA CONTA</button>
+                <p>
+                    Se ainda assim deseja continuar, confirme sua senha abaixo.
+                </p>
+
+                <div th:if="${param.wrong_password != null}"
+                     class="alert alert-warning mt-3 mb-3"
+                     role="alert">
+                    Senha incorreta.
+                </div>
+
+                <form th:action="@{/config/delete-account}" method="post">
+                    <div class="form-group mt-4">
+                        <label>Confirme sua senha
+                            <input type="password"
+                                   class="form-control"
+                                   name="password"
+                                   placeholder="Digite sua senha aqui">
+                        </label>
+                    </div>
+
+                    <div class="form-group mt-5">
+                        <button type="submit" class="btn btn-danger">FORÇAR A EXCLUSÃO DA MINHA CONTA</button>
+                    </div>
                 </form>
 
             </div>
