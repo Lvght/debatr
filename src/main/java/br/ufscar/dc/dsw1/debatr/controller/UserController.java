@@ -1,27 +1,27 @@
 package br.ufscar.dc.dsw1.debatr.controller;
 
+import javax.mail.internet.InternetAddress;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
-import br.ufscar.dc.dsw1.debatr.helper.AuthenticatedUserHelper;
+import br.ufscar.dc.dsw1.debatr.service.impl.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.ufscar.dc.dsw1.debatr.domain.User;
+import br.ufscar.dc.dsw1.debatr.helper.AuthenticatedUserHelper;
 import br.ufscar.dc.dsw1.debatr.service.spec.IUserService;
+
+import java.io.UnsupportedEncodingException;
 
 @Controller
 public class UserController {
@@ -31,6 +31,14 @@ public class UserController {
 
     @Autowired
     private BCryptPasswordEncoder encoder;
+
+    private static String getBaseUrl(HttpServletRequest request) {
+        String scheme = request.getScheme() + "://";
+        String serverName = request.getServerName();
+        String serverPort = (request.getServerPort() == 80) ? "" : ":" + request.getServerPort();
+        String contextPath = request.getContextPath();
+        return scheme + serverName + serverPort + contextPath;
+    }
 
     private User getCurrentUser() {
         UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
@@ -52,15 +60,14 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String salvar(
-            HttpServletRequest request,
-            @RequestParam("email") String email,
-            @RequestParam("display_name") String displayName,
-            @RequestParam("username") String username,
-            @RequestParam("password") String plaintextPassword
-    ) {
+    public String salvar(HttpServletRequest request, @RequestParam("email") String email,
+                         @RequestParam("display_name") String displayName, @RequestParam("username") String username,
+                         @RequestParam("password") String plaintextPassword) {
         User newUser = new User(displayName, username, email, encoder.encode(plaintextPassword));
         service.salvar(newUser);
+
+        EmailService emailService = new EmailService();
+        emailService.sendVerifyYourEmail(newUser, getBaseUrl(request));
 
         try {
             request.login(username, plaintextPassword);
@@ -68,7 +75,53 @@ public class UserController {
             return "redirect:login";
         }
 
-        return "redirect:home";
+        return "redirect:/config/verify-email";
+    }
+
+    @GetMapping("/login")
+    public String getLoginForm() {
+
+        UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+        if (details != null) {
+            return "/";
+        }
+
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String login(
+            @RequestParam("username") String username,
+            @RequestParam("password") String password,
+            HttpServletRequest request
+    ) {
+        User user = service.buscarPorUsername(username);
+
+        if (user != null) {
+            if (encoder.matches(password, user.getPassword())) {
+                try {
+                    request.login(username, password);
+                } catch (ServletException e) {
+                    e.printStackTrace();
+                }
+
+                return "redirect:/config/verify-email";
+
+            }
+        }
+
+        return "login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        try {
+            request.logout();
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+
+        return "redirect:/";
     }
 
     @GetMapping("/profile/{username}")
@@ -85,8 +138,7 @@ public class UserController {
                 User currentUser = service.buscarPorUsername(details.getUsername());
 
                 if (currentUser != null) {
-                    model.addAttribute("isProfileOwner",
-                            currentUser.getId() == profileOwner.getId());
+                    model.addAttribute("isProfileOwner", currentUser.getId() == profileOwner.getId());
                 }
             }
         } else {
@@ -110,11 +162,8 @@ public class UserController {
     }
 
     @PostMapping("/config/profile")
-    public ModelAndView editProfile(
-            @RequestParam("display-name") String displayName,
-            @RequestParam("biography") String biography,
-            ModelMap model
-    ) {
+    public ModelAndView editProfile(@RequestParam("display-name") String displayName,
+                                    @RequestParam("biography") String biography, ModelMap model) {
         UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
         if (userDetails != null) {
             User currentUser = service.buscarPorUsername(userDetails.getUsername());
@@ -152,11 +201,8 @@ public class UserController {
     }
 
     @PostMapping("/config/delete-account")
-    public ModelAndView deleteAccount(
-            @RequestParam("password") String password,
-            ModelMap model,
-            HttpServletRequest request
-            ) {
+    public ModelAndView deleteAccount(@RequestParam("password") String password, ModelMap model,
+                                      HttpServletRequest request) {
         User currentUser = getCurrentUser();
 
         if (currentUser != null) {
@@ -165,7 +211,8 @@ public class UserController {
 
                 try {
                     request.logout();
-                } catch (ServletException ignored) {}
+                } catch (ServletException ignored) {
+                }
             } else {
                 model.addAttribute("wrong_password", true);
                 model.addAttribute("pw", request.getAttribute("password"));
@@ -180,5 +227,33 @@ public class UserController {
         }
 
         return new ModelAndView("redirect:goodbye", model);
+    }
+
+    @GetMapping("/config/verify-email")
+    public String emailConfirmation() {
+        EmailService emailService = new EmailService();
+
+        UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+
+        if (details != null) {
+            User user = service.buscarPorUsername(details.getUsername());
+
+            if (user != null && user.getEmailVerifiedAt() != null) {
+                return "redirect:/";
+            }
+        }
+
+        return "confirmEmail";
+
+//        try {
+//            emailService.send(
+//                    new InternetAddress("no-reply@debatr.com", "Equipe Debatr"),
+//                    new InternetAddress("viniciusluz@estudante.ufscar.br", "Vinicius"),
+//                    "Caixa Econômica Federal",
+//                    "Socorro");
+//            System.out.println("Deu certoooooooooooooooooooooo");
+//        } catch (UnsupportedEncodingException ignored) {
+//            System.out.println("Deu erradoooooooooooooo");
+//        }
     }
 }

@@ -45,6 +45,12 @@
                             <i class='bx bx-grid-alt nav_icon'></i>
                             <span class="nav_name">Perfil</span>
                         </a>
+
+                        <a th:href="@{/logout}"
+                           th:class="'nav_link ' + ${#httpServletRequest.requestURI == '/logout' ? 'active' : ''}">
+                            <i class='bx bx-grid-alt nav_icon'></i>
+                            <span class="nav_name">Sair da conta</span>
+                        </a>
                     </div>
                 </div>
             </nav>
