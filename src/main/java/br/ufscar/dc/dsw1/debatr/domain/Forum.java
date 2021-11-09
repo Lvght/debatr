@@ -28,6 +28,9 @@ public class Forum extends AbstractEntity {
     @OneToMany(mappedBy = "forum", cascade = {CascadeType.REMOVE})
     private List<Post> posts;
 
+    @OneToMany(mappedBy = "forum", cascade = {CascadeType.REMOVE})
+    private List<Topic> topics;
+
     @NotNull
     @Column(name = "post_scope", nullable = false)
     private int postScope;
@@ -170,6 +173,14 @@ public class Forum extends AbstractEntity {
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
+    }
+
+    public List<Topic> getTopics() {
+        return topics;
+    }
+
+    public void setTopics(List<Topic> topics) {
+        this.topics = topics;
     }
 
 }

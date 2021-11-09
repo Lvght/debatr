@@ -43,13 +43,13 @@
                     <span>Geral</span>
                   </div>
                 </a>
-                <!-- <c:forEach var="topico" items="${requestScope.topicos}">
-                          <a href="${pageContext.request.contextPath}/forum/especifico?id=${requestScope.forum.id}&topico=${topico.id}&filtro=${requestScope.filtro}">
-                            <div class="topicCard ${requestScope.topico == topico.id ? "active" : ""}">
-                              <span>${topico.getNome()}</span>
-                            </div>
-                          </a>
-                        </c:forEach>   -->
+                <div th:each="topic: ${forum.topics}">
+                  <a href="#">
+                    <div class="topicCard">
+                      <span th:text="${topic.name}"></span>
+                    </div>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
