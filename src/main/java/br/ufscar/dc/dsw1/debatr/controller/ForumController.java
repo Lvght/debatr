@@ -46,7 +46,7 @@ public class ForumController {
                 Forum newForum = new Forum(user, postScope, accessScope, title, description);
                 forumService.salvarEAdicionarMembro(newForum, user);
 
-                return "redirect:/";
+                return "redirect:/forum/" + newForum.getId();
             }
         }
 
@@ -77,6 +77,7 @@ public class ForumController {
         UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
         User user = userService.buscarPorUsername(userDetails.getUsername());
         Forum forum = forumService.buscarPorId(id, user);
+        model.addAttribute("currentUser", user);
         model.addAttribute("posts", forum.getPosts());
         model.addAttribute("forum", forumService.buscarPorId(id, user));
         model.addAttribute("status", "ingressar");
@@ -105,5 +106,41 @@ public class ForumController {
         // forum.setUserIngress(false);
         model.addAttribute("forum", forum);
         return "fragments/signButton";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String editForm(@PathVariable("id") Long id, ModelMap model) {
+        UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+        User user = userService.buscarPorUsername(userDetails.getUsername());
+        Forum forum = forumService.buscarPorId(id, user);
+        if(forum.getOwner().getId() != user.getId()) {
+            return "redirect:/forum/" + id;
+        }
+        model.addAttribute("currentUser", user);
+        model.addAttribute("forum", forum);
+        return "/edit";
+    }
+
+    @PostMapping("/{id}/edit")
+    public String edit(            
+            @RequestParam(value = "title", required = true) String title,
+            @RequestParam(value = "description") String description,
+            @RequestParam(value = "accessScope", defaultValue = "1") int accessScope,
+            @RequestParam(value = "postScope", defaultValue = "1") int postScope,
+            @RequestParam(value = "id", required = true) Long id
+        ) {
+        UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+
+        if (userDetails != null) {
+            User user = userService.buscarPorUsername(userDetails.getUsername());
+            Forum forum = forumService.buscarPorId(id, user);
+            forum.setTitle(title);
+            forum.setDescription(description);
+            forum.setAccessScope(accessScope);
+            forum.setPostScope(postScope);
+            forumService.salvar(forum);
+        }
+        
+        return "redirect:/forum/" + id;
     }
 }
