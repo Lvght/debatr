@@ -2,7 +2,7 @@
 <html layout:decorate="~{layout}">
   <head>
     <meta charset="UTF-8" />
-    <title>Criar novo fórum</title>
+    <title>Editar</title>
 
     <script>
       function imagePreview(input) {
@@ -20,7 +20,7 @@
 
   <body>
     <div class="forumForm layout-content mt-5 mb-5" layout:fragment="corpo">
-      <h1>Criar um forum</h1>
+      <h1>Editar</h1>
 
       <form th:object="${forum}" th:action="@{/forum/cadastrar}" method="post">
         <div class="form-group mt-4 mb-4">

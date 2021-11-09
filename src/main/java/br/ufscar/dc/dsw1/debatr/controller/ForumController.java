@@ -1,19 +1,24 @@
 package br.ufscar.dc.dsw1.debatr.controller;
 
 import br.ufscar.dc.dsw1.debatr.domain.Forum;
+import br.ufscar.dc.dsw1.debatr.domain.Topic;
 import br.ufscar.dc.dsw1.debatr.domain.User;
 import br.ufscar.dc.dsw1.debatr.helper.AuthenticatedUserHelper;
 import br.ufscar.dc.dsw1.debatr.service.spec.IForumService;
+import br.ufscar.dc.dsw1.debatr.service.spec.ITopicService;
 import br.ufscar.dc.dsw1.debatr.service.spec.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
 import java.util.List;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/forum")
@@ -24,6 +29,9 @@ public class ForumController {
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private ITopicService topicService;
 
     @GetMapping("/register")
     public String cadastrar(Forum forum) {
@@ -142,5 +150,35 @@ public class ForumController {
         }
         
         return "redirect:/forum/" + id;
+    }
+
+
+    @GetMapping("/{id}/topic")
+    public String topicForm(@PathVariable("id") Long id, ModelMap model) {
+        UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+        User user = userService.buscarPorUsername(userDetails.getUsername());
+        Forum forum = forumService.buscarPorId(id, user);
+        if(forum.getOwner().getId() != user.getId()) {
+            return "redirect:/forum/" + id;
+        }
+        model.addAttribute("currentUser", user);
+        model.addAttribute("forum", forum);
+        return "/createTopic";
+    }
+
+    @PostMapping("/{id}/topic")
+    public String topicCreation(@Valid @ModelAttribute("topic") Topic topic,
+                                BindingResult result,
+                                ModelMap model) {
+        UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+        User user = userService.buscarPorUsername(userDetails.getUsername());
+        Forum forum = forumService.buscarPorId(user.getId(), user);
+        if(forum.getOwner().getId() != user.getId()) {
+            return "redirect:/forum/" + forum.getId();
+        }
+        topic.setForum(forum);
+        topicService.salvar(topic);
+        
+        return "redirect:/forum/" + forum.getId();
     }
 }

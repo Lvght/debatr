@@ -11,6 +11,7 @@ import java.util.List;
 @Table(name = "topic")
 public class Topic extends AbstractEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne()

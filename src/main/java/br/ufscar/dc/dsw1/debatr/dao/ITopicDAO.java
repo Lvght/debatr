@@ -13,6 +13,8 @@ public interface ITopicDAO extends CrudRepository<Topic, Long> {
 
 	List<Topic> findAll();
 
+	List<Topic> findTopicsByForumId(Long forumId);
+
 	Topic save(Topic topico);
 
 	void deleteById(Long id);
