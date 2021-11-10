@@ -15,7 +15,16 @@ spring.jpa.hibernate.naming.physical-strategy = org.hibernate.boot.model.naming.
 # THYMELEAF
 
 spring.thymeleaf.cache = false
-
-
 spring.security.user.username=username
 spring.security.user.password=password
+
+# Email
+mail.smtp.host = smtp.gmail.com
+mail.smtp.port = 465
+mail.smtp.ssl.enable = true
+mail.smtp.auth = true
+username = XXX
+password = XXX
+
+# JWT Related
+secret = uma_string_segura_e_secreta
