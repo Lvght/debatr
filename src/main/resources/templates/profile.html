@@ -1,78 +1,75 @@
 <!DOCTYPE HTML>
 <html layout:decorate="~{layout}">
 
-    <head>
-    </head>
+<head>
+</head>
 
-    <body>
-        <section class="layout-content" layout:fragment="corpo">
-            <div class="container-fluid">
-                <div class="row align-items-center mt-5 mb-2">
-                    <div class="col-auto">
+<body>
+    <section class="layout-content" layout:fragment="corpo">
+        <div class="container-fluid">
 
-                        <!-- Profile image -->
-                        <div th:switch="${profileOwner.profileImageUrl == null}">
-                            <img th:case="true"
-                                 th:src="@{/image/default-profile.jpeg}"
-                                 class="rounded-circle p-0"
-                                 style="width: 48px; height: 48px; object-fit: cover">
-                            <img th:case="false"
-                                 th:src="@{${profileOwner.profileImageUrl}}"
-                                 class="rounded-circle p-0"
-                                 style="width: 48px; height: 48px; object-fit: cover">
-                        </div>
+            <!--A warning indicating that the user did not verify their email-->
+            <div th:if="${profileOwner.username == #request.getUserPrincipal().getName() && profileOwner.emailVerifiedAt == null}"
+                class="alert alert-warning mt-5" 
+                role="alert">
+                <strong>Atenção!</strong> Você ainda não verificou seu email.
+                <a th:href="${resendVerifyEmailPath}" class="alert-link">Clique aqui para verificar</a>
+            </div>
 
+            <div class="row align-items-center mt-5 mb-2">
+                <div class="col-auto">
+
+                    <!-- Profile image -->
+                    <div th:switch="${profileOwner.profileImageUrl == null}">
+                        <img th:case="true" th:src="@{/image/default-profile.jpeg}" class="rounded-circle p-0"
+                            style="width: 48px; height: 48px; object-fit: cover">
+                        <img th:case="false" th:src="@{${profileOwner.profileImageUrl}}" class="rounded-circle p-0"
+                            style="width: 48px; height: 48px; object-fit: cover">
                     </div>
-                    <div class="col-auto p-0">
-                        <span class="font-weight-bold d-block" th:text="${profileOwner.display_name}"></span>
-                        <span class="d-block" th:text="'@' + ${profileOwner.username}"></span>
-                    </div>
-                    <div class="col text-end p-0" th:if="${isProfileOwner}">
-                        <a th:href="@{/config/profile}"
-                           class="btn btn-primary">Editar perfil</a>
-                    </div>
+
                 </div>
-
-                <p th:if="${profileOwner.getDescription() != null && !profileOwner.getDescription().isBlank()}"
-                   th:text="${profileOwner.description}"
-                   class="mt-4 mb-3 p-0"></p>
-
-                <h1 class="mt-5">Estatísticas</h1>
-                <div class="row align-items-center">
-                    <div class="col-auto align-items-center justify-content-center">
-                    <span th:text="${profileOwner.posts.size()}"
-                          class="d-block text-center"
-                          style="font-size: 2.5rem"></span>
-                        <span class="d-block text-center">posts</span>
-                    </div>
-
-                    <div class="col-auto align-items-center justify-content-center">
-                    <span th:text="${profileOwner.reputation}"
-                          class="d-block text-center"
-                          style="font-size: 2.5rem"></span>
-                        <span class="d-block text-center">reputação</span>
-                    </div>
-
-                    <div th:switch="${profileOwner.ar != 0}"
-                         class="col-auto align-items-center justify-content-center">
-
-                        <img th:case="true"
-                             th:src="verifiedpath">
-
-                        <input th:case="false"
-                               type="button"
-                               value="Verificar perfil">
-
-                    </div>
+                <div class="col-auto p-0">
+                    <span class="font-weight-bold d-block" th:text="${profileOwner.display_name}"></span>
+                    <span class="d-block" th:text="'@' + ${profileOwner.username}"></span>
                 </div>
-
-                <div th:if="${profileOwner.username == #request.getUserPrincipal().getName()}" class="mt-5">
-                    <form th:action="@{/config/delete-account}">
-                        <button type="submit" class="btn btn-outline-danger">Apagar minha conta</button>
-                    </form>
+                <div class="col text-end p-0" th:if="${isProfileOwner}">
+                    <a th:href="@{/config/profile}" class="btn btn-primary">Editar perfil</a>
                 </div>
             </div>
-        </section>
-    </body>
+
+            <p th:if="${profileOwner.getDescription() != null && !profileOwner.getDescription().isBlank()}"
+                th:text="${profileOwner.description}" class="mt-4 mb-3 p-0"></p>
+
+            <h1 class="mt-5">Estatísticas</h1>
+            <div class="row align-items-center">
+                <div class="col-auto align-items-center justify-content-center">
+                    <span th:text="${profileOwner.posts.size()}" class="d-block text-center"
+                        style="font-size: 2.5rem"></span>
+                    <span class="d-block text-center">posts</span>
+                </div>
+
+                <div class="col-auto align-items-center justify-content-center">
+                    <span th:text="${profileOwner.reputation}" class="d-block text-center"
+                        style="font-size: 2.5rem"></span>
+                    <span class="d-block text-center">reputação</span>
+                </div>
+
+                <div th:switch="${profileOwner.ar != 0}" class="col-auto align-items-center justify-content-center">
+
+                    <img th:case="true" th:src="verifiedpath">
+
+                    <input th:case="false" type="button" value="Verificar perfil">
+
+                </div>
+            </div>
+
+            <div th:if="${profileOwner.username == #request.getUserPrincipal().getName()}" class="mt-5">
+                <form th:action="@{/config/delete-account}">
+                    <button type="submit" class="btn btn-outline-danger">Apagar minha conta</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
 
 </html>

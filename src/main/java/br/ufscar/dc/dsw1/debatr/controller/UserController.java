@@ -1,12 +1,12 @@
 package br.ufscar.dc.dsw1.debatr.controller;
 
-import javax.mail.internet.InternetAddress;
+import java.util.Date;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import br.ufscar.dc.dsw1.debatr.service.impl.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,10 +22,8 @@ import org.springframework.web.servlet.ModelAndView;
 import br.ufscar.dc.dsw1.debatr.domain.User;
 import br.ufscar.dc.dsw1.debatr.helper.AuthenticatedUserHelper;
 import br.ufscar.dc.dsw1.debatr.helper.JwtHelper;
+import br.ufscar.dc.dsw1.debatr.service.impl.EmailService;
 import br.ufscar.dc.dsw1.debatr.service.spec.IUserService;
-
-import java.io.UnsupportedEncodingException;
-import java.util.Date;
 
 @Controller
 public class UserController {
@@ -126,12 +124,15 @@ public class UserController {
     }
 
     @GetMapping("/profile/{username}")
-    public String profile(@PathVariable("username") String username, Model model) {
+    public String profile(@PathVariable("username") String username, HttpServletRequest request, ModelMap model) {
 
         User profileOwner = service.buscarPorUsername(username);
 
         if (profileOwner != null) {
             model.addAttribute("profileOwner", profileOwner);
+
+            // TODO Existe maneira eficiente de obter a url a partir do Thymeleaf?
+            model.addAttribute("resendVerifyEmailPath", getBaseUrl(request) + "/config/resend-verify-token");
 
             UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
 
@@ -268,4 +269,20 @@ public class UserController {
         return "emailVerified";
     }
 
+    @GetMapping("/config/resend-verify-token")
+    public String resendVerifyToken(HttpServletRequest request, ModelMap model) {
+        UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+
+        if (details != null) {
+            User user = service.buscarPorUsername(details.getUsername());
+
+            if (user != null && user.getEmailVerifiedAt() == null) {
+                EmailService emailService = new EmailService();
+                emailService.sendVerifyYourEmail(user, getBaseUrl(request));
+            }
+        }
+
+        model.addAttribute("homePath", getBaseUrl(request));
+        return "confirmEmail";
+    }
 }
