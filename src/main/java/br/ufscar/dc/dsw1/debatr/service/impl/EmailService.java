@@ -17,12 +17,12 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import br.ufscar.dc.dsw1.debatr.domain.User;
-import br.ufscar.dc.dsw1.debatr.helper.JwtHelper;
 import org.jboss.jandex.Main;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
+
+import br.ufscar.dc.dsw1.debatr.domain.User;
+import br.ufscar.dc.dsw1.debatr.helper.JwtHelper;
 
 public class EmailService {
 
@@ -104,19 +104,30 @@ public class EmailService {
         final String subject = "Verifique o email da sua conta Debatr";
         final String token = JwtHelper.generateJWTToken(user, "verify");
 
-//        Context context = new Context();
-//        context.setVariable("displayName", user.getDisplayName());
-//        context.setVariable("token", token);
-//
-//        final String body = templateEngine.process("welcome-email", context);
-        final String body = "" +
-                "Olá,\n\n" +
-                "Bem-vindo(a) ao Debatr. Para continuar usando sua conta sem limitações verifique sua conta " +
-                "com o link abaixo.\n\n" +
-                "<a href=" + path + "/config/verify-email/" + token + ">Verifique sua conta</a>";
+        final String body = "" + "Olá,\n\n"
+                + "Bem-vindo(a) ao Debatr. Para continuar usando sua conta sem limitações verifique sua conta "
+                + "com o link abaixo.\n\n" + "<a href=" + path + "/config/verify-email/" + token
+                + ">Verifique sua conta</a>";
 
         try {
-            send(
+            send(new InternetAddress("no-reply@debatr.com", "Debatr"),
+                    new InternetAddress(user.getEmail(), user.getDisplayName()), subject, body);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendPasswordResetEmail(User user, String path) {
+        final String subject = "Recuperação de senha";
+        final String token = JwtHelper.generateJWTToken(user, "reset");
+
+        final String body = "" + "Olá,\n\n"
+                + "Você está recebendo este email porque você ou alguém solicitou a recuperação de senha para sua conta.\n\n"
+                + "<a href=" + path + "/config/password-reset/" + token
+                + ">Recuperar senha</a>";
+
+        try {
+            send (
                     new InternetAddress("no-reply@debatr.com", "Debatr"),
                     new InternetAddress(user.getEmail(), user.getDisplayName()),
                     subject,

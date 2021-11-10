@@ -8,6 +8,8 @@ public interface IUserService {
 
     User buscarPorUsername(String username);
 
+    User buscarPorEmail(String email);
+
     List<User> buscarTodos();
 
     void salvar(User user);

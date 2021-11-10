@@ -1,7 +1,12 @@
 package br.ufscar.dc.dsw1.debatr.helper;
 
-import br.ufscar.dc.dsw1.debatr.dao.IUserDAO;
-import br.ufscar.dc.dsw1.debatr.domain.User;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.Properties;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -9,16 +14,10 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.jboss.jandex.Main;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.Properties;
+import org.jboss.jandex.Main;
+
+import br.ufscar.dc.dsw1.debatr.domain.User;
 
 public class JwtHelper {
 

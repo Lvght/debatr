@@ -1,6 +1,5 @@
 package br.ufscar.dc.dsw1.debatr;
 
-import br.ufscar.dc.dsw1.debatr.domain.Forum;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,7 +24,7 @@ public class DebatrApplication {
 			u1.setUsername("username");
 			u1.setPassword(encoder.encode("password"));
 			u1.setDisplayName("user");
-			u1.setEmail("user@user.com");
+			u1.setEmail("user@user.com"); 
 			usuarioDAO.save(u1);
 		};
 	}

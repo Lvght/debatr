@@ -81,7 +81,9 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String getLoginForm() {
+    public String getLoginForm(HttpServletRequest request, ModelMap model) {
+
+        model.addAttribute("forgotPasswordPath", getBaseUrl(request) + "/config/password-reset");
 
         UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
         if (details != null) {
@@ -284,5 +286,64 @@ public class UserController {
 
         model.addAttribute("homePath", getBaseUrl(request));
         return "confirmEmail";
+    }
+
+    /**
+     * Envia o usuário para o formulário de escolher uma nova senha.
+     */
+    @GetMapping("/config/password-reset/{token}")
+    public String forgotPasswordForm(@PathVariable("token") String token, HttpServletRequest request, ModelMap model) {
+        model.addAttribute("token", token);
+        return "alterPassword";
+    }
+
+    /**
+     * Processa a alteração de senha do usuário.
+     */
+    @PostMapping("/config/change-password")
+    public String changePassword(
+        @RequestParam("token") String token,
+        @RequestParam("password") String password
+    ) {
+        DecodedJWT jwt = JwtHelper.getDecodedJWT(token);
+
+        if (jwt != null && JwtHelper.isTokenValid(token)) {
+            String username = jwt.getClaim("username").asString();
+            User user = service.buscarPorUsername(username);
+
+            System.out.println("Changing password for user [" + username + "].");
+
+            if (user != null) {
+                user.setPassword(encoder.encode(password));
+                service.salvar(user);
+            }
+        }
+
+        return "redirect:/";
+    }
+
+    /**
+     * Envia o usuário para a página de redefinição de senha.
+     */
+    @GetMapping("/config/password-reset")
+    public String forgotPassword(HttpServletRequest request, ModelMap model) {
+        model.addAttribute("passwordResetPath", getBaseUrl(request) + "/config/password-reset");
+        return "forgotPassword";
+    }
+
+    /**
+     * Processa o pedido de redefinição de senha, enviando o email com token para o usuário.
+     */
+    @PostMapping("/config/password-reset")
+    public String forgotPassword(@RequestParam("email") String email, HttpServletRequest request, ModelMap model) {
+        User user = service.buscarPorEmail(email);
+
+        if (user != null) {
+            EmailService emailService = new EmailService();
+            emailService.sendPasswordResetEmail(user, getBaseUrl(request));
+        }
+
+        model.addAttribute("sent", true);
+        return "checkYourEmailPasswordChange";
     }
 }
