@@ -1,0 +1,8 @@
+<option value="0">
+  <span>Geral</span>
+</option>
+<div th:each="topic: ${topics}">
+  <option th:value="${topic.id}">
+    <span th:text="${topic.name}"></span>
+  </option>
+</div>

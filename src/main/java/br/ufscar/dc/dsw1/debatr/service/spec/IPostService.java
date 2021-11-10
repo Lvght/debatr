@@ -8,7 +8,7 @@ import br.ufscar.dc.dsw1.debatr.domain.User;
 public interface IPostService {
     void save(Post post);
 
-    void save(Post post, long forumId);
+    void save(Post post, long forumId, long topicId);
 
     List<Post> getUserTimeline(User user);
 

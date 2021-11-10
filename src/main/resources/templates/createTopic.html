@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Criar Tópico</title>
+  </head>
+
+  <body>
+    <div class="forumForm layout-content mt-5 mb-5" layout:fragment="corpo">
+      <h1>Criar Tópico</h1>
+
+      <form
+        th:object="${topic}"
+        th:action="@{/forum/${forum.id}/topic}"
+        method="post"
+      >
+        <div class="form-group mt-3">
+          <label for="title-field">Título</label>
+          <input
+            id="title-field"
+            class="form-control"
+            name="name"
+            required
+            pattern="[^ ]+([^]*[^ ])*"
+            title="Deve conter ao menos uma letra, não começar e nem terminar com espaço"
+            placeholder="Deve conter ao menos uma letra, não começar e nem terminar com espaço"
+          />
+        </div>
+
+        <div class="row mt-5">
+          <div class="col-auto">
+            <button
+              class="btn btn-outline-danger"
+              type="button"
+              onclick="window.history.back()"
+            >
+              Descartar
+            </button>
+          </div>
+
+          <div class="col-auto">
+            <button class="btn btn-primary" type="submit">Salvar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

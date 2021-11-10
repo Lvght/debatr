@@ -2,8 +2,10 @@ package br.ufscar.dc.dsw1.debatr.service.impl;
 
 import br.ufscar.dc.dsw1.debatr.dao.IForumDAO;
 import br.ufscar.dc.dsw1.debatr.dao.IPostDAO;
+import br.ufscar.dc.dsw1.debatr.dao.ITopicDAO;
 import br.ufscar.dc.dsw1.debatr.domain.Forum;
 import br.ufscar.dc.dsw1.debatr.domain.Post;
+import br.ufscar.dc.dsw1.debatr.domain.Topic;
 import br.ufscar.dc.dsw1.debatr.domain.User;
 import br.ufscar.dc.dsw1.debatr.service.spec.IPostService;
 
@@ -22,13 +24,20 @@ public class PostService implements IPostService {
     @Autowired
     private IForumDAO forumDAO;
 
+    @Autowired
+    private ITopicDAO topicDAO;
+
     public void save(Post post) {
         postDAO.save(post);
     }
 
-    public void save(Post post, long forumId) {
+    public void save(Post post, long forumId, long topicId) {
         Forum forum = forumDAO.findById(forumId);
         post.setForum(forum);
+        if(topicId != 0){
+            Topic topic = topicDAO.findById(topicId);
+            post.setTopic(topic);
+        }
 
         postDAO.save(post);
     }

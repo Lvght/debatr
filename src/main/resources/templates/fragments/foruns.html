@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>${forum.titulo}</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-</head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"
+    />
+  </head>
 
-<body>
+  <body>
     <section class="layout-content" th:fragment="foruns">
-        <div class="forum" th:each="forum: ${foruns}">
-            <div class="details">
-                <div class="forumIcon">
-
-                    <div th:switch="${forum.iconImageUrl == null}" class="forumIcon">
-                        <img th:case="true" th:src="@{/image/default-forum.png}" />
-                        <img th:case="false" th:src="@{${forum.iconImageUrl}}">
-                    </div>
-                </div>
-                <div class="forumInformation">
-                    <a th:href="@{/forum/{id} (id=${forum.id})}">
-                        <h1 th:text="${forum.title}"></h1>
-                    </a>
-                    <h2 th:text="${forum.accessScope == 1 ? 'livre' : 'restrito'}"></h2>
-                </div>
-                <div th:replace="fragments/signButton :: button"></div>
+      <div class="forum" th:each="forum: ${foruns}">
+        <div class="details">
+          <div class="forumIcon">
+            <div th:switch="${forum.iconImageUrl == null}" class="forumIcon">
+              <img th:case="true" th:src="@{/image/default-forum.png}" />
+              <img th:case="false" th:src="@{${forum.iconImageUrl}}" />
             </div>
-
-            <div class="description">
-                <h2 th:text="${forum.description}"></h2>
-            </div>
-            <hr />
+          </div>
+          <div class="forumInformation">
+            <a th:href="@{/forum/{id} (id=${forum.id})}">
+              <h1 th:text="${forum.title}"></h1>
+            </a>
+            <h2 th:text="${forum.accessScope == 1 ? 'livre' : 'restrito'}"></h2>
+          </div>
+          <div th:replace="fragments/signButton :: button"></div>
         </div>
-    </section>
-</body>
 
+        <div class="description">
+          <h2 th:text="${forum.description}"></h2>
+        </div>
+        <hr />
+      </div>
+    </section>
+  </body>
 </html>

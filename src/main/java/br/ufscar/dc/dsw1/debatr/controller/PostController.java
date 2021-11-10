@@ -51,7 +51,7 @@ public class PostController {
 
     @PostMapping("/compose")
     public String createPost(@RequestParam("title") String title, @RequestParam("content") String content,
-            @RequestParam("forum_id") Long forumId, Model model) {
+            @RequestParam("forum_id") Long forumId, @RequestParam("topic_id") Long topicId, Model model) {
 
         UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
         model.addAttribute("errored", true);
@@ -60,7 +60,7 @@ public class PostController {
 
             if (currentUser != null) {
                 Post newPost = new Post(title, content, currentUser, null, null);
-                postService.save(newPost, forumId);
+                postService.save(newPost, forumId, topicId);
 
                 model.addAttribute("errored", false);
             }
