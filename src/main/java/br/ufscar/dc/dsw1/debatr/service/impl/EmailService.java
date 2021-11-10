@@ -113,7 +113,7 @@ public class EmailService {
                 "Olá,\n\n" +
                 "Bem-vindo(a) ao Debatr. Para continuar usando sua conta sem limitações verifique sua conta " +
                 "com o link abaixo.\n\n" +
-                "<a href=" + path + "?token=" + token + ">Verifique sua conta</a>";
+                "<a href=" + path + "/config/verify-email/" + token + ">Verifique sua conta</a>";
 
         try {
             send(

@@ -97,6 +97,19 @@ public class JwtHelper {
 
         return false;
     }
+
+    /**
+     * Returns true if the token is not expired.
+     */
+    public static boolean isTokenValid(String token) {
+        DecodedJWT jwt = JwtHelper.getDecodedJWT(token);
+
+        if (jwt != null) {
+            return !jwt.getExpiresAt().before(new Date());
+        }
+
+        return false;
+    }
 }
 
 

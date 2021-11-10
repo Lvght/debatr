@@ -4,6 +4,8 @@ import javax.mail.internet.InternetAddress;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
+
 import br.ufscar.dc.dsw1.debatr.service.impl.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,9 +21,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import br.ufscar.dc.dsw1.debatr.domain.User;
 import br.ufscar.dc.dsw1.debatr.helper.AuthenticatedUserHelper;
+import br.ufscar.dc.dsw1.debatr.helper.JwtHelper;
 import br.ufscar.dc.dsw1.debatr.service.spec.IUserService;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 
 @Controller
 public class UserController {
@@ -61,8 +65,8 @@ public class UserController {
 
     @PostMapping("/register")
     public String salvar(HttpServletRequest request, @RequestParam("email") String email,
-                         @RequestParam("display_name") String displayName, @RequestParam("username") String username,
-                         @RequestParam("password") String plaintextPassword) {
+            @RequestParam("display_name") String displayName, @RequestParam("username") String username,
+            @RequestParam("password") String plaintextPassword) {
         User newUser = new User(displayName, username, email, encoder.encode(plaintextPassword));
         service.salvar(newUser);
 
@@ -90,11 +94,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(
-            @RequestParam("username") String username,
-            @RequestParam("password") String password,
-            HttpServletRequest request
-    ) {
+    public String login(@RequestParam("username") String username, @RequestParam("password") String password,
+            HttpServletRequest request) {
         User user = service.buscarPorUsername(username);
 
         if (user != null) {
@@ -163,7 +164,7 @@ public class UserController {
 
     @PostMapping("/config/profile")
     public ModelAndView editProfile(@RequestParam("display-name") String displayName,
-                                    @RequestParam("biography") String biography, ModelMap model) {
+            @RequestParam("biography") String biography, ModelMap model) {
         UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
         if (userDetails != null) {
             User currentUser = service.buscarPorUsername(userDetails.getUsername());
@@ -202,7 +203,7 @@ public class UserController {
 
     @PostMapping("/config/delete-account")
     public ModelAndView deleteAccount(@RequestParam("password") String password, ModelMap model,
-                                      HttpServletRequest request) {
+            HttpServletRequest request) {
         User currentUser = getCurrentUser();
 
         if (currentUser != null) {
@@ -245,15 +246,37 @@ public class UserController {
 
         return "confirmEmail";
 
-//        try {
-//            emailService.send(
-//                    new InternetAddress("no-reply@debatr.com", "Equipe Debatr"),
-//                    new InternetAddress("viniciusluz@estudante.ufscar.br", "Vinicius"),
-//                    "Caixa Econômica Federal",
-//                    "Socorro");
-//            System.out.println("Deu certoooooooooooooooooooooo");
-//        } catch (UnsupportedEncodingException ignored) {
-//            System.out.println("Deu erradoooooooooooooo");
-//        }
+        // try {
+        // emailService.send(
+        // new InternetAddress("no-reply@debatr.com", "Equipe Debatr"),
+        // new InternetAddress("viniciusluz@estudante.ufscar.br", "Vinicius"),
+        // "Caixa Econômica Federal",
+        // "Socorro");
+        // System.out.println("Deu certoooooooooooooooooooooo");
+        // } catch (UnsupportedEncodingException ignored) {
+        // System.out.println("Deu erradoooooooooooooo");
+        // }
     }
+
+    /**
+     * Permite que o usuário verifique seu email.
+     */
+    @GetMapping("/config/verify-email/{token}")
+    public String verifyEmail(@PathVariable("token") String token, HttpServletRequest request, ModelMap model) {
+
+        if (JwtHelper.isTokenValid(token)) {
+            DecodedJWT jwt = JwtHelper.getDecodedJWT(token);
+
+            String username = jwt.getClaim("username").asString();
+            User newlyRegisteredUser = service.buscarPorUsername(username);
+
+            newlyRegisteredUser.setEmailVerifiedAt(new Date());
+            service.salvar(newlyRegisteredUser);
+
+            model.addAttribute("verified", true);
+        }
+
+        return "emailVerified";
+    }
+
 }

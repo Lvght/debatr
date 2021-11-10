@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Email verificado</title>
+        <meta charset="UTF-8">
+    </head>
+
+    <body>
+        <!--A bootstrap jumbotron with a welcome message-->
+        <div th:if="${verified}" class="jumbotron">
+            <h1>Seu email foi verificado.</h1>
+            <p>Você pode prosseguir para a sua conta.</p>
+        </div>
+
+        <div th:if="${!verified}" class="jumbotron">
+            <h1>Seu email não foi verificado.</h1>
+            <p>O token expirou ou não era válido. Por favor, solicite outro.</p>
+        </div>
+    </body>
+</html>
