@@ -231,9 +231,7 @@ public class UserController {
     }
 
     @GetMapping("/config/verify-email")
-    public String emailConfirmation() {
-        EmailService emailService = new EmailService();
-
+    public String emailConfirmation(HttpServletRequest request, ModelMap model) {
         UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
 
         if (details != null) {
@@ -243,6 +241,8 @@ public class UserController {
                 return "redirect:/";
             }
         }
+
+        model.addAttribute("homePath", getBaseUrl(request));
 
         return "confirmEmail";
     }

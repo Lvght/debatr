@@ -1,59 +1,48 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Confirm Email</title>
 
-        <!-- import bootstrap -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    </head>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Confirme seu email</title>
 
-    <body>
-        <!--Header with website logo-->
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="page-header">
-                        <h1>
-                            <a href="http://localhost:8080/">
-                                <img src="/image/logo.png" alt="logo" class="img-responsive" style="width:100px;height:100px;">
-                            </a>
-                        </h1>
+    <!-- import bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <!--A div asking for the user to verify their email-->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Por favor, verifique seu email</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>
+                            Verifique seu email e abra o link que enviamos para confirmar que o endereço usado na
+                            criação desta conta é válido.
+                        </p>
+                        <!--<p>If you did not receive the email, please click <a href="http://localhost:8080/user/resendEmail?email=${email}">here</a> to resend the email.</p>-->
+
+                        <!--A link button that redirects the user to the home page-->
+                        <a th:href="${homePath}" class="btn btn-primary">Ir para o Debatr</a>
                     </div>
                 </div>
             </div>
+        </div>
 
-        <!--Form for confirming user email-->
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 col-md-offset-3">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Confirmar Email</h3>
-                        </div>
-                        <div class="panel-body">
-                            <form action="confirm-email" method="post">
-                                <div class="form-group">
-                                    <label for="email">Email</label>
+</body>
 
-                                    <input type="email" 
-                                           class="form-control" 
-                                           id="email" 
-                                           name="email" 
-                                           placeholder="Email" required>
-                                           
-                                </div>
-                                <div class="form-group">
-                                    <label for="code">Code</label>
-                                    <input type="text" class="form-control" id="code" name="code" placeholder="Code" required>
-                                </div>
-                                <button type="submit" class="btn btn-default">Submit</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    </body>
 </html>
