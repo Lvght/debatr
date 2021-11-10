@@ -22,7 +22,7 @@
     <div class="forumForm layout-content mt-5 mb-5" layout:fragment="corpo">
       <h1>Editar</h1>
 
-      <form th:object="${forum}" th:action="@{/forum/cadastrar}" method="post">
+      <form th:object="${forum}" th:action="@{'/forum/' + ${forum.id} + '/edit'}" method="post">
         <div class="form-group mt-4 mb-4">
           <input
             type="text"

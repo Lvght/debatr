@@ -19,6 +19,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 @Controller
 @RequestMapping("/forum")
@@ -135,7 +136,7 @@ public class ForumController {
             @RequestParam(value = "description") String description,
             @RequestParam(value = "accessScope", defaultValue = "1") int accessScope,
             @RequestParam(value = "postScope", defaultValue = "1") int postScope,
-            @RequestParam(value = "id", required = true) Long id
+            @PathVariable(value = "id") Long id
         ) {
         UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
 
