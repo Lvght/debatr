@@ -24,8 +24,10 @@ public class ExternalImageServiceHelper {
             Map<String, String> metadata = new HashMap<String, String>();
             metadata.put("Content-Type", file.getContentType());
 
+            final String bucketName = System.getenv("AWS_BUCKET_NAME");
+
             PutObjectRequest request = PutObjectRequest.builder()
-                    .bucket("REPLACE-BUCKET-NAME-HERE")
+                    .bucket(bucketName)
                     .key("myfile")
                     .metadata(metadata)
                     .build();
