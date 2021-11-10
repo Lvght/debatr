@@ -245,17 +245,6 @@ public class UserController {
         }
 
         return "confirmEmail";
-
-        // try {
-        // emailService.send(
-        // new InternetAddress("no-reply@debatr.com", "Equipe Debatr"),
-        // new InternetAddress("viniciusluz@estudante.ufscar.br", "Vinicius"),
-        // "Caixa Econômica Federal",
-        // "Socorro");
-        // System.out.println("Deu certoooooooooooooooooooooo");
-        // } catch (UnsupportedEncodingException ignored) {
-        // System.out.println("Deu erradoooooooooooooo");
-        // }
     }
 
     /**
