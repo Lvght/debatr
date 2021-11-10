@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Verifique seu vínculo com a UFSCar</title>
+</head>
+
+<body>
+    <section class="layout-content" layout:fragment="corpo">
+        <h1>Verifique seu vínculo com a UFSCar</h1>
+        <p>
+            Para comprovarmos que você possui vínculo com a instituição, faça login em sua conta
+            do Ambiente Virtual Acadêmico (AVA) digitando suas credenciais abaixo.
+        </p>
+
+        <form th:action="@{/config/ufscar/verify}" method="post">
+            <input type="number" name="ar" id="ar" placeholder="Registro Acadêmico" required>
+            <input type="password" name="password" id="password" placeholder="Senha" required>
+
+            <input type="submit" value="Verificar">
+        </form>
+    </section>
+</body>
+
+</html>

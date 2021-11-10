@@ -58,7 +58,7 @@
 
                     <img th:case="true" th:src="verifiedpath">
 
-                    <input th:case="false" type="button" value="Verificar perfil">
+                    <a th:href="@{/config/ufscar/verify}" th:case="false" class="btn btn-primary">Verificar perfil</a>
 
                 </div>
             </div>
