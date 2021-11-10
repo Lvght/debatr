@@ -28,3 +28,8 @@ password = XXX
 
 # JWT Related
 secret = uma_string_segura_e_secreta
+
+# AWS Auth
+aws.access-key-id = XXX
+aws.secret-access-key = XXX
+aws.bucket-name = bucket_name
