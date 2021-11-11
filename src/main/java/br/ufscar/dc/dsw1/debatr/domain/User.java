@@ -22,6 +22,7 @@ import javax.validation.constraints.Size;
 
 import org.dom4j.tree.AbstractEntity;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -65,7 +66,8 @@ public class User extends AbstractEntity {
     @Column(unique = false, nullable = false, length = 60)
     private String password;
 
-    @Column(name = "profile_image", nullable = true, length = 255)
+    @URL
+    @Column(name = "profile_image", nullable = true)
     private String profileImageUrl;
 
     @ManyToMany(cascade = {CascadeType.DETACH})

@@ -64,7 +64,7 @@ public class UserController {
 
     @PostMapping("/register")
     public String salvar(HttpServletRequest request, 
-            @RequestParam(name = "profileImage", required = false) MultipartFile profileImage,
+            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
             @RequestParam("email") String email,
             @RequestParam("display_name") String displayName, 
             @RequestParam("username") String username,

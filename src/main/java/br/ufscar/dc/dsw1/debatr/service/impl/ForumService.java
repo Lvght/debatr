@@ -8,11 +8,13 @@ import br.ufscar.dc.dsw1.debatr.dao.ITopicDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.ufscar.dc.dsw1.debatr.dao.IForumDAO;
 import br.ufscar.dc.dsw1.debatr.domain.Forum;
 import br.ufscar.dc.dsw1.debatr.domain.Topic;
 import br.ufscar.dc.dsw1.debatr.domain.User;
+import br.ufscar.dc.dsw1.debatr.helper.ExternalImageServiceHelper;
 import br.ufscar.dc.dsw1.debatr.service.spec.IForumService;
 
 @Service
@@ -59,5 +61,27 @@ public class ForumService implements IForumService {
         Forum f = dao.save(forum);
         member.getForuns().add(f);
         userDAO.save(member);
+    }
+
+    @Transactional()
+    @Override
+    public void salvarEAdicionarMembro(Forum forum, User member, MultipartFile iconFile) {
+        Forum f = dao.save(forum);
+        member.getForuns().add(f);
+        userDAO.save(member);
+
+        if (iconFile != null) {
+            // obtém a extensão de profileImage
+            final String fileExtension = iconFile.getOriginalFilename()
+                    .substring(iconFile.getOriginalFilename().lastIndexOf(".") + 1);
+
+            ExternalImageServiceHelper helper = new ExternalImageServiceHelper();
+            helper.uploadImage(iconFile, "profile/" + f.getId() + "." + fileExtension);
+
+            final String imageUri = "https://debatr-sb-media.s3.sa-east-1.amazonaws.com/" + "profile/" + f.getId() + "." + fileExtension;
+            f.setIconImageUrl(imageUri);
+
+            dao.save(f);
+        }
     }
 }

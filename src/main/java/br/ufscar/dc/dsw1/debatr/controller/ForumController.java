@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Comparator;
 import java.util.List;
@@ -42,6 +43,7 @@ public class ForumController {
     @PostMapping("/cadastrar")
     public String salvar(
             @RequestParam(value = "title", required = true) String title,
+            @RequestParam(value = "iconFile", required = false) MultipartFile iconFile,
             @RequestParam(value = "description") String description,
             @RequestParam(value = "accessScope", defaultValue = "1") int accessScope,
             @RequestParam(value = "postScope", defaultValue = "1") int postScope
@@ -53,7 +55,7 @@ public class ForumController {
 
             if (user != null) {
                 Forum newForum = new Forum(user, postScope, accessScope, title, description);
-                forumService.salvarEAdicionarMembro(newForum, user);
+                forumService.salvarEAdicionarMembro(newForum, user, iconFile);
 
                 return "redirect:/forum/" + newForum.getId();
             }

@@ -22,7 +22,7 @@
                     <div th:switch="${profileOwner.profileImageUrl == null}">
                         <img th:case="true" th:src="@{/image/default-profile.jpeg}" class="rounded-circle p-0"
                             style="width: 48px; height: 48px; object-fit: cover">
-                        <img th:case="false" th:src="${'https://debatr-sb-media.s3.sa-east-1.amazonaws.com' +  profileOwner.profileImageUrl}" class="rounded-circle p-0"
+                        <img th:case="false" th:src="@{${profileOwner.profileImageUrl}}" class="rounded-circle p-0"
                             style="width: 48px; height: 48px; object-fit: cover">
                     </div>
 
