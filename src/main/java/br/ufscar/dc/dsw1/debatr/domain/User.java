@@ -1,15 +1,28 @@
 package br.ufscar.dc.dsw1.debatr.domain;
 
-import org.dom4j.tree.AbstractEntity;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.validator.constraints.Length;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.dom4j.tree.AbstractEntity;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "debatr_user")
@@ -52,7 +65,7 @@ public class User extends AbstractEntity {
     @Column(unique = false, nullable = false, length = 60)
     private String password;
 
-    @Column(name = "profile_image")
+    @Column(name = "profile_image", nullable = true, length = 255)
     private String profileImageUrl;
 
     @ManyToMany(cascade = {CascadeType.DETACH})

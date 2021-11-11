@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.ufscar.dc.dsw1.debatr.domain.User;
@@ -62,11 +63,15 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String salvar(HttpServletRequest request, @RequestParam("email") String email,
-            @RequestParam("display_name") String displayName, @RequestParam("username") String username,
+    public String salvar(HttpServletRequest request, 
+            @RequestParam(name = "profileImage", required = false) MultipartFile profileImage,
+            @RequestParam("email") String email,
+            @RequestParam("display_name") String displayName, 
+            @RequestParam("username") String username,
             @RequestParam("password") String plaintextPassword) {
+                
         User newUser = new User(displayName, username, email, encoder.encode(plaintextPassword));
-        service.salvar(newUser);
+        service.saveAndSetProfileImage(newUser, profileImage);
 
         EmailService emailService = new EmailService();
         emailService.sendVerifyYourEmail(newUser, getBaseUrl(request));

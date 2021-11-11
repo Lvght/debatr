@@ -21,7 +21,7 @@ public class S3TestController {
     @PostMapping("/image-upload")
     public String imageUpload(@RequestParam("file") MultipartFile file) {
         ExternalImageServiceHelper helper = new ExternalImageServiceHelper();
-        helper.uploadImage(file);
+        helper.uploadImage(file, "myfile");
 
         return "imageUploadTest";
     }

@@ -96,13 +96,13 @@
                 <br />
 
                 <h3>Criar conta no Debatr</h3>
-                <form th:action="@{/register}" method="POST">
+                <form th:action="@{/register}" method="POST" enctype="multipart/form-data">
                     <input placeholder="Nome" name="display_name" required pattern="[^ ]+([^]*[^ ])*"
                         title="Deve conter ao menos uma letra, não começar e nem terminar com espaço" />
                     <input placeholder="Nome de usuário" name="username" required pattern="[^ ]*"
                         title="Deve conter ao menos uma letra e não conter espaços" />
                     <input placeholder="Email" name="email" type="email" required />
-                    <input name="profileImageUrl" type="file" />
+                    <input name="profileImage" type="file" />
                     <input placeholder="Senha" name="password" type="password" required />
 
                     <input class="buttom" type="submit" value="Criar">
