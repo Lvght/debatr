@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+
+<head>
+    <title th:text="${'Post de ' + post.author.username}"></title>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <div class="container mt-5" layout:fragment="corpo">
+
+        <!--Imagem do fórum-->
+        <div class="row align-items-center mb-5">
+            <div th:switch="${post.forum.iconImageUrl== null}" class="col-auto">
+                <img th:case="true" id="frame" th:src="@{/image/default-forum.jpeg}" class="rounded-circle p-0"
+                    style="width: 72px; height: 72px; object-fit: cover">
+
+                <img th:case="false" id="frame" th:src="@{${post.forum.iconImageUrl}}" class="rounded-circle p-0"
+                    style="width: 72px; height: 72px; object-fit: cover">
+            </div>
+
+            <div class="col-auto">
+                <a th:href="@{'/forum/' + ${post.forum.id}}"><h1 th:text="${post.forum.title}"></h1></a>
+            </div>
+        </div>
+
+        <!--Imagem do autor-->
+        <div class="row align-items-center mb-5">
+            <div th:switch="${post.author.profileImageUrl == null}" class="col-auto">
+                <img th:case="true" id="frame" th:src="@{/image/default-profile.jpeg}" class="rounded-circle p-0"
+                    style="width: 72px; height: 72px; object-fit: cover">
+
+                <img th:case="false" id="frame" th:src="@{${post.author.profileImageUrl}}" class="rounded-circle p-0"
+                    style="width: 72px; height: 72px; object-fit: cover">
+            </div>
+
+            <div class="col-auto">
+                <a th:href="@{'/profile/' + ${post.author.username}}"><h1 th:text="${post.author.displayName}"></h1></a>
+                <h5 th:text="'@' + ${post.author.username}"></h5>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-auto">
+                <h1 th:text="${post.title}"></h1>
+                <p th:text="${post.content}"></p>
+            </div>
+        </div>
+
+        <div th:if="${post.author.username == #request.getUserPrincipal().getName()}" class="mt-3">
+            <a class="btn btn-danger" href="${'/post/' + post.id + '/delete'}">Apagar</a>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

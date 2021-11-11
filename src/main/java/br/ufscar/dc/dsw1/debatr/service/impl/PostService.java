@@ -27,6 +27,10 @@ public class PostService implements IPostService {
     @Autowired
     private ITopicDAO topicDAO;
 
+    public Post findById(long id) {
+        return postDAO.findById(id);
+    }
+
     public void save(Post post) {
         postDAO.save(post);
     }

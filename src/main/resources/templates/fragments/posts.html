@@ -1,80 +1,77 @@
 <!DOCTYPE html>
 <html lang="br">
-  <head>
+
+<head>
+    <title>Debatr - Página inicial</title>
     <meta charset="utf-8" />
-  </head>
 
-  <body>
-    <div
-      th:fragment="posts"
-      th:if="${posts != null && posts.size() == 0}"
-      class="container mt-5 mb-5"
-    >
-      <h1>Não há nada aqui... ainda</h1>
-      <p>
-        <a th:href="@{/forum/list}">Se cadastre em um dos fóruns do Debatr</a>,
-        ou <a th:href="@{/forum/register}">comece o seu pŕoprio.</a>
-      </p>
+    <script>
+        // Send user to post detail page with the specified id
+        function detail(postId) {
+            // send the user to the post detail page
+            window.location.href = "@{'/post/' + postId}";
+        }
+    </script>
+</head>
+
+<body>
+    <div th:fragment="posts" th:if="${posts != null && posts.size() == 0}" class="container mt-5 mb-5">
+        <h1>Não há nada aqui... ainda</h1>
+        <p>
+            <a th:href="@{/forum/list}">Se cadastre em um dos fóruns do Debatr</a>,
+            ou <a th:href="@{/forum/register}">comece o seu pŕoprio.</a>
+        </p>
     </div>
 
-    <div
-      class="posts"
-      th:if="${posts != null && posts.size() != 0}"
-      th:fragment="posts"
-      th:each="post: ${posts}"
-    >
-      <div class="post">
-        <div class="postHeader">
-          <div class="informations">
-            <a th:href="@{/forum/{forum_id} (forum_id=${post.forum.id})}">
-              <div class="postForumInformation">
-                <div
-                  th:switch="${post.forum.iconImageUrl == null}"
-                  class="forumIcon"
-                >
-                  <img th:case="true" th:src="@{/image/default-forum.png}" />
-                  <img th:case="true" th:src="@{post.forum.iconImageUrl}" />
+    <div class="posts" th:if="${posts != null && posts.size() != 0}" th:fragment="posts" th:each="post: ${posts}">
+        <div class="post">
+            <div class="postHeader">
+                <div class="informations">
+                    <a th:href="@{/forum/{forum_id} (forum_id=${post.forum.id})}">
+                        <div class="postForumInformation">
+                            <div th:switch="${post.forum.iconImageUrl == null}" class="forumIcon">
+                                <img th:case="true" th:src="@{/image/default-forum.png}" />
+                                <img th:case="true" th:src="@{post.forum.iconImageUrl}" />
+                            </div>
+                            <div class="forumName">
+                                <h2 th:text="${'f:' + post.forum.title}"></h2>
+                            </div>
+                        </div>
+                    </a>
+                    <a th:href="@{/profile/{username} (username=${post.author.username})}">
+                        <div class="userInformation">
+                            <div class="userPicture">
+                                <img th:src="@{/image/default-profile.jpeg}" alt="" />
+                            </div>
+                            <div class="username">
+                                <h2 th:text="${post.author.username}"></h2>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-                <div class="forumName">
-                  <h2 th:text="${'f:' + post.forum.title}"></h2>
-                </div>
-              </div>
-            </a>
-            <a
-              th:href="@{/profile/{username} (username=${post.author.username})}"
-            >
-              <div class="userInformation">
-                <div class="userPicture">
-                  <img th:src="@{/image/default-profile.jpeg}" alt="" />
-                </div>
-                <div class="username">
-                  <h2 th:text="${post.author.username}"></h2>
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
+            </div>
 
-        <div class="body">
-          <div class="titulo">
-            <h2 th:text="${post.title}"></h2>
-          </div>
-          <div id="content${post.id}" class="conteudo">
-            <h2 th:text="${post.content}"></h2>
-          </div>
-        </div>
+            <div class="body">
+                <div class="titulo">
+                    <h2 th:text="${post.title}"></h2>
+                </div>
+                <div id="content${post.id}" class="conteudo">
+                    <h2 th:text="${post.content}"></h2>
+                </div>
+            </div>
 
-        <div class="footer">
-          <div class="topico">
-            <a href="#">
-              <h4
-                th:text="${'# ' + (post.topic != null ? post.topic.name : 'Geral')}"
-              ></h4>
-            </a>
-          </div>
+            <div class="footer">
+                <div class="topico">
+                    <a href="#">
+                        <h4 th:text="${'# ' + (post.topic != null ? post.topic.name : 'Geral')}"></h4>
+                    </a>
+
+                    <a class="btn btn-outline-primary text-primary" th:href="@{'/post/' + ${post.id}}">Ver detalhes</a>
+                </div>
+            </div>
         </div>
-      </div>
-      <hr />
+        <hr />
     </div>
-  </body>
+</body>
+
 </html>
