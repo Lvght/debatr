@@ -24,6 +24,7 @@ import br.ufscar.dc.dsw1.debatr.domain.Topic;
 import br.ufscar.dc.dsw1.debatr.domain.User;
 import br.ufscar.dc.dsw1.debatr.helper.AuthenticatedUserHelper;
 import br.ufscar.dc.dsw1.debatr.service.spec.IForumService;
+import br.ufscar.dc.dsw1.debatr.service.spec.IPostService;
 import br.ufscar.dc.dsw1.debatr.service.spec.ITopicService;
 import br.ufscar.dc.dsw1.debatr.service.spec.IUserService;
 
@@ -39,6 +40,9 @@ public class ForumController {
 
     @Autowired
     private ITopicService topicService;
+
+    @Autowired
+    private IPostService postService;
 
     @GetMapping("/register")
     public String cadastrar(Forum forum) {
@@ -81,19 +85,28 @@ public class ForumController {
                 return 0;
             }
         });
+        model.addAttribute("currentUser", user);
         model.addAttribute("foruns", foruns);
         model.addAttribute("status", "ingressar");
         return "/listForuns";
     }
 
     @GetMapping("/{id}")
-    public String preEditar(@PathVariable("id") Long id, ModelMap model) {
+    public String preEditar(@PathVariable("id") Long id, 
+            @RequestParam(value = "topic_id", required = false) Long topicId, 
+            ModelMap model
+        ) {
         UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
         User user = userService.buscarPorUsername(userDetails.getUsername());
         Forum forum = forumService.buscarPorId(id, user);
+        Topic topic = topicId != null ? topicService.buscarPorId(topicId) : null;
+        if(forum == null) {
+            return "redirect:/forum/list";
+        }
         model.addAttribute("currentUser", user);
-        model.addAttribute("posts", forum.getPosts());
-        model.addAttribute("forum", forumService.buscarPorId(id, user));
+        model.addAttribute("posts", postService.getForumPosts(forum, topic));
+        model.addAttribute("currentTopic", topic);
+        model.addAttribute("forum", forum);
         model.addAttribute("status", "ingressar");
         return "/forum";
     }

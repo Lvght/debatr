@@ -66,7 +66,7 @@ public class User extends AbstractEntity {
     @Column(unique = false, nullable = false, length = 60)
     private String password;
 
-    @URL
+    //@URL
     @Column(name = "profile_image", nullable = true)
     private String profileImageUrl;
 

@@ -4,11 +4,13 @@
 <head>
     <meta charset="UTF-8" />
     <title>${forum.titulo}</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
 </head>
 
 <body>
     <section class="layout-content" th:fragment="foruns">
+        <div th:if="${foruns != null && foruns.size() == 0}" class="container mt-5 mb-5">
+            <h1>Não há nada aqui... ainda</h1>
+        </div>
         <div class="forum" th:each="forum: ${foruns}">
             <div class="details">
                 <div class="forumIcon">
@@ -23,36 +25,42 @@
                     </a>
                     <h2 th:text="${forum.accessScope == 1 ? 'livre' : 'restrito'}"></h2>
                 </div>
-
-                <!--Botão de cadastro/sair/apagar-->
-
-                <!--Membro, mas não é dono. Pode sair do fórum-->
-                <div th:if="${forum.isMember(#request.userPrincipal.getName()) && !forum.isOwner(#request.userPrincipal.getName())}"
-                    th:fragment="button" class="action">
-                    <div th:id="${'sair' + forum.id}">
-                        <input class=" sair" type="submit" value="Sair"
-                            th:attr="onclick=|genericXmlHttpRequest('/forum/signOut/${forum.id}', 'GET', '', 'sair${forum.id}')|">
+                <div class="action"
+                    th:if="${forum.accessScope == 2 && currentUser.ar == 0 && forum.isMember(#request.userPrincipal.getName()) == false}">
+                    <div class="lockImage">
+                        <i class="bx bxs-lock-alt"></i>
                     </div>
                 </div>
+                <div class="action" th:if="${forum.accessScope != 2 || currentUser.ar != 0}">
+                    <!--Botão de cadastro/sair/apagar-->
 
-                <!--Não é membro e nem dono. Pode ingressar no fórum-->
-                <div th:if="${!forum.isMember(#request.userPrincipal.getName()) && !forum.isOwner(#request.userPrincipal.getName())}"
-                    th:fragment="button" class="action">
-                    <div th:id="${'ingressar' + forum.id}">
-                        <input class="ingressar" type="submit" value="Ingressar"
-                            th:attr="onclick=|genericXmlHttpRequest('/forum/signIn/${forum.id}', 'GET', '', 'ingressar${forum.id}')|">
+                    <!--Membro, mas não é dono. Pode sair do fórum-->
+                    <div th:if="${forum.isMember(#request.userPrincipal.getName()) && !forum.isOwner(#request.userPrincipal.getName())}"
+                        th:fragment="button" class="action">
+                        <div th:id="${'sair' + forum.id}">
+                            <input class=" sair" type="submit" value="Sair"
+                                th:attr="onclick=|genericXmlHttpRequest('/forum/signOut/${forum.id}', 'GET', '', 'sair${forum.id}')|">
+                        </div>
+                    </div>
+
+                    <!--Não é membro e nem dono. Pode ingressar no fórum-->
+                    <div th:if="${!forum.isMember(#request.userPrincipal.getName()) && !forum.isOwner(#request.userPrincipal.getName())}"
+                        th:fragment="button" class="action">
+                        <div th:id="${'ingressar' + forum.id}">
+                            <input class="ingressar" type="submit" value="Ingressar"
+                                th:attr="onclick=|genericXmlHttpRequest('/forum/signIn/${forum.id}', 'GET', '', 'ingressar${forum.id}')|">
+                        </div>
+                    </div>
+
+                    <!--Dono do fórum, pode apenas apagar-->
+                    <div th:if="${forum.isOwner(#request.userPrincipal.getName())}" th:fragment="button" class="action">
+                        <div th:id="${'sair' + forum.id}">
+                            <form th:action="@{'/forum/delete/' + ${forum.id}}" method="get">
+                                <input type="submit" value="Apagar" class="sair">
+                            </form>
+                        </div>
                     </div>
                 </div>
-
-                <!--Dono do fórum, pode apenas apagar-->
-                <div th:if="${forum.isOwner(#request.userPrincipal.getName())}" th:fragment="button" class="action">
-                    <div th:id="${'sair' + forum.id}">
-                        <form th:action="@{'/forum/delete/' + ${forum.id}}" method="get">
-                            <input type="submit" value="Apagar" class="sair">
-                        </form>
-                    </div>
-                </div>
-
             </div>
 
             <div class="description">
