@@ -78,6 +78,7 @@ public class ForumController {
                 return 0;
             }
         });
+        model.addAttribute("currentUser", user);
         model.addAttribute("foruns", foruns);
         model.addAttribute("status", "ingressar");
         return "/listForuns";

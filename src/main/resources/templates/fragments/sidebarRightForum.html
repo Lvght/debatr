@@ -43,12 +43,17 @@
                     <span>Geral</span>
                   </div>
                 </a>
-                <div th:each="topic: ${forum.topics}">
-                  <a href="#">
-                    <div class="topicCard">
-                      <span th:text="${topic.name}"></span>
-                    </div>
-                  </a>
+
+                <div
+                  th:if="${forum.accessScope != 2 || currentUser.ar != 0 || forum.isMember(#request.userPrincipal.getName()) == true}"
+                >
+                  <div th:each="topic: ${forum.topics}">
+                    <a href="#">
+                      <div class="topicCard">
+                        <span th:text="${topic.name}"></span>
+                      </div>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>

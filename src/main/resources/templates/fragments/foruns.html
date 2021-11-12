@@ -3,14 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <title>${forum.titulo}</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"
-    />
   </head>
 
   <body>
     <section class="layout-content" th:fragment="foruns">
+      <div
+        th:if="${foruns != null && foruns.size() == 0}"
+        class="container mt-5 mb-5"
+      >
+        <h1>Não há nada aqui... ainda</h1>
+      </div>
       <div class="forum" th:each="forum: ${foruns}">
         <div class="details">
           <div class="forumIcon">
@@ -25,7 +27,20 @@
             </a>
             <h2 th:text="${forum.accessScope == 1 ? 'livre' : 'restrito'}"></h2>
           </div>
-          <div th:replace="fragments/signButton :: button"></div>
+          <div
+            class="action"
+            th:if="${forum.accessScope == 2 && currentUser.ar == 0 && forum.isMember(#request.userPrincipal.getName()) == false}"
+          >
+            <div class="lockImage">
+              <i class="bx bxs-lock-alt"></i>
+            </div>
+          </div>
+          <div
+            class="action"
+            th:if="${forum.accessScope != 2 || currentUser.ar != 0}"
+          >
+            <div th:replace="fragments/signButton :: button"></div>
+          </div>
         </div>
 
         <div class="description">
