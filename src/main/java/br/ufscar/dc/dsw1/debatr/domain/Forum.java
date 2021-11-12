@@ -83,6 +83,10 @@ public class Forum extends AbstractEntity {
                 .findFirst().orElse(null) != null;
     }
 
+    public boolean isOwner(String username) {
+        return this.owner.getUsername().equals(username);
+    }
+
     public void addMember(User newMember) {
         members.add(newMember);
     }

@@ -1,38 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <title>${forum.titulo}</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"
-    />
-  </head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
+</head>
 
-  <body>
+<body>
     <section class="layout-content" th:fragment="foruns">
-      <div class="forum" th:each="forum: ${foruns}">
-        <div class="details">
-          <div class="forumIcon">
-            <div th:switch="${forum.iconImageUrl == null}" class="forumIcon">
-              <img th:case="true" th:src="@{/image/default-forum.png}" />
-              <img th:case="false" th:src="@{${forum.iconImageUrl}}" />
-            </div>
-          </div>
-          <div class="forumInformation">
-            <a th:href="@{/forum/{id} (id=${forum.id})}">
-              <h1 th:text="${forum.title}"></h1>
-            </a>
-            <h2 th:text="${forum.accessScope == 1 ? 'livre' : 'restrito'}"></h2>
-          </div>
-          <div th:replace="fragments/signButton :: button"></div>
-        </div>
+        <div class="forum" th:each="forum: ${foruns}">
+            <div class="details">
+                <div class="forumIcon">
+                    <div th:switch="${forum.iconImageUrl == null}" class="forumIcon">
+                        <img th:case="true" th:src="@{/image/default-forum.png}" />
+                        <img th:case="false" th:src="@{${forum.iconImageUrl}}" />
+                    </div>
+                </div>
+                <div class="forumInformation">
+                    <a th:href="@{/forum/{id} (id=${forum.id})}">
+                        <h1 th:text="${forum.title}"></h1>
+                    </a>
+                    <h2 th:text="${forum.accessScope == 1 ? 'livre' : 'restrito'}"></h2>
+                </div>
 
-        <div class="description">
-          <h2 th:text="${forum.description}"></h2>
+                <!--Botão de cadastro/sair/apagar-->
+
+                <!--Membro, mas não é dono. Pode sair do fórum-->
+                <div th:if="${forum.isMember(#request.userPrincipal.getName()) && !forum.isOwner(#request.userPrincipal.getName())}"
+                    th:fragment="button" class="action">
+                    <div th:id="${'sair' + forum.id}">
+                        <input class=" sair" type="submit" value="Sair"
+                            th:attr="onclick=|genericXmlHttpRequest('/forum/signOut/${forum.id}', 'GET', '', 'sair${forum.id}')|">
+                    </div>
+                </div>
+
+                <!--Não é membro e nem dono. Pode ingressar no fórum-->
+                <div th:if="${!forum.isMember(#request.userPrincipal.getName()) && !forum.isOwner(#request.userPrincipal.getName())}"
+                    th:fragment="button" class="action">
+                    <div th:id="${'ingressar' + forum.id}">
+                        <input class="ingressar" type="submit" value="Ingressar"
+                            th:attr="onclick=|genericXmlHttpRequest('/forum/signIn/${forum.id}', 'GET', '', 'ingressar${forum.id}')|">
+                    </div>
+                </div>
+
+                <!--Dono do fórum, pode apenas apagar-->
+                <div th:if="${forum.isOwner(#request.userPrincipal.getName())}" th:fragment="button" class="action">
+                    <div th:id="${'sair' + forum.id}">
+                        <form th:action="@{'/forum/delete/' + ${forum.id}}" method="get">
+                            <input type="submit" value="Apagar" class="sair">
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="description">
+                <h2 th:text="${forum.description}"></h2>
+            </div>
+            <hr />
         </div>
-        <hr />
-      </div>
     </section>
-  </body>
+</body>
+
 </html>

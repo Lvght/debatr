@@ -1,255 +1,283 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layoutForum}">
-  <head>
+
+<head>
     <script th:src="@{/js/ajax.js}"></script>
     <link th:href="@{/css/post.css}" rel="stylesheet" />
     <style>
-      .forum {
-        margin-top: 30px;
-      }
-
-      .forum .forumInformation a:hover {
-        color: #02181f;
-        text-decoration: underline;
-      }
-
-      .forum .details {
-        display: flex;
-      }
-
-      .details > * {
-        margin-top: auto;
-        margin-bottom: auto;
-      }
-
-      .forum .forumIcon {
-        min-width: 75px;
-        max-width: 75px;
-        height: 75px;
-        border-radius: 100%;
-        overflow: hidden;
-        display: grid;
-        background-color: #f5f5f5;
-      }
-
-      .forum .forumIcon img {
-        position: relative;
-        width: 100%;
-        margin: auto;
-      }
-
-      .forum .forumIcon img {
-        position: relative;
-        width: 100%;
-        margin: auto;
-      }
-
-      .forum .forumInformation {
-        margin-left: 10px;
-      }
-
-      .forum .forumInformation a {
-        color: #02181f;
-      }
-
-      .forum .forumInformation a:hover {
-        color: #02181f;
-      }
-
-      .forum .details h1 {
-        font-size: 24px;
-        font-weight: bolder;
-        margin-bottom: 0;
-      }
-
-      .forum .details h2 {
-        font-size: 13px;
-        font-weight: 400;
-      }
-
-      .forum .description h2 {
-        font-size: 16px;
-        font-weight: 400;
-      }
-
-      .forum .description {
-        padding: 20px 0 0 0;
-      }
-
-      .forum .lockImage {
-        margin-left: auto;
-      }
-
-      .forum .lockImage i {
-        padding: 30px;
-        font-size: 30px;
-      }
-
-      .forum .action {
-        margin-left: auto;
-      }
-
-      .forum .action input {
-        width: 100px;
-        height: 40px;
-        padding: 0 15px;
-        border-radius: 10px;
-        border: 0;
-        transition: 0.1s;
-      }
-
-      .forum .action input:hover {
-        filter: brightness(1.5);
-        box-shadow: 0 10px 10px -10px rgb(0 0 0 / 17%);
-        -webkit-transform: scale(1.1);
-        transform: scale(1.1);
-        transition: 0.1s;
-      }
-
-      .forum .ingressar {
-        background-color: #142931;
-        color: white;
-      }
-
-      .forum .sair {
-        background-color: transparent;
-        color: #142931;
-        border: 2px solid #142931 !important;
-      }
-
-      .forum .nameAndEdit {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: center;
-      }
-
-      .forum .edit {
-        color: blue !important;
-        text-align: center;
-        font-size: 11px;
-      }
-
-      .r-navbar label {
-        font-weight: bold;
-      }
-
-      .r-navbar .topicsLabel a {
-        font-weight: 500;
-        font-size: 12px;
-      }
-
-      .r-navbar .topics a:hover {
-        text-decoration: underline;
-      }
-
-      .r-navbar .filterSelect {
-        margin-top: 5px;
-        margin-bottom: 10px !important;
-        padding: 10px;
-        background-color: #142931;
-        color: white;
-        border-radius: 15px;
-        width: 50%;
-      }
-
-      .r-navbar .topics {
-        margin-top: 50px;
-      }
-
-      .r-navbar .forumTopics {
-        margin-top: 5px;
-      }
-
-      .r-navbar .forumTopics a:hover {
-        text-decoration: none;
-      }
-
-      .r-navbar .topicCard {
-        width: 100%;
-        margin-bottom: 10px;
-        color: black;
-        padding: 10px;
-        border-radius: 10px;
-        background-color: rgba(20, 41, 49, 0.15);
-        cursor: pointer;
-      }
-
-      .r-navbar .active {
-        background-color: #142931;
-        color: white;
-      }
-
-      .r-navbar .nav_list > * {
-        padding: 0 1.5rem;
-      }
-
-      .r-navbar .filter {
-        display: flex;
-        flex-direction: column;
-      }
-
-      @media only screen and (max-width: 700px) {
         .forum {
-          width: 100%;
+            margin-top: 30px;
+        }
+
+        .forum .forumInformation a:hover {
+            color: #02181f;
+            text-decoration: underline;
         }
 
         .forum .details {
-          flex-wrap: wrap;
+            display: flex;
         }
 
-        .forum .action {
-          margin-top: 20px;
-        }
-
-        .forum .details > * {
-          margin-top: auto;
-          margin-bottom: auto;
-          margin: auto;
+        .details>* {
+            margin-top: auto;
+            margin-bottom: auto;
         }
 
         .forum .forumIcon {
-          margin-bottom: 10px;
+            min-width: 75px;
+            max-width: 75px;
+            height: 75px;
+            border-radius: 100%;
+            overflow: hidden;
+            display: grid;
+            background-color: #f5f5f5;
         }
 
-        .forum .forumInformation h2 {
-          text-align: center;
+        .forum .forumIcon img {
+            position: relative;
+            width: 100%;
+            margin: auto;
         }
-      }
+
+        .forum .forumIcon img {
+            position: relative;
+            width: 100%;
+            margin: auto;
+        }
+
+        .forum .forumInformation {
+            margin-left: 10px;
+        }
+
+        .forum .forumInformation a {
+            color: #02181f;
+        }
+
+        .forum .forumInformation a:hover {
+            color: #02181f;
+        }
+
+        .forum .details h1 {
+            font-size: 24px;
+            font-weight: bolder;
+            margin-bottom: 0;
+        }
+
+        .forum .details h2 {
+            font-size: 13px;
+            font-weight: 400;
+        }
+
+        .forum .description h2 {
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .forum .description {
+            padding: 20px 0 0 0;
+        }
+
+        .forum .lockImage {
+            margin-left: auto;
+        }
+
+        .forum .lockImage i {
+            padding: 30px;
+            font-size: 30px;
+        }
+
+        .forum .action {
+            margin-left: auto;
+        }
+
+        .forum .action input {
+            width: 100px;
+            height: 40px;
+            padding: 0 15px;
+            border-radius: 10px;
+            border: 0;
+            transition: 0.1s;
+        }
+
+        .forum .action input:hover {
+            filter: brightness(1.5);
+            box-shadow: 0 10px 10px -10px rgb(0 0 0 / 17%);
+            -webkit-transform: scale(1.1);
+            transform: scale(1.1);
+            transition: 0.1s;
+        }
+
+        .forum .ingressar {
+            background-color: #142931;
+            color: white;
+        }
+
+        .forum .sair {
+            background-color: transparent;
+            color: #142931;
+            border: 2px solid #142931 !important;
+        }
+
+        .forum .nameAndEdit {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .forum .edit {
+            color: blue !important;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        .r-navbar label {
+            font-weight: bold;
+        }
+
+        .r-navbar .topicsLabel a {
+            font-weight: 500;
+            font-size: 12px;
+        }
+
+        .r-navbar .topics a:hover {
+            text-decoration: underline;
+        }
+
+        .r-navbar .filterSelect {
+            margin-top: 5px;
+            margin-bottom: 10px !important;
+            padding: 10px;
+            background-color: #142931;
+            color: white;
+            border-radius: 15px;
+            width: 50%;
+        }
+
+        .r-navbar .topics {
+            margin-top: 50px;
+        }
+
+        .r-navbar .forumTopics {
+            margin-top: 5px;
+        }
+
+        .r-navbar .forumTopics a:hover {
+            text-decoration: none;
+        }
+
+        .r-navbar .topicCard {
+            width: 100%;
+            margin-bottom: 10px;
+            color: black;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: rgba(20, 41, 49, 0.15);
+            cursor: pointer;
+        }
+
+        .r-navbar .active {
+            background-color: #142931;
+            color: white;
+        }
+
+        .r-navbar .nav_list>* {
+            padding: 0 1.5rem;
+        }
+
+        .r-navbar .filter {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media only screen and (max-width: 700px) {
+            .forum {
+                width: 100%;
+            }
+
+            .forum .details {
+                flex-wrap: wrap;
+            }
+
+            .forum .action {
+                margin-top: 20px;
+            }
+
+            .forum .details>* {
+                margin-top: auto;
+                margin-bottom: auto;
+                margin: auto;
+            }
+
+            .forum .forumIcon {
+                margin-bottom: 10px;
+            }
+
+            .forum .forumInformation h2 {
+                text-align: center;
+            }
+        }
     </style>
-  </head>
+</head>
 
-  <body>
+<body>
     <section class="layout-content" layout:fragment="corpo">
-      <div class="forum">
-        <div class="details">
-          <div th:switch="${forum.iconImageUrl == null}" class="forumIcon">
-            <img th:case="true" th:src="@{/image/default-forum.png}" />
-            <img th:case="false" th:src="@{${forum.iconImageUrl}}" />
-          </div>
-          <div class="forumInformation">
-            <div class="nameAndEdit">
-              <a th:href="@{/forum/{id} (id=${forum.id})}">
-                <h1 th:text="${forum.title}"></h1>
-              </a>
-              <a
-                th:if="${currentUser.id == forum.owner.id}"
-                th:href="@{/forum/{id}/edit (id=${forum.id})}"
-                class="edit"
-              >
-                - Editar</a
-              >
+        <div class="forum">
+            <div class="details">
+                <div th:switch="${forum.iconImageUrl == null}" class="forumIcon">
+                    <img th:case="true" th:src="@{/image/default-forum.png}" />
+                    <img th:case="false" th:src="@{${forum.iconImageUrl}}" />
+                </div>
+                <div class="forumInformation">
+                    <div class="nameAndEdit">
+                        <a th:href="@{/forum/{id} (id=${forum.id})}">
+                            <h1 th:text="${forum.title}"></h1>
+                        </a>
+                        <a th:if="${currentUser.id == forum.owner.id}" th:href="@{/forum/{id}/edit (id=${forum.id})}"
+                            class="edit">
+                            - Editar</a>
+                    </div>
+                    <h2 th:text="${forum.accessScope == 1 ? 'livre' : 'restrito'}"></h2>
+
+                </div>
+
+                <!--Botão de cadastro/sair/apagar-->
+
+                <!--Membro, mas não é dono. Pode sair do fórum-->
+                <div th:if="${forum.isMember(#request.userPrincipal.getName()) && !forum.isOwner(#request.userPrincipal.getName())}"
+                    th:fragment="button" class="action">
+                    <div th:id="${'sair' + forum.id}">
+                        <input class=" sair" type="submit" value="Sair"
+                            th:attr="onclick=|genericXmlHttpRequest('/forum/signOut/${forum.id}', 'GET', '', 'sair${forum.id}')|">
+                    </div>
+                </div>
+
+                <!--Não é membro e nem dono. Pode ingressar no fórum-->
+                <div th:if="${!forum.isMember(#request.userPrincipal.getName()) && !forum.isOwner(#request.userPrincipal.getName())}"
+                    th:fragment="button" class="action">
+                    <div th:id="${'ingressar' + forum.id}">
+                        <input class="ingressar" type="submit" value="Ingressar"
+                            th:attr="onclick=|genericXmlHttpRequest('/forum/signIn/${forum.id}', 'GET', '', 'ingressar${forum.id}')|">
+                    </div>
+                </div>
+
+                <!--Dono do fórum, pode apenas apagar-->
+                <div th:if="${forum.isOwner(#request.userPrincipal.getName())}" th:fragment="button" class="action">
+                    <div th:id="${'sair' + forum.id}">
+                        <form th:action="@{'/forum/delete/' + ${forum.id}}" method="get">
+                            <input type="submit" value="Apagar" class="sair">
+                        </form>
+                    </div>
+                </div>
+
             </div>
-            <h2 th:text="${forum.accessScope == 1 ? 'livre' : 'restrito'}"></h2>
-          </div>
-          <div th:replace="fragments/signButton :: button"></div>
+            <div class="description">
+                <h2 th:text="${forum.description}"></h2>
+            </div>
+            <hr />
         </div>
-        <div class="description">
-          <h2 th:text="${forum.description}"></h2>
-        </div>
-        <hr />
-      </div>
-      <div th:replace="fragments/posts :: posts"></div>
+        <div th:replace="fragments/posts :: posts"></div>
     </section>
-  </body>
+</body>
+
 </html>

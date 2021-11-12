@@ -1,5 +1,24 @@
 package br.ufscar.dc.dsw1.debatr.controller;
 
+import java.util.Comparator;
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
 import br.ufscar.dc.dsw1.debatr.domain.Forum;
 import br.ufscar.dc.dsw1.debatr.domain.Topic;
 import br.ufscar.dc.dsw1.debatr.domain.User;
@@ -7,20 +26,6 @@ import br.ufscar.dc.dsw1.debatr.helper.AuthenticatedUserHelper;
 import br.ufscar.dc.dsw1.debatr.service.spec.IForumService;
 import br.ufscar.dc.dsw1.debatr.service.spec.ITopicService;
 import br.ufscar.dc.dsw1.debatr.service.spec.IUserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Comparator;
-import java.util.List;
-
-import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 
 @Controller
 @RequestMapping("/forum")
@@ -41,13 +46,11 @@ public class ForumController {
     }
 
     @PostMapping("/cadastrar")
-    public String salvar(
-            @RequestParam(value = "title", required = true) String title,
+    public String salvar(@RequestParam(value = "title", required = true) String title,
             @RequestParam(value = "iconFile", required = false) MultipartFile iconFile,
             @RequestParam(value = "description") String description,
             @RequestParam(value = "accessScope", defaultValue = "1") int accessScope,
-            @RequestParam(value = "postScope", defaultValue = "1") int postScope
-    ) {
+            @RequestParam(value = "postScope", defaultValue = "1") int postScope) {
         UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
 
         if (userDetails != null) {
@@ -119,12 +122,27 @@ public class ForumController {
         return "fragments/signButton";
     }
 
+    @GetMapping("/delete/{idForum}")
+    public String delete(@PathVariable("idForum") long idForum) {
+        UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+        User user = userService.buscarPorUsername(userDetails.getUsername());
+        Forum forum = forumService.buscarPorId(idForum, user);
+
+        if (forum.getOwner().equals(user)) {
+            user.getForuns().remove(forum);
+            userService.salvar(user);
+            forumService.excluir(idForum);
+        }
+
+        return "redirect:/";
+    }
+
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable("id") Long id, ModelMap model) {
         UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
         User user = userService.buscarPorUsername(userDetails.getUsername());
         Forum forum = forumService.buscarPorId(id, user);
-        if(forum.getOwner().getId() != user.getId()) {
+        if (forum.getOwner().getId() != user.getId()) {
             return "redirect:/forum/" + id;
         }
         model.addAttribute("currentUser", user);
@@ -133,13 +151,10 @@ public class ForumController {
     }
 
     @PostMapping("/{id}/edit")
-    public String edit(            
-            @RequestParam(value = "title", required = true) String title,
+    public String edit(@RequestParam(value = "title", required = true) String title,
             @RequestParam(value = "description") String description,
             @RequestParam(value = "accessScope", defaultValue = "1") int accessScope,
-            @RequestParam(value = "postScope", defaultValue = "1") int postScope,
-            @PathVariable(value = "id") Long id
-        ) {
+            @RequestParam(value = "postScope", defaultValue = "1") int postScope, @PathVariable(value = "id") Long id) {
         UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
 
         if (userDetails != null) {
@@ -151,17 +166,16 @@ public class ForumController {
             forum.setPostScope(postScope);
             forumService.salvar(forum);
         }
-        
+
         return "redirect:/forum/" + id;
     }
-
 
     @GetMapping("/{id}/topic")
     public String topicForm(@PathVariable("id") Long id, ModelMap model) {
         UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
         User user = userService.buscarPorUsername(userDetails.getUsername());
         Forum forum = forumService.buscarPorId(id, user);
-        if(forum.getOwner().getId() != user.getId()) {
+        if (forum.getOwner().getId() != user.getId()) {
             return "redirect:/forum/" + id;
         }
         model.addAttribute("currentUser", user);
@@ -170,18 +184,16 @@ public class ForumController {
     }
 
     @PostMapping("/{id}/topic")
-    public String topicCreation(@Valid @ModelAttribute("topic") Topic topic,
-                                BindingResult result,
-                                ModelMap model) {
+    public String topicCreation(@Valid @ModelAttribute("topic") Topic topic, BindingResult result, ModelMap model) {
         UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
         User user = userService.buscarPorUsername(userDetails.getUsername());
         Forum forum = forumService.buscarPorId(user.getId(), user);
-        if(forum.getOwner().getId() != user.getId()) {
+        if (forum.getOwner().getId() != user.getId()) {
             return "redirect:/forum/" + forum.getId();
         }
         topic.setForum(forum);
         topicService.salvar(topic);
-        
+
         return "redirect:/forum/" + forum.getId();
     }
 }
