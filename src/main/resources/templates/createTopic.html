@@ -11,7 +11,7 @@
 
       <form
         th:object="${topic}"
-        th:action="@{/forum/${forum.id}/topic}"
+        th:action="@{'/forum/'+${forum.id} + '/topic'}"
         method="post"
       >
         <div class="form-group mt-3">

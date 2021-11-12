@@ -52,7 +52,7 @@ public class UserService implements IUserService {
         return dao.findById(id.longValue());
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public User buscarPorUsername(String username) {
         User u = dao.findByUsername(username);
 

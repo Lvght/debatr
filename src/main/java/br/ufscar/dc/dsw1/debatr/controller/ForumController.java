@@ -195,6 +195,11 @@ public class ForumController {
     public String topicForm(@PathVariable("id") Long id, ModelMap model) {
         UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
         User user = userService.buscarPorUsername(userDetails.getUsername());
+
+        if(user == null) {
+            return "redirect:/";
+        }
+        
         Forum forum = forumService.buscarPorId(id, user);
         if (forum.getOwner().getId() != user.getId()) {
             return "redirect:/forum/" + id;
