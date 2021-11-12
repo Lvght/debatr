@@ -67,7 +67,7 @@ public class PostController {
                 model.addAttribute("errored", false);
             }
         }
-        return "compose";
+        return "redirect:compose";
     }
 
     @GetMapping("/post/{postId}")

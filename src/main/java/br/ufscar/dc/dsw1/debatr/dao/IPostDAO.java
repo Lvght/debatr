@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
+import br.ufscar.dc.dsw1.debatr.domain.Forum;
 import br.ufscar.dc.dsw1.debatr.domain.Post;
+import br.ufscar.dc.dsw1.debatr.domain.Topic;
 import br.ufscar.dc.dsw1.debatr.domain.User;
 
 @SuppressWarnings("unchecked")
@@ -18,7 +20,9 @@ public interface IPostDAO extends CrudRepository<Post, Long> {
 
 	void deleteById(Long id);
 
-	List<Post> findPostsByForumIdAndTopicId(Long forumId, Long topicId);
+	List<Post> findByForum(Forum forum);
+
+	List<Post> findByForumAndTopic(Forum forum, Topic topic);
 
 	List<Post> findPostsByForum_Members(User user);
 

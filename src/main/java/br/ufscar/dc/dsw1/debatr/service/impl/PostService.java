@@ -50,6 +50,13 @@ public class PostService implements IPostService {
         postDAO.delete(post);
     }
 
+    public List<Post> getForumPosts(Forum forum, Topic topic){
+        if(topic != null){
+            return postDAO.findByForumAndTopic(forum, topic);
+        }
+        return postDAO.findByForum(forum);
+    }
+
     public List<Post> getUserTimeline(User user) {
         return postDAO.findPostsByForum_Members(user);
     }
