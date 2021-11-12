@@ -31,7 +31,7 @@
                         <i class="bx bxs-lock-alt"></i>
                     </div>
                 </div>
-                <div class="action" th:if="${forum.accessScope != 2 || currentUser.ar != 0}">
+                <div class="action" th:if="${forum.accessScope != 2 || currentUser.ar != 0  || forum.owner.id == currentUser.id}">
                     <!--Botão de cadastro/sair/apagar-->
 
                     <!--Membro, mas não é dono. Pode sair do fórum-->

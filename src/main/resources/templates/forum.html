@@ -242,53 +242,53 @@
 
                 </div>
 
-                <!--Botão de cadastro/sair/apagar-->
-
-                <!--Membro, mas não é dono. Pode sair do fórum-->
-                <div th:if="${forum.isMember(#request.userPrincipal.getName()) && !forum.isOwner(#request.userPrincipal.getName())}"
-                    th:fragment="button" class="action">
-                    <div th:id="${'sair' + forum.id}">
-                        <input class=" sair" type="submit" value="Sair"
-                            th:attr="onclick=|genericXmlHttpRequest('/forum/signOut/${forum.id}', 'GET', '', 'sair${forum.id}')|">
+                <div class="action"
+                    th:if="${forum.accessScope == 2 && currentUser.ar == 0 && forum.isMember(#request.userPrincipal.getName()) == false}">
+                    <div class="lockImage">
+                        <i class="bx bxs-lock-alt"></i>
                     </div>
                 </div>
 
-                <!--Não é membro e nem dono. Pode ingressar no fórum-->
-                <div th:if="${!forum.isMember(#request.userPrincipal.getName()) && !forum.isOwner(#request.userPrincipal.getName())}"
-                    th:fragment="button" class="action">
-                    <div th:id="${'ingressar' + forum.id}">
-                        <input class="ingressar" type="submit" value="Ingressar"
-                            th:attr="onclick=|genericXmlHttpRequest('/forum/signIn/${forum.id}', 'GET', '', 'ingressar${forum.id}')|">
+                <div class="action" th:if="${forum.accessScope != 2 || currentUser.ar != 0 || forum.owner.id == currentUser.id}">
+
+                    <!--Botão de cadastro/sair/apagar-->
+
+                    <!--Membro, mas não é dono. Pode sair do fórum-->
+                    <div th:if="${forum.isMember(#request.userPrincipal.getName()) && !forum.isOwner(#request.userPrincipal.getName())}"
+                        th:fragment="button" class="action">
+                        <div th:id="${'sair' + forum.id}">
+                            <input class=" sair" type="submit" value="Sair"
+                                th:attr="onclick=|genericXmlHttpRequest('/forum/signOut/${forum.id}', 'GET', '', 'sair${forum.id}')|">
+                        </div>
+                    </div>
+
+                    <!--Não é membro e nem dono. Pode ingressar no fórum-->
+                    <div th:if="${!forum.isMember(#request.userPrincipal.getName()) && !forum.isOwner(#request.userPrincipal.getName())}"
+                        th:fragment="button" class="action">
+                        <div th:id="${'ingressar' + forum.id}">
+                            <input class="ingressar" type="submit" value="Ingressar"
+                                th:attr="onclick=|genericXmlHttpRequest('/forum/signIn/${forum.id}', 'GET', '', 'ingressar${forum.id}')|">
+                        </div>
+                    </div>
+
+                    <!--Dono do fórum, pode apenas apagar-->
+                    <div th:if="${forum.isOwner(#request.userPrincipal.getName())}" th:fragment="button" class="action">
+                        <div th:id="${'sair' + forum.id}">
+                            <form th:action="@{'/forum/delete/' + ${forum.id}}" method="get">
+                                <input type="submit" value="Apagar" class="sair">
+                            </form>
+                        </div>
                     </div>
                 </div>
-
-                <!--Dono do fórum, pode apenas apagar-->
-                <div th:if="${forum.isOwner(#request.userPrincipal.getName())}" th:fragment="button" class="action">
-                    <div th:id="${'sair' + forum.id}">
-                        <form th:action="@{'/forum/delete/' + ${forum.id}}" method="get">
-                            <input type="submit" value="Apagar" class="sair">
-                        </form>
-                    </div>
-                </div>
-
             </div>
-            <h2 th:text="${forum.accessScope == 1 ? 'livre' : 'restrito'}"></h2>
+
         </div>
-        <div class="action"
-            th:if="${forum.accessScope == 2 && currentUser.ar == 0 && forum.isMember(#request.userPrincipal.getName()) == false}">
-            <div class="lockImage">
-                <i class="bx bxs-lock-alt"></i>
-            </div>
-        </div>
-        <div class="action" th:if="${forum.accessScope != 2 || currentUser.ar != 0}">
-            <div th:replace="fragments/signButton :: button"></div>
-        </div>
-        </div>
-        <div class="description">
-            <h2 th:text="${forum.description}"></h2>
+
+        <div class="description mt-3">
+            <p th:text="${forum.description}"></p>
         </div>
         <hr />
-        </div>
+
         <div
             th:if="${forum.accessScope != 2 || currentUser.ar != 0 || forum.isMember(#request.userPrincipal.getName()) == true}">
             <div th:replace="fragments/posts :: posts"></div>
