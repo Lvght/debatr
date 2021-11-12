@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import br.ufscar.dc.dsw1.debatr.domain.Forum;
 import br.ufscar.dc.dsw1.debatr.domain.Post;
 import br.ufscar.dc.dsw1.debatr.domain.User;
 import br.ufscar.dc.dsw1.debatr.helper.AuthenticatedUserHelper;
@@ -72,8 +73,16 @@ public class PostController {
 
     @GetMapping("/post/{postId}")
     public String getPostDetail(@PathVariable("postId") long postId, ModelMap model) {
-
         Post post = postService.findById(postId);
+        Forum forum = post.getForum();
+        UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+        User currentUser = userService.buscarPorUsername(details.getUsername());
+
+        if(forum.getAccessScope() == 2){
+            if(currentUser == null || (currentUser.getAr() == 0 && !forum.isMember(currentUser.getUsername()))){
+                return "redirect:/";
+            }
+        }
         model.addAttribute("post", post);
 
         return "postDetail";
