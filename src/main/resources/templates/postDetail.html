@@ -50,7 +50,9 @@
         </div>
 
         <div th:if="${post.author.username == #request.getUserPrincipal().getName()}" class="mt-3">
-            <a class="btn btn-danger" href="${'/post/' + post.id + '/delete'}">Apagar</a>
+            <form th:action="@{'/post/' + ${post.id} + '/delete'}" method="post">
+                <input type="submit" class="btn btn-danger" value="Apagar">
+            </form>
         </div>
 
     </div>

@@ -77,5 +77,16 @@ public class PostController {
         model.addAttribute("post", post);
 
         return "postDetail";
+    } 
+    
+
+    
+    @PostMapping("/post/{postId}/delete")
+    public String deletePost(@PathVariable("postId") long postId, ModelMap model) {
+
+        Post post = postService.findById(postId);
+        postService.delete(post);
+
+        return "redirect:/";
     }
 }
