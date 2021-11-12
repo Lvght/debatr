@@ -2,11 +2,14 @@ package br.ufscar.dc.dsw1.debatr.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,7 +40,7 @@ public class PostController {
     }
 
     @GetMapping("/compose")
-    public String getPosts(Model model) {
+    public String getPosts(Post post, Model model) {
         UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
 
         if (userDetails != null) {
@@ -53,16 +56,30 @@ public class PostController {
     }
 
     @PostMapping("/compose")
-    public String createPost(@RequestParam("title") String title, @RequestParam("content") String content,
+    public String createPost(
+            @Valid Post post,
+            BindingResult results,
             @RequestParam("forum_id") Long forumId, @RequestParam("topic_id") Long topicId, Model model) {
-
+        
         UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+
+        if(results.hasErrors()) {
+            if (details != null) {
+                User user = userService.buscarPorUsername(details.getUsername());
+    
+                if (user != null) {
+                    model.addAttribute("forum_count", user.getForuns().size());
+                    model.addAttribute("foruns", user.getForuns());
+                }
+            }
+            return "compose";
+        }
         model.addAttribute("errored", true);
         if (details != null) {
             User currentUser = userService.buscarPorUsername(details.getUsername());
 
             if (currentUser != null) {
-                Post newPost = new Post(title, content, currentUser, null, null);
+                Post newPost = new Post(post.getTitle(), post.getContent(), currentUser, null, null);
                 postService.save(newPost, forumId, topicId);
 
                 model.addAttribute("errored", false);

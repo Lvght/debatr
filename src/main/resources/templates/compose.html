@@ -127,7 +127,7 @@
           <h1>Criar um novo post</h1>
           <hr />
 
-          <form th:action="@{/compose}" method="post">
+          <form th:action="@{/compose}" method="post" th:object="${post}">
             <input
               name="id_autor"
               value="${sessionScope.user.id}"
@@ -161,19 +161,30 @@
               id="post-title"
               name="title"
               placeholder="Titulo"
-              maxlength="255"
-              required
-              pattern="[^ ]+([^]*[^ ])*"
-              title="Deve conter ao menos uma letra, não começar e nem terminar com espaço"
             />
+            <div class="invalid-feedback">
+              <span
+                th:each="err : ${#fields.errors('title')}"
+                th:text="${err + ','}"
+                class="error"
+              >
+              </span>
+            </div>
 
             <span id="counter" class="counter">255</span>
 
             <textarea
               name="content"
               placeholder="Conteudo (suporta markdown)"
-              required
             ></textarea>
+            <div class="invalid-feedback">
+              <span
+                th:each="err : ${#fields.errors('content')}"
+                th:text="${err + ','}"
+                class="error"
+              >
+              </span>
+            </div>
 
             <select id="selectTopic" class="selectTopic" name="topic_id">
               <option value="0" selected>Geral</option>

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,26 +60,28 @@ public class UserController {
     }
 
     @GetMapping("/register")
-    public String cadastrar(User usuario) {
+    public String cadastrar(User user) {
         return "register";
     }
 
     @PostMapping("/register")
-    public String salvar(HttpServletRequest request, 
-            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
-            @RequestParam("email") String email,
-            @RequestParam("display_name") String displayName, 
-            @RequestParam("username") String username,
-            @RequestParam("password") String plaintextPassword) {
+    public String salvar(HttpServletRequest request,
+            @Valid User user,
+            BindingResult result,
+            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage){
                 
-        User newUser = new User(displayName, username, email, encoder.encode(plaintextPassword));
+        if (result.hasErrors()) {
+            return "register";
+        }
+
+        User newUser = new User(user.getDisplayName(), user.getUsername(), user.getEmail(), encoder.encode(user.getPassword()));
         service.saveAndSetProfileImage(newUser, profileImage);
 
         EmailService emailService = new EmailService();
         emailService.sendVerifyYourEmail(newUser, getBaseUrl(request));
 
         try {
-            request.login(username, plaintextPassword);
+            request.login(user.getUsername(), user.getPassword());
         } catch (ServletException e) {
             return "redirect:login";
         }
@@ -89,6 +93,7 @@ public class UserController {
     public String getLoginForm(HttpServletRequest request, ModelMap model) {
 
         model.addAttribute("forgotPasswordPath", getBaseUrl(request) + "/config/password-reset");
+        model.addAttribute("user", new User()); 
 
         UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
         if (details != null) {
@@ -98,26 +103,26 @@ public class UserController {
         return "login";
     }
 
-    @PostMapping("/login")
-    public String login(@RequestParam("username") String username, @RequestParam("password") String password,
-            HttpServletRequest request) {
-        User user = service.buscarPorUsername(username);
+    // @PostMapping("/login")
+    // public String login(@Valid User user,  BindingResult result, HttpServletRequest request, ModelMap model) {
+    //     User loginUser = service.buscarPorUsername(user.getUsername());
+    //     System.out.println(result.getAllErrors());
+    //     if (loginUser != null) {
+    //         if (encoder.matches(user.getPassword(), loginUser.getPassword())) {
+    //             try {
+    //                 request.login(user.getUsername(), loginUser.getPassword());
+    //             } catch (ServletException e) {
+    //                 e.printStackTrace();
+    //             }
 
-        if (user != null) {
-            if (encoder.matches(password, user.getPassword())) {
-                try {
-                    request.login(username, password);
-                } catch (ServletException e) {
-                    e.printStackTrace();
-                }
+    //             return "redirect:/config/verify-email";
 
-                return "redirect:/config/verify-email";
+    //         }
+    //     }
+    //     System.out.println(result.getAllErrors());
 
-            }
-        }
-
-        return "login";
-    }
+    //     return "login";
+    // }
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request) {

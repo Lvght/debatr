@@ -50,25 +50,28 @@ public class ForumController {
     }
 
     @PostMapping("/cadastrar")
-    public String salvar(@RequestParam(value = "title", required = true) String title,
-            @RequestParam(value = "iconFile", required = false) MultipartFile iconFile,
-            @RequestParam(value = "description") String description,
-            @RequestParam(value = "accessScope", defaultValue = "1") int accessScope,
-            @RequestParam(value = "postScope", defaultValue = "1") int postScope) {
+    public String salvar(
+            @Valid Forum forum,
+            BindingResult result,
+            @RequestParam(value = "iconFile", required = false) MultipartFile iconFile) {
         UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+
+        if(result.hasErrors()) {
+            return "createForum";
+        }
 
         if (userDetails != null) {
             User user = userService.buscarPorUsername(userDetails.getUsername());
 
             if (user != null) {
-                Forum newForum = new Forum(user, postScope, accessScope, title, description);
+                Forum newForum = new Forum(user, forum.getPostScope(), forum.getAccessScope(), forum.getTitle(), forum.getDescription());
                 forumService.salvarEAdicionarMembro(newForum, user, iconFile);
 
                 return "redirect:/forum/" + newForum.getId();
             }
         }
 
-        return "redirect:/forum/register";
+        return "createForum";
     }
 
     @GetMapping("/list")
@@ -164,20 +167,25 @@ public class ForumController {
     }
 
     @PostMapping("/{id}/edit")
-    public String edit(@RequestParam(value = "title", required = true) String title,
-            @RequestParam(value = "description") String description,
-            @RequestParam(value = "accessScope", defaultValue = "1") int accessScope,
-            @RequestParam(value = "postScope", defaultValue = "1") int postScope, @PathVariable(value = "id") Long id) {
-        UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+    public String edit(       
+            @Valid Forum forum,
+            BindingResult result,
+            @RequestParam(value = "iconFile", required = false) MultipartFile iconFile, @PathVariable(value = "id") Long id) {
+            UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+
+        
+        if (result.hasErrors()) {
+            return "edit";
+        }
 
         if (userDetails != null) {
             User user = userService.buscarPorUsername(userDetails.getUsername());
-            Forum forum = forumService.buscarPorId(id, user);
-            forum.setTitle(title);
-            forum.setDescription(description);
-            forum.setAccessScope(accessScope);
-            forum.setPostScope(postScope);
-            forumService.salvar(forum);
+            Forum editForum = forumService.buscarPorId(id, user);
+            editForum.setTitle(forum.getTitle());
+            editForum.setDescription(forum.getDescription());
+            editForum.setAccessScope(forum.getAccessScope());
+            editForum.setPostScope(forum.getPostScope());
+            forumService.salvar(editForum);
         }
 
         return "redirect:/forum/" + id;

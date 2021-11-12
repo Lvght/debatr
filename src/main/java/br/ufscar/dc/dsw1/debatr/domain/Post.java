@@ -1,10 +1,13 @@
 package br.ufscar.dc.dsw1.debatr.domain;
 
 import org.dom4j.tree.AbstractEntity;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -30,8 +33,12 @@ public class Post extends AbstractEntity {
 
     @NotNull
     @NotBlank
+    @Length(min = 1, max = 256)
     private String title;
 
+    @NotNull
+    @NotBlank
+    @Length(min = 1)
     private String content;
 
     @ManyToOne()
