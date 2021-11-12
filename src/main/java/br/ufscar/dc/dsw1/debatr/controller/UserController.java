@@ -70,7 +70,8 @@ public class UserController {
             BindingResult result,
             @RequestParam(value = "profileImage", required = false) MultipartFile profileImage){
                 
-        if (result.hasErrors()) {
+        if (result.hasErrors() || service.buscarPorUsername(user.getUsername()) != null) {
+            result.rejectValue("username", "", "Username já utilizado");
             return "register";
         }
 

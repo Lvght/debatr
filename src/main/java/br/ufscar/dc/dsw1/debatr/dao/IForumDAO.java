@@ -17,6 +17,8 @@ public interface IForumDAO extends CrudRepository<Forum, Long> {
 
 	Forum save(Forum forum);
 
+	Forum findByTitle(String title); 
+
 	void deleteById(Long id);
 
 	// @Query("SELECT f.* from Forum f JOIN usuario_ingressa_forum u ON f.id_forum =

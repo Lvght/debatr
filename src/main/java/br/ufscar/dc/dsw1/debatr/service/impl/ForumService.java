@@ -38,6 +38,11 @@ public class ForumService implements IForumService {
         dao.deleteById(id);
     }
 
+    public Forum buscarPorTitulo(String titulo){
+        return dao.findByTitle(titulo);
+    }
+
+
     @Transactional(readOnly = true)
     public Forum buscarPorId(Long id, User user) {
         Forum forum = dao.findById(id.longValue());

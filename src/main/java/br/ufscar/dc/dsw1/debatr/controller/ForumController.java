@@ -56,7 +56,8 @@ public class ForumController {
             @RequestParam(value = "iconFile", required = false) MultipartFile iconFile) {
         UserDetails userDetails = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
 
-        if(result.hasErrors()) {
+        if(result.hasErrors() || forumService.buscarPorTitulo(forum.getTitle()) != null) {
+            result.rejectValue("title", "", "Um fórum com este título já existe");
             return "createForum";
         }
 
@@ -199,7 +200,7 @@ public class ForumController {
         if(user == null) {
             return "redirect:/";
         }
-        
+
         Forum forum = forumService.buscarPorId(id, user);
         if (forum.getOwner().getId() != user.getId()) {
             return "redirect:/forum/" + id;
