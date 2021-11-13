@@ -69,11 +69,20 @@ public class UserController {
             @Valid User user,
             BindingResult result,
             @RequestParam(value = "profileImage", required = false) MultipartFile profileImage){
+
+            User userSameUsername = service.buscarPorUsername(user.getUsername());
+            User userSameEmail = service.buscarPorEmail(user.getEmail());
                 
-        if (result.hasErrors() || service.buscarPorUsername(user.getUsername()) != null) {
-            result.rejectValue("username", "", "Username já utilizado");
+        if (result.hasErrors() || userSameUsername != null || userSameEmail != null) {
+            if(userSameEmail != null){
+                result.rejectValue("email", "", "Email já utilizado");
+            }
+            if(userSameUsername != null){
+                result.rejectValue("username", "", "Username já utilizado");
+            }
             return "register";
         }
+
 
         User newUser = new User(user.getDisplayName(), user.getUsername(), user.getEmail(), encoder.encode(user.getPassword()));
         service.saveAndSetProfileImage(newUser, profileImage);

@@ -52,14 +52,14 @@ public class UserService implements IUserService {
         return dao.findById(id.longValue());
     }
 
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = true)
     public User buscarPorUsername(String username) {
         User u = dao.findByUsername(username);
 
-        if (u.getProfileImageUrl() != null) {
-            // TODO implementar aqui a recuperação com url autoassinada.
-            u.setProfileImageUrl("/profile/" + u.getId() + ".jpg");
-        }
+        // if (u != null && u.getProfileImageUrl() != null) {
+        //     // TODO implementar aqui a recuperação com url autoassinada.
+        //     u.setProfileImageUrl("/profile/" + u.getId() + ".jpg");
+        // }
 
         return u;
     }
