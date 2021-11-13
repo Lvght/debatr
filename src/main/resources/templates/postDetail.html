@@ -1,113 +1,81 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}">
-  <head>
+
+<head>
     <title th:text="${'Post de ' + post.author.username}"></title>
     <meta charset="UTF-8" />
     <link th:href="@{/css/post.css}" rel="stylesheet" />
     <script th:src="@{/js/ajax.js}"></script>
-  </head>
+</head>
 
-  <body>
+<body>
     <div class="container mt-5" layout:fragment="corpo">
-      <!--Imagem do fórum-->
-      <div class="row align-items-center mb-5">
-        <div th:switch="${post.forum.iconImageUrl== null}" class="col-auto">
-          <img
-            th:case="true"
-            id="frame"
-            th:src="@{/image/default-forum.jpeg}"
-            class="rounded-circle p-0"
-            style="width: 72px; height: 72px; object-fit: cover"
-          />
+        <!--Imagem do fórum-->
+        <div class="row align-items-center mb-5">
+            <div th:switch="${post.forum.iconImageUrl== null}" class="col-auto">
+                <img th:case="true" id="frame" th:src="@{/image/default-forum.jpeg}" class="rounded-circle p-0"
+                    style="width: 72px; height: 72px; object-fit: cover" />
 
-          <img
-            th:case="false"
-            id="frame"
-            th:src="@{${post.forum.iconImageUrl}}"
-            class="rounded-circle p-0"
-            style="width: 72px; height: 72px; object-fit: cover"
-          />
+                <img th:case="false" id="frame" th:src="@{${post.forum.iconImageUrl}}" class="rounded-circle p-0"
+                    style="width: 72px; height: 72px; object-fit: cover" />
+            </div>
+
+            <div class="col-auto">
+                <a th:href="@{'/forum/' + ${post.forum.id}}">
+                    <h1 th:text="${post.forum.title}"></h1>
+                </a>
+            </div>
         </div>
 
-        <div class="col-auto">
-          <a th:href="@{'/forum/' + ${post.forum.id}}"
-            ><h1 th:text="${post.forum.title}"></h1
-          ></a>
-        </div>
-      </div>
+        <!--Imagem do autor-->
+        <div class="row align-items-center mb-5">
+            <div th:switch="${post.author.profileImageUrl == null}" class="col-auto">
+                <img th:case="true" id="frame" th:src="@{/image/default-profile.jpeg}" class="rounded-circle p-0"
+                    style="width: 72px; height: 72px; object-fit: cover" />
 
-      <!--Imagem do autor-->
-      <div class="row align-items-center mb-5">
-        <div
-          th:switch="${post.author.profileImageUrl == null}"
-          class="col-auto"
-        >
-          <img
-            th:case="true"
-            id="frame"
-            th:src="@{/image/default-profile.jpeg}"
-            class="rounded-circle p-0"
-            style="width: 72px; height: 72px; object-fit: cover"
-          />
+                <img th:case="false" id="frame" th:src="@{${post.author.profileImageUrl}}" class="rounded-circle p-0"
+                    style="width: 72px; height: 72px; object-fit: cover" />
+            </div>
 
-          <img
-            th:case="false"
-            id="frame"
-            th:src="@{${post.author.profileImageUrl}}"
-            class="rounded-circle p-0"
-            style="width: 72px; height: 72px; object-fit: cover"
-          />
+            <div class="col-auto">
+                <a th:href="@{'/profile/' + ${post.author.username}}">
+                    <h1 th:text="${post.author.displayName}"></h1>
+                </a>
+                <h5 th:text="'@' + ${post.author.username}"></h5>
+            </div>
         </div>
 
-        <div class="col-auto">
-          <a th:href="@{'/profile/' + ${post.author.username}}"
-            ><h1 th:text="${post.author.displayName}"></h1
-          ></a>
-          <h5 th:text="'@' + ${post.author.username}"></h5>
+        <hr />
+
+        <div class="row">
+            <div class="col-auto">
+                <h1 th:text="${post.title}"></h1>
+                <p th:text="${post.content}"></p>
+            </div>
         </div>
-      </div>
 
-      <hr />
-
-      <div class="row">
-        <div class="col-auto">
-          <h1 th:text="${post.title}"></h1>
-          <p th:text="${post.content}"></p>
+        <div class="mt-3">
+            <form th:action="@{'/post/' + ${post.id} + '/delete'}" method="post">
+                <input type="submit" class="btn btn-danger" value="Apagar" />
+            </form>
         </div>
-      </div>
 
-      <div class="mt-3">
-        <form action="#" method="post">
-          <input type="submit" class="btn btn-danger" value="Apagar" />
-        </form>
-      </div>
+        <div class="commentSection">
+            <div class="form-group mb-5 mt-3" id="postCreation">
+                <label for="input-area">Comente algo sobre isso</label>
+                <textarea class="form-control" rows="3" name="content" required
+                    placeholder="Escreva seu comentário aqui" id="commentContent"></textarea>
 
-      <div class="commentSection">
-        <div class="form-group mb-5 mt-3" id="postCreation">
-          <label for="input-area">Comente algo sobre isso</label>
-          <textarea
-            class="form-control"
-            rows="3"
-            name="content"
-            required
-            placeholder="Escreva seu comentário aqui"
-            id="commentContent"
-          ></textarea>
-
-          <input
-            type="submit"
-            value="Enviar comentário"
-            class="btn btn-outline-success mt-2"
-            th:attr="onclick=|{
+                <input type="submit" value="Enviar comentário" class="btn btn-outline-success mt-2" th:attr="onclick=|{
               if(document.getElementById('commentContent').value.length > 0) {
                 genericXmlHttpRequest('/post/${post.id}/comment', 'GET', 'content=' + document.getElementById('commentContent').value, 'comments');
                 document.getElementById('commentContent').value = '';
               }
-            }|"
-          />
+            }|" />
+            </div>
+            <div th:replace="fragments/comments :: comments"></div>
         </div>
-        <div th:replace="fragments/comments :: comments"></div>
-      </div>
     </div>
-  </body>
+</body>
+
 </html>

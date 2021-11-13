@@ -53,7 +53,7 @@ public class Post extends AbstractEntity {
     @OneToMany
     private List<Reaction> reactions;
 
-    @OneToMany
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
     @ManyToOne

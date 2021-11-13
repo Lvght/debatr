@@ -73,7 +73,7 @@ public class Comment extends AbstractEntity {
         this.createdAt = createdAt;
     }
 
-    public Comment(){
+    public Comment() {
 
     }
 
