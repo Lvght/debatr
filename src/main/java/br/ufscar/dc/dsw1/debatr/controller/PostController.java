@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import br.ufscar.dc.dsw1.debatr.domain.Forum;
 import br.ufscar.dc.dsw1.debatr.domain.Post;
 import br.ufscar.dc.dsw1.debatr.domain.User;
+import br.ufscar.dc.dsw1.debatr.domain.Comment;
 import br.ufscar.dc.dsw1.debatr.helper.AuthenticatedUserHelper;
+import br.ufscar.dc.dsw1.debatr.service.spec.ICommentService;
 import br.ufscar.dc.dsw1.debatr.service.spec.IPostService;
 import br.ufscar.dc.dsw1.debatr.service.spec.IUserService;
 
@@ -29,6 +31,9 @@ public class PostController {
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private ICommentService commentService;
 
     @GetMapping("/")
     public String home(Model model) {
@@ -100,6 +105,7 @@ public class PostController {
                 return "redirect:/";
             }
         }
+        model.addAttribute("comments", commentService.buscarPorPost(post));
         model.addAttribute("post", post);
 
         return "postDetail";
@@ -114,5 +120,18 @@ public class PostController {
         postService.delete(post);
 
         return "redirect:/";
+    }
+
+    @GetMapping("/post/{postId}/comment")  
+    public String createComment(@PathVariable("postId") long postId, @RequestParam("content") String content, Model model) {
+        UserDetails details = AuthenticatedUserHelper.getCurrentAuthenticatedUserDetails();
+        User currentUser = userService.buscarPorUsername(details.getUsername());
+        Post post = postService.findById(postId);
+        List<Comment> comments = commentService.buscarPorPost(post);
+        Comment comment = new Comment(post, currentUser, content);
+        commentService.save(comment);
+        comments.add(0, comment);
+        model.addAttribute("comments", comments);
+        return "fragments/comments";
     }
 }

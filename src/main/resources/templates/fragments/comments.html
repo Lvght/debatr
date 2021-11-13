@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+
+  <body>
+    <section class="layout-content" th:fragment="comments" id="comments">
+      <div
+        class="post"
+        style="background-color: #f1f1f1; margin-bottom: 30px"
+        th:each="comment: ${comments}"
+      >
+        <div class="postHeader">
+          <div class="informations">
+            <a
+              th:href="@{/profile/{username} (username=${comment.author.username})}"
+            >
+              <div class="userInformation">
+                <div class="userPicture">
+                  <img th:src="@{/image/default-profile.jpeg}" alt="" />
+                </div>
+                <div class="username">
+                  <h2 th:text="${comment.author.username}"></h2>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="body">
+          <div id="content${comment.id}" class="conteudo">
+            <h2 th:text="${comment.content}"></h2>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

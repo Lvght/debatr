@@ -39,6 +39,7 @@ public class Post extends AbstractEntity {
     @NotNull
     @NotBlank
     @Length(min = 1)
+    @Column(length = 65535)
     private String content;
 
     @ManyToOne()

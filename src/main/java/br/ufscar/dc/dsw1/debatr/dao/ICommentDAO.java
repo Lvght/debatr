@@ -1,26 +1,21 @@
-// package br.ufscar.dc.dsw1.debatr.dao;
+package br.ufscar.dc.dsw1.debatr.dao;
 
-// import java.util.List;
+import java.util.List;
+import org.springframework.data.repository.CrudRepository;
 
-// import org.springframework.data.jpa.repository.Query;
-// import org.springframework.data.repository.CrudRepository;
-// import org.springframework.data.repository.query.Param;
+import br.ufscar.dc.dsw1.debatr.domain.Comment;
+import br.ufscar.dc.dsw1.debatr.domain.Post;
 
-// import br.ufscar.dc.dsw1.debatr.domain.Comment;
+@SuppressWarnings("unchecked")
+public interface ICommentDAO extends CrudRepository<Comment, Long> {
 
-// @SuppressWarnings("unchecked")
-// public interface ICommentDAO extends CrudRepository<Comment, Long> {
+Comment findById(long id);
 
-// Comment findById(long id);
+List<Comment> findAll();
 
-// List<Comment> findAll();
+Comment save(Comment comment);
 
-// Comment save(Comment comment);
+void deleteById(Long id);
 
-// void deleteById(Long id);
-
-// @Query("SELECT * FROM comentario WHERE id_postagem = :id_postagem")
-// public List<Comment> getAlllCommentsFromPost(@Param("id_postagem") Long
-// id_postagem);
-
-// }
+List<Comment> findByPost(Post post);
+}
