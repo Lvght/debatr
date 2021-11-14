@@ -10,6 +10,7 @@
 	<groupId>br.ufscar.dc.dsw1</groupId>
 	<artifactId>debatr</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
 	<name>debatr</name>
 	<description>An Academic Forum</description>
 	<properties>
