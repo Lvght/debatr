@@ -50,8 +50,8 @@ public class EmailService {
                 throw new FileNotFoundException("config.properties not found in the classpath");
             }
 
-            String username = prop.getProperty("username");
-            String password = prop.getProperty("password");
+            String username = System.getenv("GMAIL_ADDRESS");
+            String password = System.getenv("GMAIL_PASSWORD");
 
             Session session = Session.getInstance(prop, new Authenticator() {
                 @Override
