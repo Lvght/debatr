@@ -1,23 +1,33 @@
 package br.ufscar.dc.dsw1.debatr.domain;
 
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import org.dom4j.tree.AbstractEntity;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
-import java.util.List;
-
 @Entity
 @Table(name = "post")
 @EntityListeners(AuditingEntityListener.class)
 public class Post extends AbstractEntity {
-    public Post() {}
+    public Post() {
+    }
 
     public Post(String title, String content, User author, Forum forum, Topic topic) {
         this.title = title;
@@ -49,8 +59,8 @@ public class Post extends AbstractEntity {
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private Date createdAt;
-    
-    @OneToMany
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Reaction> reactions;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
@@ -132,5 +142,40 @@ public class Post extends AbstractEntity {
 
     public void setTopic(Topic topic) {
         this.topic = topic;
+    }
+
+    private int getReactionCountOfType(int reactionType) {
+        int count = 0;
+
+        for (Reaction reaction : reactions) {
+            if (reaction.getType() == reactionType) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getLikes() {
+        return getReactionCountOfType(1);
+    }
+
+    public int getDeslikes() {
+        return getReactionCountOfType(0);
+    }
+
+    public int userReacted(String username) {
+        for (Reaction reaction : reactions) {
+            if (reaction.author.getUsername().equals(username)) {
+                return reaction.getType();
+            }
+        }
+
+        return -1;
+    }
+
+    public String toString() {
+        return "Post{" + "id=" + id + ", title='" + title + '\'' + ", content='" + content + '\'' + ", author=" + author
+                + ", createdAt=" + createdAt + ", reactions=" + reactions + ", comments=" + comments + ", forum="
+                + forum + ", topic=" + topic + '}';
     }
 }

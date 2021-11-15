@@ -66,12 +66,22 @@
                         <h4 th:text="${'# ' + (post.topic != null ? post.topic.name : 'Geral')}"></h4>
                     </a>
 
-                    <a class="btn btn-outline-primary text-primary" th:href="@{'/post/' + ${post.id}}">Ver detalhes</a>
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <a class="btn btn-outline-primary text-primary" th:href="@{'/post/' + ${post.id}}">Ver
+                                detalhes</a>
+                        </div>
+
+                        <div class="col-auto align-items-center">
+                            <span th:text="${'Reputação: ' + (post.getLikes() - post.getDeslikes())}"></span>
+                        </div>
+
+                        
+                    </div>
                 </div>
             </div>
+            <hr />
         </div>
-        <hr />
-    </div>
 </body>
 
 </html>
