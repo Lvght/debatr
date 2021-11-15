@@ -92,7 +92,7 @@ public class ForumController {
         model.addAttribute("currentUser", user);
         model.addAttribute("foruns", foruns);
         model.addAttribute("status", "ingressar");
-        return "/listForuns";
+        return "listForuns";
     }
 
     @GetMapping("/{id}")
@@ -112,7 +112,7 @@ public class ForumController {
         model.addAttribute("currentTopic", topic);
         model.addAttribute("forum", forum);
         model.addAttribute("status", "ingressar");
-        return "/forum";
+        return "forum";
     }
 
     @GetMapping("/signIn/{id_forum}")
@@ -164,7 +164,7 @@ public class ForumController {
         }
         model.addAttribute("currentUser", user);
         model.addAttribute("forum", forum);
-        return "/edit";
+        return "edit";
     }
 
     @PostMapping("/{id}/edit")
@@ -207,7 +207,7 @@ public class ForumController {
         }
         model.addAttribute("currentUser", user);
         model.addAttribute("forum", forum);
-        return "/createTopic";
+        return "createTopic";
     }
 
     @PostMapping("/{id}/topic")
