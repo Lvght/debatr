@@ -7,6 +7,10 @@ import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,9 +27,11 @@ public class Forum extends AbstractEntity {
     private User owner;
 
     @ManyToMany(mappedBy = "foruns", cascade = {CascadeType.DETACH})
+    @JsonBackReference
     private List<User> members = new ArrayList<>();
 
     @OneToMany(mappedBy = "forum", cascade = {CascadeType.REMOVE})
+    @JsonBackReference
     private List<Post> posts;
 
     @OneToMany(mappedBy = "forum", cascade = {CascadeType.REMOVE})

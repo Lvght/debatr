@@ -9,10 +9,14 @@ import br.ufscar.dc.dsw1.debatr.domain.User;
 
 public interface IForumService {
     Forum buscarPorId(Long id, User user);
+        
+    Forum buscarPorId(Long id);
 
     Forum buscarPorTitulo(String titulo);
 
     List<Forum> buscarTodos(User user);
+
+    List<Forum> buscarTodos();
 
     Forum salvar(Forum forum);
 

@@ -38,7 +38,7 @@
                 >
               </label>
               <div id="forumTopics" class="forumTopics">
-                <a th:href="@{/forum/{id} (id=${forum.id})}">
+                <a th:href="@{/forum/detail/{id} (id=${forum.id})}">
                   <div
                     th:class="${'topicCard ' + (currentTopic == null ? 'active' : '')}"
                   >
@@ -50,7 +50,7 @@
                 >
                   <div th:each="topic: ${forum.topics}">
                     <a
-                      th:href="@{/forum/{id}?topic_id={topic_id} (id=${forum.id}, topic_id=${topic.id})}"
+                      th:href="@{/forum/detail/{id}?topic_id={topic_id} (id=${forum.id}, topic_id=${topic.id})}"
                     >
                       <div
                         th:class="${'topicCard ' + (currentTopic != null && topic.id == currentTopic.id ? 'active' : '')}"

@@ -4,6 +4,9 @@ import org.dom4j.tree.AbstractEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +19,7 @@ public class Topic extends AbstractEntity {
 
     @ManyToOne()
     @JoinColumn(name = "forum_id", referencedColumnName = "id")
+    @JsonBackReference
     private Forum forum;
 
     @OneToMany

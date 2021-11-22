@@ -20,6 +20,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import org.dom4j.tree.AbstractEntity;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
@@ -71,9 +74,11 @@ public class User extends AbstractEntity {
     private String profileImageUrl;
 
     @ManyToMany(cascade = {CascadeType.DETACH})
+    @JsonBackReference
     List<Forum> foruns = new ArrayList<>();
 
     @OneToMany(mappedBy = "owner", cascade = {CascadeType.REMOVE})
+    @JsonBackReference
     private List<Forum> administeredForuns = new ArrayList<>();
 
     private String description;

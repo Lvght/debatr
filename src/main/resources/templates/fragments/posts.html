@@ -27,7 +27,7 @@
         <div class="post">
             <div class="postHeader">
                 <div class="informations">
-                    <a th:href="@{/forum/{forum_id} (forum_id=${post.forum.id})}">
+                    <a th:href="@{/forum/detail/{forum_id} (forum_id=${post.forum.id})}">
                         <div class="postForumInformation">
                             <div th:switch="${post.forum.iconImageUrl == null}" class="forumIcon">
                                 <img th:case="true" th:src="@{/image/default-forum.png}" />

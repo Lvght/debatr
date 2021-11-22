@@ -68,7 +68,7 @@ public class ForumController {
                 Forum newForum = new Forum(user, forum.getPostScope(), forum.getAccessScope(), forum.getTitle(), forum.getDescription());
                 forumService.salvarEAdicionarMembro(newForum, user, iconFile);
 
-                return "redirect:/forum/" + newForum.getId();
+                return "redirect:/forum/detail/" + newForum.getId();
             }
         }
 
@@ -95,7 +95,7 @@ public class ForumController {
         return "listForuns";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/detail/{id}")
     public String preEditar(@PathVariable("id") Long id, 
             @RequestParam(value = "topic_id", required = false) Long topicId, 
             ModelMap model
@@ -160,7 +160,7 @@ public class ForumController {
         User user = userService.buscarPorUsername(userDetails.getUsername());
         Forum forum = forumService.buscarPorId(id, user);
         if (forum.getOwner().getId() != user.getId()) {
-            return "redirect:/forum/" + id;
+            return "redirect:/forum/detail/" + id;
         }
         model.addAttribute("currentUser", user);
         model.addAttribute("forum", forum);
@@ -189,7 +189,7 @@ public class ForumController {
             forumService.salvar(editForum);
         }
 
-        return "redirect:/forum/" + id;
+        return "redirect:/forum/detail/" + id;
     }
 
     @GetMapping("/{id}/topic")
@@ -203,7 +203,7 @@ public class ForumController {
 
         Forum forum = forumService.buscarPorId(id, user);
         if (forum.getOwner().getId() != user.getId()) {
-            return "redirect:/forum/" + id;
+            return "redirect:/forum/detail/" + id;
         }
         model.addAttribute("currentUser", user);
         model.addAttribute("forum", forum);
@@ -216,11 +216,11 @@ public class ForumController {
         User user = userService.buscarPorUsername(userDetails.getUsername());
         Forum forum = forumService.buscarPorId(user.getId(), user);
         if (forum.getOwner().getId() != user.getId()) {
-            return "redirect:/forum/" + forum.getId();
+            return "redirect:/forum/detail/" + forum.getId();
         }
         topic.setForum(forum);
         topicService.salvar(topic);
 
-        return "redirect:/forum/" + forum.getId();
+        return "redirect:/forum/detail/" + forum.getId();
     }
 }

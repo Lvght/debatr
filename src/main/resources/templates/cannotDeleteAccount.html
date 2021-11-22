@@ -1,54 +1,70 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{layout}">
-    <head>
-        <meta charset="UTF-8">
-        <title>Não é possível deletar a sua conta</title>
-    </head>
-    <body>
-        <section class="layout-content" layout:fragment="corpo">
-            <div class="container mt-5 mb-5">
-                <h1>Não podemos apagar a sua conta ainda</h1>
-                <p>Você é administrador dos seguintes fóruns:</p>
-                <ul th:each="forum: ${foruns}">
-                    <li><a target="_blank" th:href="@{'/forum/' + ${forum.id}}" th:text="${forum.title}"></a></li>
-                </ul>
-                <p>Para excluir a sua conta, delegue os fóruns acima para outro usuário antes.</p>
-                <a class="btn btn-link" href="/">Voltar para o início</a>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Não é possível deletar a sua conta</title>
+  </head>
+  <body>
+    <section class="layout-content" layout:fragment="corpo">
+      <div class="container mt-5 mb-5">
+        <h1>Não podemos apagar a sua conta ainda</h1>
+        <p>Você é administrador dos seguintes fóruns:</p>
+        <ul th:each="forum: ${foruns}">
+          <li>
+            <a
+              target="_blank"
+              th:href="@{'/forum/detail/' + ${forum.id}}"
+              th:text="${forum.title}"
+            ></a>
+          </li>
+        </ul>
+        <p>
+          Para excluir a sua conta, delegue os fóruns acima para outro usuário
+          antes.
+        </p>
+        <a class="btn btn-link" href="/">Voltar para o início</a>
 
-                <hr>
+        <hr />
 
-                <p>
-                    Se quiser, podemos forçar a exclusão da sua conta imediatamente. <strong>ESTEJA CIENTE DE
-                    QUE ISSO APAGARÁ IRREVERSÍVELMENTE TODOS OS DADOS DOS FÓRUNS QUE VOCÊ ADMINISTRA. POR ESTE
-                    MOTIVO, ESTA OPÇÃO É FORTEMENTE CONTRARRECOMENDADA</strong>.
-                </p>
+        <p>
+          Se quiser, podemos forçar a exclusão da sua conta imediatamente.
+          <strong
+            >ESTEJA CIENTE DE QUE ISSO APAGARÁ IRREVERSÍVELMENTE TODOS OS DADOS
+            DOS FÓRUNS QUE VOCÊ ADMINISTRA. POR ESTE MOTIVO, ESTA OPÇÃO É
+            FORTEMENTE CONTRARRECOMENDADA</strong
+          >.
+        </p>
 
-                <p>
-                    Se ainda assim deseja continuar, confirme sua senha abaixo.
-                </p>
+        <p>Se ainda assim deseja continuar, confirme sua senha abaixo.</p>
 
-                <div th:if="${param.wrong_password != null}"
-                     class="alert alert-warning mt-3 mb-3"
-                     role="alert">
-                    Senha incorreta.
-                </div>
+        <div
+          th:if="${param.wrong_password != null}"
+          class="alert alert-warning mt-3 mb-3"
+          role="alert"
+        >
+          Senha incorreta.
+        </div>
 
-                <form th:action="@{/config/delete-account}" method="post">
-                    <div class="form-group mt-4">
-                        <label>Confirme sua senha
-                            <input type="password"
-                                   class="form-control"
-                                   name="password"
-                                   placeholder="Digite sua senha aqui">
-                        </label>
-                    </div>
+        <form th:action="@{/config/delete-account}" method="post">
+          <div class="form-group mt-4">
+            <label
+              >Confirme sua senha
+              <input
+                type="password"
+                class="form-control"
+                name="password"
+                placeholder="Digite sua senha aqui"
+              />
+            </label>
+          </div>
 
-                    <div class="form-group mt-5">
-                        <button type="submit" class="btn btn-danger">FORÇAR A EXCLUSÃO DA MINHA CONTA</button>
-                    </div>
-                </form>
-
-            </div>
-        </section>
-    </body>
+          <div class="form-group mt-5">
+            <button type="submit" class="btn btn-danger">
+              FORÇAR A EXCLUSÃO DA MINHA CONTA
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </body>
 </html>
