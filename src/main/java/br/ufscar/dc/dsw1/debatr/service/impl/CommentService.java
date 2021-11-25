@@ -3,6 +3,7 @@ package br.ufscar.dc.dsw1.debatr.service.impl;
 import br.ufscar.dc.dsw1.debatr.dao.ICommentDAO;
 import br.ufscar.dc.dsw1.debatr.domain.Comment;
 import br.ufscar.dc.dsw1.debatr.domain.Post;
+import br.ufscar.dc.dsw1.debatr.domain.User;
 import br.ufscar.dc.dsw1.debatr.service.spec.ICommentService;
 
 import java.util.List;
@@ -21,8 +22,12 @@ public class CommentService implements ICommentService {
         return commentDAO.findById(id);
     }
 
-    public void save(Comment comment) {
-        commentDAO.save(comment);
+    public List<Comment> findAll() {
+        return commentDAO.findAll();
+    }
+
+    public Comment save(Comment comment) {
+        return commentDAO.save(comment);
     }
 
     public void delete(Comment comment) {
@@ -32,5 +37,7 @@ public class CommentService implements ICommentService {
     public List<Comment> buscarPorPost(Post post){
         return commentDAO.findByPost(post);
     }
+
+    
 
 }
