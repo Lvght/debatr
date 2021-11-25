@@ -15,7 +15,7 @@ public interface IUserService {
 
     List<User> buscarTodos();
 
-    void salvar(User user);
+    User salvar(User user);
 
     void saveAndSetProfileImage(User user, MultipartFile file);
 

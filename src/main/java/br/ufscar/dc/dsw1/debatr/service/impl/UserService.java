@@ -19,8 +19,8 @@ public class UserService implements IUserService {
     @Autowired
     IUserDAO dao;
 
-    public void salvar(User usuario) {
-        dao.save(usuario);
+    public User salvar(User usuario) {
+        return dao.save(usuario);
     }
 
     @Transactional

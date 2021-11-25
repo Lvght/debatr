@@ -21,18 +21,18 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import org.dom4j.tree.AbstractEntity;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.URL;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "debatr_user")
 @EntityListeners(AuditingEntityListener.class)
 public class User extends AbstractEntity {
-
+    
     @Column(nullable = false, updatable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,6 +67,7 @@ public class User extends AbstractEntity {
     @NotEmpty
     @NotNull
     @Column(unique = false, nullable = false, length = 60)
+    @JsonProperty(access = Access.WRITE_ONLY)
     private String password;
 
     //@URL
