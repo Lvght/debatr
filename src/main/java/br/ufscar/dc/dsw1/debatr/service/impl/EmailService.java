@@ -18,16 +18,11 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import org.jboss.jandex.Main;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import br.ufscar.dc.dsw1.debatr.domain.User;
 import br.ufscar.dc.dsw1.debatr.helper.JwtHelper;
 
 public class EmailService {
-
-    @Autowired
-    private SpringTemplateEngine templateEngine;
 
     /**
      * Envia um email com o assunto e o corpo passados como parametros.

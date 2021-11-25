@@ -1,16 +1,15 @@
 package br.ufscar.dc.dsw1.debatr.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import br.ufscar.dc.dsw1.debatr.dao.IUserDAO;
-import br.ufscar.dc.dsw1.debatr.dao.ITopicDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.ufscar.dc.dsw1.debatr.dao.IForumDAO;
+import br.ufscar.dc.dsw1.debatr.dao.ITopicDAO;
+import br.ufscar.dc.dsw1.debatr.dao.IUserDAO;
 import br.ufscar.dc.dsw1.debatr.domain.Forum;
 import br.ufscar.dc.dsw1.debatr.domain.Topic;
 import br.ufscar.dc.dsw1.debatr.domain.User;
@@ -64,9 +63,9 @@ public class ForumService implements IForumService {
     @Transactional(readOnly = true)
     public List<Forum> buscarTodos(User user) {
         List<Forum> foruns = dao.findAll();
-        for (Forum forum : foruns) {
+        // for (Forum forum : foruns) {
             // forum.setUserIngress(forum.getMembers().contains(user));
-        }
+        // }
         return foruns;
     }
 

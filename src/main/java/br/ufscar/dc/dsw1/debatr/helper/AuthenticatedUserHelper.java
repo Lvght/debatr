@@ -1,6 +1,5 @@
 package br.ufscar.dc.dsw1.debatr.helper;
 
-import br.ufscar.dc.dsw1.debatr.domain.User;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 

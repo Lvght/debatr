@@ -1,16 +1,16 @@
 package br.ufscar.dc.dsw1.debatr.controller;
 
-import br.ufscar.dc.dsw1.debatr.domain.Forum;
-import br.ufscar.dc.dsw1.debatr.domain.Topic;
-import br.ufscar.dc.dsw1.debatr.service.spec.IForumService;
-import br.ufscar.dc.dsw1.debatr.service.spec.ITopicService;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import br.ufscar.dc.dsw1.debatr.domain.Topic;
+import br.ufscar.dc.dsw1.debatr.service.spec.ITopicService;
 
 
 @Controller

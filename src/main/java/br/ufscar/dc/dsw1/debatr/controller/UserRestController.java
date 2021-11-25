@@ -1,15 +1,12 @@
 package br.ufscar.dc.dsw1.debatr.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -61,6 +58,7 @@ public class UserRestController implements IBaseRestController<User> {
         return ResponseEntity.ok(service.salvar(parsedUser));
     }
 
+    // Permite deletar um usuário pelo seu ID.
     @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE, produces = "application/json")
     public ResponseEntity<User> deleteUser(@PathVariable("id") Long id) {
         User toExcludeUser = service.buscarPorId(id);
