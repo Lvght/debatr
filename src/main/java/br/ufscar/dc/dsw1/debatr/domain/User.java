@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -32,7 +33,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "debatr_user")
 @EntityListeners(AuditingEntityListener.class)
 public class User extends AbstractEntity {
-    
+
     @Column(nullable = false, updatable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,6 +57,7 @@ public class User extends AbstractEntity {
     private Date emailVerifiedAt;
 
     @OneToMany(mappedBy = "author", cascade = {CascadeType.REMOVE})
+    @JsonIgnore
     private List<Post> posts;
 
     @NotEmpty

@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.dom4j.tree.AbstractEntity;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
@@ -39,7 +41,7 @@ public class Post extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotNull
     @NotBlank
@@ -60,9 +62,11 @@ public class Post extends AbstractEntity {
     @Column(name = "created_at", nullable = false, updatable = false)
     private Date createdAt;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Reaction> reactions;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
@@ -72,11 +76,11 @@ public class Post extends AbstractEntity {
     @ManyToOne()
     private Topic topic;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -112,6 +116,7 @@ public class Post extends AbstractEntity {
         this.createdAt = createdAt;
     }
 
+    @JsonIgnore
     public List<Reaction> getReactions() {
         return reactions;
     }
@@ -120,6 +125,7 @@ public class Post extends AbstractEntity {
         this.reactions = reactions;
     }
 
+    @JsonIgnore
     public List<Comment> getComments() {
         return comments;
     }
@@ -155,10 +161,12 @@ public class Post extends AbstractEntity {
         return count;
     }
 
+    @JsonIgnore
     public int getLikes() {
         return getReactionCountOfType(1);
     }
 
+    @JsonIgnore
     public int getDeslikes() {
         return getReactionCountOfType(0);
     }

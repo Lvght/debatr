@@ -31,11 +31,11 @@ public class PostService implements IPostService {
         return postDAO.findById(id);
     }
 
-    public void save(Post post) {
-        postDAO.save(post);
+    public Post save(Post post) {
+        return postDAO.save(post);
     }
 
-    public void save(Post post, long forumId, long topicId) {
+    public Post save(Post post, long forumId, long topicId) {
         Forum forum = forumDAO.findById(forumId);
         post.setForum(forum);
         if(topicId != 0){
@@ -43,11 +43,15 @@ public class PostService implements IPostService {
             post.setTopic(topic);
         }
 
-        postDAO.save(post);
+        return postDAO.save(post);
     }
 
     public void delete(Post post) {
         postDAO.delete(post);
+    }
+
+    public List<Post> getAll() {
+        return postDAO.findAll();
     }
 
     public List<Post> getForumPosts(Forum forum, Topic topic){
