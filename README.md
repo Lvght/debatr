@@ -19,3 +19,5 @@ Acesse o Debatr [aqui](https://debatr-forum.herokuapp.com/).
 Para instruções de como configurar o projeto localmente, [clique aqui](https://github.com/Lvght/debatr/wiki/Instru%C3%A7%C3%B5es-de-como-executar-o-projeto-localmente).
 
 Para ler o relatório da atividade, [clique aqui](https://github.com/Lvght/debatr/wiki/Relat%C3%B3rio-da-Atividade).
+
+Para instruções de testar o projeto, [clique aqui](https://github.com/Lvght/debatr/wiki/Como-testar-o-projeto).
